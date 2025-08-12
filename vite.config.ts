@@ -1,15 +1,26 @@
-import { defineConfig } from "vite";
+import { defineConfig, loadEnv } from "vite";
 import type { UserConfig } from "vite";
 import vue from "@vitejs/plugin-vue";
 import path from "path"; // ⬅️ 用 path 更稳
 import { createSvgIconsPlugin } from "vite-plugin-svg-icons";
-
+import { createHtmlPlugin } from "vite-plugin-html";
 // https://vite.dev/config/
-export default defineConfig((): Promise<UserConfig> => {
+export default defineConfig(({ mode }): Promise<UserConfig> => {
+  const env = loadEnv(mode, process.cwd(), "");
+  const { VITE_APP_TITLE } = env;
   return new Promise((resolve) => {
     resolve({
       plugins: [
         vue(),
+        createHtmlPlugin({
+          minify: true,
+          inject: {
+            data: {
+              //获取标题变量
+              title: VITE_APP_TITLE,
+            },
+          },
+        }),
         createSvgIconsPlugin({
           iconDirs: [path.resolve(process.cwd(), "src/assets/icons")],
           symbolId: "icon-[name]",
@@ -23,7 +34,7 @@ export default defineConfig((): Promise<UserConfig> => {
         extensions: [".ts", ".js", ".vue"],
       },
       server: {
-        port: 99,
+        port: 1111,
         open: true,
         host: "0.0.0.0",
         fs: {
