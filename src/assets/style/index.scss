@@ -1,0 +1,23 @@
+@import url(./theme.scss);
+@import url(./element.scss);
+@import url(./fonts.scss);
+
+html,
+body {
+  height: 100%;
+  width: 100%;
+  padding: 0;
+  margin: 0;
+  background: var(--bg-color);
+}
+
+/* 设置滑块颜色（滑动条中可拖动的部分） */
+::-webkit-scrollbar-thumb {
+  background-color: #ccc; /* 滑块颜色 */
+  border-radius: 3px; /* 圆角 */
+}
+.tooltip-wrap {
+  white-space: normal;
+  max-width: 300px; /* 控制最大宽度让它触发换行 */
+  word-break: break-word; /* 或 break-all */
+}

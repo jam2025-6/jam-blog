@@ -1,0 +1,21 @@
+// | 类别     | 命名建议（CSS变量）                                           | 说明          |
+// | ------ | ----------------------------------------------------- | ----------- |
+// | 主色     | `--color-main`                                     | 主题主色        |
+// | 次色     | `--color-secondary`                                   | 辅助色（次要操作）   |
+// | 背景色    | `--bg-color`, `--bg-page`, `--bg-card`                | 页面/容器背景色    |
+// | 文字颜色   | `--text-color`, `--text-muted`                        | 主/次级文字      |
+// | 边框色    | `--border-color`                                      | 默认边框色       |
+// | 成功/警告类 | `--color-success`, `--color-warning`, `--color-error` | 状态类颜色       |
+// | 通用间距   | `--spacing-sm`, `--spacing-md`, `--spacing-lg`        | 统一间距变量（非必要） |
+// | 圆角     | `--radius-base`, `--radius-sm`                        | 圆角尺寸（统一风格）  |
+// | 字号     | `--font-size-base`, `--font-size-title`               | 字号层级        |
+
+:root {
+  body,
+  body[data-theme="light"] {
+  }
+
+  body,
+  body[data-theme="dark"] {
+  }
+}
