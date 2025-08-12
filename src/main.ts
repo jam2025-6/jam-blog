@@ -6,6 +6,7 @@ import "element-plus/dist/index.css";
 import router from "@/router";
 import "@/assets/style/index.scss"; // 全局样式
 import pinia from "@/stores"; // ✅ 引入刚才的 pinia 实例
+// import "@/utils/base";
 
 // import SvgIcon from "@/components/SvgIcon/index.vue";
 

@@ -4,6 +4,7 @@ import vue from "@vitejs/plugin-vue";
 import path from "path"; // ⬅️ 用 path 更稳
 import { createSvgIconsPlugin } from "vite-plugin-svg-icons";
 import { createHtmlPlugin } from "vite-plugin-html";
+import svgLoader from "vite-svg-loader";
 // https://vite.dev/config/
 export default defineConfig(({ mode }): Promise<UserConfig> => {
   const env = loadEnv(mode, process.cwd(), "");
@@ -12,6 +13,7 @@ export default defineConfig(({ mode }): Promise<UserConfig> => {
     resolve({
       plugins: [
         vue(),
+        svgLoader(),
         createHtmlPlugin({
           minify: true,
           inject: {

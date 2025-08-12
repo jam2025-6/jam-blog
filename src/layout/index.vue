@@ -2,6 +2,7 @@
   <div class="pages">
     <!-- <NagivationHead />
     <NagivationAside v-if="isHome" /> -->
+    <PlatHeader />
     <div class="pages-content">
       <RouterView></RouterView>
     </div>
@@ -15,6 +16,7 @@
 // import NagivationAside from "@/components/NagivationAside/index.vue";
 // import NagivationFooter from "@/components/NagivationFooter/index.vue";
 // import FooterTools from "@/components/FooterTools/index.vue";
+import PlatHeader from "@/components/PlatHeader/index.vue";
 import { computed } from "vue";
 import { useRoute } from "vue-router";
 const route = useRoute();
