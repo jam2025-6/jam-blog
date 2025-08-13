@@ -1,3 +1,13 @@
+<script setup lang="ts">
+import { ref } from "vue";
+import SelectSvg from "@/assets/icons/select.svg";
+import SearchSvg from "@/assets/icons/search.svg";
+const selectedValue = ref(null);
+const options = [
+  { value: "1", label: "选项1" },
+  { value: "2", label: "选项2" },
+];
+</script>
 <template>
   <div class="plat-header">
     <img class="logo" src="@/assets/images/global/logo.png" alt="" />
@@ -39,17 +49,6 @@
     </div>
   </div>
 </template>
-
-<script setup lang="ts">
-import { ref } from "vue";
-import SelectSvg from "@/assets/icons/select.svg";
-import SearchSvg from "@/assets/icons/search.svg";
-const selectedValue = ref(null);
-const options = [
-  { value: "1", label: "选项1" },
-  { value: "2", label: "选项2" },
-];
-</script>
 
 <style scoped lang="scss">
 .plat-header {

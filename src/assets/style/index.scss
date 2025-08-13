@@ -29,7 +29,26 @@ body {
   background-repeat: no-repeat; /* 禁止重复 */
   background-attachment: fixed; /* 可选：固定背景不随滚动移动 */
 }
-#app {
+
+.page {
+  height: 100%;
+  width: 100%;
+}
+
+.station-tooltip {
+  border: 1px solid #5084b8 !important;
+  background: #0d2e58 !important;
+  padding: 12px;
+  z-index: 2026;
+  opacity: 1;
+  color: #fff;
+  /* 内容文字1 */
+  font-family: "HarmonyOS Sans SC";
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 16px; /* 133.333% */
+  letter-spacing: 0.6px;
 }
 
 /* 设置滑块颜色（滑动条中可拖动的部分） */
