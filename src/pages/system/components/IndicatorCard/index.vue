@@ -69,6 +69,7 @@
       font-weight: 700;
       line-height: normal;
       letter-spacing: 1.6px;
+      margin-bottom: 4px;
     }
     &-indicator {
       display: flex;
