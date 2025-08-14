@@ -2,17 +2,21 @@
 // 定义props接口
 interface Props {
   title?: string;
+  size?: string;
 }
 
 // 设置默认props值
 const props = withDefaults(defineProps<Props>(), {
   title: "基本信息", // 默认值
+  size: "small", //背景图大小
 });
 </script>
 
 <template>
-  <div class="panel-title">
-    <div class="title">{{ props.title }}</div>
+  <div class="panel-title" :class="[props.size]">
+    <div class="title">
+      {{ props.title }}
+    </div>
   </div>
 </template>
 
@@ -20,8 +24,14 @@ const props = withDefaults(defineProps<Props>(), {
 .panel-title {
   height: 42px;
   width: 100%;
-  background-image: url("@/assets/images/system/title-bg.png");
+  background-repeat: no-repeat;
   padding-left: 52px;
+  &.small {
+    background-image: url("@/assets/images/system/title-bg.png");
+  }
+  &.large {
+    background-image: url("@/assets/images/system/title-bg-large.png");
+  }
   .title {
     /* 二级标题投影 */
     text-shadow: 0 2px 5px rgba(0, 0, 0, 0.4), 0 0 6px rgba(229, 240, 249, 0.36), 0 0 10px rgba(48, 139, 229, 0.6);
