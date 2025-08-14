@@ -50,7 +50,9 @@ import { PanelTitle, SemiCircleProgress } from "@/components";
       </div>
       <div class="rate">
         <div class="rate-item">
-          <div class="rate-item-pic"></div>
+          <div class="rate-item-pic">
+            <SemiCircleProgress :bluePercent="60" :orangePercent="40" text="月对比" />
+          </div>
           <div class="rate-item-main">
             <div class="item">
               <div class="point"></div>
@@ -74,7 +76,9 @@ import { PanelTitle, SemiCircleProgress } from "@/components";
           <!-- <SemiCircleProgress :progress="85" title="月对比" :size="100" progress-color="#2196F3" /> -->
         </div>
         <div class="rate-item">
-          <div class="rate-item-pic"></div>
+          <div class="rate-item-pic">
+            <SemiCircleProgress :bluePercent="40" :orangePercent="60" text="月对比" />
+          </div>
           <div class="rate-item-main">
             <div class="item">
               <div class="point"></div>
@@ -95,7 +99,6 @@ import { PanelTitle, SemiCircleProgress } from "@/components";
               <div class="percent">（50%）</div>
             </div>
           </div>
-          <!-- <SemiCircleProgress :progress="85" title="月对比" :size="100" progress-color="#2196F3" /> -->
         </div>
       </div>
     </div>
@@ -186,7 +189,7 @@ import { PanelTitle, SemiCircleProgress } from "@/components";
           flex: 1;
         }
         &-main {
-          width: calc(100% - 148px);
+          width: calc(100% - 138px);
           .item {
             display: flex;
             align-items: center;

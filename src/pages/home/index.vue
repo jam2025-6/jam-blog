@@ -24,47 +24,7 @@ const tableData = new Array(33).fill({
   address: "No. 189, Grove St, Los Angeles",
   zip: "CA 90036",
 });
-const tooltipVisible = ref(true);
-const tooltipContent = ref("浙江****储能站3400kwh");
-const tooltipPosition = ref({
-  left: "0px",
-  top: "0px",
-  transform: "",
-});
-// 使用 Lodash 的防抖函数
-const debouncedMouseEnter = debounce((row: any, event: MouseEvent) => {
-  if (!tableRef.value) return;
 
-  const tableRect = tableRef.value.getBoundingClientRect();
-  const tableWidth = tableRect.width;
-  const mouseX = event.clientX - tableRect.left;
-  const mouseY = event.clientY - tableRect.top;
-
-  tooltipContent.value = row.stationName;
-
-  const tooltipWidth = 300;
-  const showOnLeft = mouseX > tableWidth - tooltipWidth - 20;
-
-  tooltipPosition.value = {
-    left: `${mouseX}px`,
-    top: `${mouseY}px`,
-    transform: showOnLeft ? "translateX(-100%) translateY(-50%)" : "translateY(-50%)",
-  };
-
-  tooltipVisible.value = true;
-}, 100);
-function handleCellMouseEnter(
-  row: TableRowData,
-  column: TableColumnCtx<TableRowData>,
-  cell: HTMLElement,
-  event: MouseEvent
-) {
-  debouncedMouseEnter(row, event);
-}
-function handleCellMouseLeave() {
-  debouncedMouseEnter.cancel(); // 取消延迟的执行
-  tooltipVisible.value = false;
-}
 function clickRow(row: TableRowData, column: TableColumnCtx<TableRowData>, event: Event) {
   router.push({
     path: "/system",
@@ -74,13 +34,7 @@ function clickRow(row: TableRowData, column: TableColumnCtx<TableRowData>, event
 <template>
   <div class="page">
     <div class="table" ref="tableRef">
-      <el-table
-        :data="tableData"
-        style="width: 100%; height: 100%"
-        @cell-mouse-enter="handleCellMouseEnter"
-        @cell-mouse-leave="handleCellMouseLeave"
-        @row-click="clickRow"
-      >
+      <el-table :data="tableData" stripe style="width: 100%; height: 100%" @row-click="clickRow">
         <el-table-column align="center" sortable prop="stationName" label="站点名" />
         <el-table-column align="center" sortable prop="power" label="累计节约电量" />
         <el-table-column align="center" sortable prop="state" label="累计新能源消纳占比" />
@@ -88,9 +42,6 @@ function clickRow(row: TableRowData, column: TableColumnCtx<TableRowData>, event
         <el-table-column align="center" sortable prop="address" label="投资回收期" />
         <el-table-column align="center" sortable prop="zip" label="减碳" />
       </el-table>
-      <div class="tooltip" :style="tooltipPosition" v-show="tooltipVisible">
-        {{ tooltipContent }}
-      </div>
     </div>
   </div>
 </template>
@@ -113,6 +64,7 @@ function clickRow(row: TableRowData, column: TableColumnCtx<TableRowData>, event
     border: none !important;
     box-shadow: 0 0 4px rgba(104, 187, 225, 0.5);
     padding: 12px 36px 22px 36px;
+    backdrop-filter: blur(12px);
     &::before {
       content: "";
       position: absolute;
@@ -132,13 +84,21 @@ function clickRow(row: TableRowData, column: TableColumnCtx<TableRowData>, event
     :deep(.el-table) {
       background-color: transparent;
       z-index: 2025;
+      //
+      .el-table__row {
+        background-color: rgba($color: #1a417e, $alpha: 0.25) !important;
+        // background-color: transparent !important;
+      }
+      .el-table__row--striped {
+        background-color: rgba($color: #0d1b36, $alpha: 0.25) !important;
+      }
       .el-table__inner-wrapper {
         &::before {
           display: none;
         }
 
         tr {
-          background-color: transparent;
+          background-color: rgba($color: #0d1b36, $alpha: 0.25);
           &:hover {
             cursor: pointer;
             box-shadow: 0 0 20px 0 rgba(104, 187, 255, 0.18);
@@ -148,6 +108,7 @@ function clickRow(row: TableRowData, column: TableColumnCtx<TableRowData>, event
                 border-bottom: 1.2px solid #68bbff;
                 // background: rgba(36, 87, 164, 0.4);
                 //
+                background: rgba(36, 87, 164, 0.25);
                 &:first-child {
                   border-left: 1.2px solid #68bbff;
                 }

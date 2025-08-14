@@ -1,31 +1,31 @@
 <template>
-  <div class="rounded-semi-circle-progress" :style="containerStyle">
-    <svg :width="width" :height="height" :viewBox="`0 0 ${width} ${height}`">
-      <!-- 背景轨道 -->
-      <path :d="backgroundPath" :stroke="trackColor" :stroke-width="strokeWidth" fill="none" stroke-linecap="round" />
-
-      <!-- 进度条 (带圆角) -->
-      <path
-        :d="progressPath"
-        :stroke="progressColor"
-        :stroke-width="strokeWidth"
-        fill="none"
-        :stroke-dasharray="circumference"
-        :stroke-dashoffset="dashOffset"
-        stroke-linecap="round"
-      />
-
-      <!-- 进度文本 -->
+  <div class="ring-compare-container">
+    <svg :width="width" :height="height" viewBox="0 0 480 160" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="blueGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" stop-color="#2B8EF3" />
+          <stop offset="100%" stop-color="#47E4E5" />
+        </linearGradient>
+        <linearGradient id="blueGradient1" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" stop-color="#E7C767" />
+          <stop offset="100%" stop-color="#F5784F" />
+        </linearGradient>
+      </defs>
+      <!-- 蓝色部分 -->
+      <path :d="bluePath" fill="none" stroke="url(#blueGradient)" stroke-width="30" stroke-linecap="round" />
+      <!-- 橙色部分 -->
+      <path :d="orangePath" fill="none" stroke="url(#blueGradient1)" stroke-width="30" stroke-linecap="round" />
+      <!-- 中间文字 -->
       <text
-        v-if="showText"
-        :x="width / 2"
-        :y="height - textOffset"
+        class="svg-text"
+        x="200"
+        y="110"
         text-anchor="middle"
-        :font-size="textSize"
-        :font-weight="textWeight"
-        class="text"
+        dominant-baseline="middle"
+        font-size="24"
+        fill="#FFFFFF"
       >
-        {{ progressText }}
+        {{ text }}
       </text>
     </svg>
   </div>
@@ -35,94 +35,67 @@
 import { computed } from "vue";
 
 interface Props {
-  progress?: number; // 进度值 (0-100)
-  size?: number; // 组件大小 (直径)
-  strokeWidth?: number; // 进度条宽度
-  trackColor?: string; // 轨道颜色
-  progressColor?: string; // 进度条颜色
-  showText?: boolean; // 是否显示进度文本
-  textColor?: string; // 文本颜色
-  textSize?: string; // 文本大小
-  textWeight?: string; // 文本粗细
-  textFormat?: (value: number) => string; // 文本格式化函数
-  cornerRadius?: number; // 圆角半径 (0-1)
-  title?: string;
+  bluePercent: number; // 蓝色部分占比（0-100）
+  orangePercent: number; // 橙色部分占比（0-100）
+  text?: string; // 中间显示的文字
+  width?: number;
+  height?: number;
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  progress: 0,
-  size: 200,
-  strokeWidth: 10,
-  trackColor: "#eee",
-  progressColor: "#4CAF50",
-  showText: true,
-  textColor: "#333",
-  textSize: "16px",
-  textWeight: "normal",
-  textFormat: (value: number) => `${Math.round(value)}%`,
-  cornerRadius: 0.5, // 默认中等圆角
-  title: "",
+  text: "月对比",
+  width: 400,
+  height: 200,
 });
 
-// 计算属性
-const width = computed(() => props.size);
-const height = computed(() => props.size / 2);
-const radius = computed(() => (props.size - props.strokeWidth) / 2);
-const circumference = computed(() => Math.PI * radius.value);
-const dashOffset = computed(() => circumference.value * (1 - props.progress / 100));
+// 计算蓝色部分的路径
+const bluePath = computed(() => {
+  const startAngle = 180;
+  const endAngle = startAngle + (props.bluePercent * 180) / 100;
+  const radius = 150;
+  const cx = 200;
+  const cy = 150;
 
-// 计算圆角控制点
-const cornerControl = computed(() => {
-  // 根据 cornerRadius 计算贝塞尔曲线控制点位置
-  const factor = Math.min(1, Math.max(0, props.cornerRadius)) * 0.5;
-  return radius.value * factor;
+  const startX = cx + radius * Math.cos((startAngle * Math.PI) / 180);
+  const startY = cy + radius * Math.sin((startAngle * Math.PI) / 180);
+  const endX = cx + radius * Math.cos((endAngle * Math.PI) / 180);
+  const endY = cy + radius * Math.sin((endAngle * Math.PI) / 180);
+
+  return `M ${startX} ${startY} A ${radius} ${radius} 0 0 1 ${endX} ${endY}`;
 });
 
-// SVG路径 - 带圆角的半圆
-const backgroundPath = computed(() => {
-  const startX = props.strokeWidth / 2;
-  const endX = width.value - props.strokeWidth / 2;
-  const centerY = height.value;
+// 计算橙色部分的路径
+const orangePath = computed(() => {
+  const startAngle = 180 + (props.bluePercent * 180) / 100;
+  const endAngle = startAngle + (props.orangePercent * 180) / 100;
+  const radius = 150;
+  const cx = 200;
+  const cy = 150;
 
-  return `
-    M ${startX},${centerY}
-    C ${startX},${centerY - cornerControl.value} 
-      ${startX + cornerControl.value},${centerY - radius.value} 
-      ${startX + radius.value},${centerY - radius.value}
-    A ${radius.value - cornerControl.value},${radius.value - cornerControl.value} 0 0 1 
-      ${endX - radius.value},${centerY - radius.value}
-    C ${endX - cornerControl.value},${centerY - radius.value} 
-      ${endX},${centerY - cornerControl.value} 
-      ${endX},${centerY}
-  `;
+  const startX = cx + radius * Math.cos((startAngle * Math.PI) / 180);
+  const startY = cy + radius * Math.sin((startAngle * Math.PI) / 180);
+  const endX = cx + radius * Math.cos((endAngle * Math.PI) / 180);
+  const endY = cy + radius * Math.sin((endAngle * Math.PI) / 180);
+
+  return `M ${startX} ${startY} A ${radius} ${radius} 0 0 1 ${endX} ${endY}`;
 });
-
-const progressPath = computed(() => backgroundPath.value);
-
-// 文本相关
-const progressText = computed(() => props.title);
-const textOffset = computed(() => props.size * 0.15);
-
-// 容器样式
-const containerStyle = computed(() => ({
-  width: `${width.value}px`,
-  height: `${height.value}px`,
-}));
 </script>
 
-<style scoped>
-.rounded-semi-circle-progress {
-  display: inline-block;
-  position: relative;
+<style scoped lang="scss">
+.ring-compare-container {
+  background-color: transparent;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  //   padding: 20px;
 }
-
-text {
+.svg-text {
   text-align: center;
 
   /* 二级标题投影 */
   text-shadow: 0 2px 5px rgba(0, 0, 0, 0.4), 0 0 6px rgba(229, 239, 249, 0.36), 0 0 10px rgba(48, 126, 229, 0.6);
   font-family: "Alimama FangYuanTi VF";
-  font-size: 14px;
+  font-size: 42px;
   font-style: normal;
   font-weight: 700;
   line-height: normal;

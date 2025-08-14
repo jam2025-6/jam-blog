@@ -61,3 +61,64 @@ body {
   max-width: 300px; /* 控制最大宽度让它触发换行 */
   word-break: break-word; /* 或 break-all */
 }
+
+.chart-main {
+  &.tooltip {
+    border: 1px solid rgba(35, 107, 171, 1);
+    padding: 12px;
+    // border: 1px solid #05305d;
+    background: rgba(7, 21, 46, 0.9);
+    box-shadow: 0 0 3px 0 rgba(133, 203, 214, 0.14);
+    backdrop-filter: blur(12px);
+    .name {
+      color: #fff;
+
+      /* 蓝色文字发光 */
+      text-shadow: 0 0 6.8px rgba(64, 182, 232, 0.7);
+      font-family: "HarmonyOS Sans SC";
+      font-size: 12px;
+      font-style: normal;
+      font-weight: 700;
+      line-height: normal;
+      letter-spacing: 1.2px;
+      margin-bottom: 10px;
+    }
+    .main {
+      .item {
+        display: flex;
+        width: 100%;
+        align-items: center;
+        gap: 0 8px;
+        height: 14px;
+        margin-bottom: 10px;
+        &:last-child {
+          margin-bottom: 0;
+        }
+        &-point {
+          width: 11px;
+          height: 11px;
+          border-radius: 50%;
+          display: inline-block;
+          background: linear-gradient(225deg, #28b558 0%, #114f26 100%);
+          &.blue {
+            background: linear-gradient(225deg, #47eaea 0%, #40ced7 100%);
+          }
+        }
+        &-name,
+        &-value,
+        &-unit {
+          color: #fff;
+
+          /* 蓝色文字发光 */
+          text-shadow: 0 0 6.8px rgba(64, 182, 232, 0.7);
+          font-family: "HarmonyOS Sans SC";
+          font-size: 12px;
+          font-style: normal;
+          font-weight: 400;
+          line-height: normal;
+          letter-spacing: 1.2px;
+        }
+      }
+    }
+  }
+}
