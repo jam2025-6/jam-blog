@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { LeftPanel, RightPanel, CentralPanel, BottomPanel, IndicatorCard } from "./components";
+import { LeftPanel, RightPanel, CentralPanel, BottomPanel, IndicatorCard, InfoCard } from "./components";
 </script>
 <template>
   <div class="page">
@@ -8,6 +8,7 @@ import { LeftPanel, RightPanel, CentralPanel, BottomPanel, IndicatorCard } from 
     <IndicatorCard />
     <CentralPanel />
     <BottomPanel />
+    <InfoCard />
   </div>
 </template>
 
