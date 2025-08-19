@@ -1,4 +1,6 @@
 import axios, { type Method } from "axios";
+import { getToken } from "@/utils/auth";
+import i18n from "@/i18n/index.js";
 interface RequestOptions {
   url: string;
   method?: Method;
@@ -16,10 +18,9 @@ const service = axios.create({
 
 // 请求拦截器
 service.interceptors.request.use((config) => {
-  const token = localStorage.getItem("token");
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
-  }
+  config.headers["Authorization"] = "Bearer " + getToken();
+  config.headers["lang"] = i18n.global.locale.value;
+  config.headers["zone"] = Intl.DateTimeFormat().resolvedOptions().timeZone;
   return config;
 });
 

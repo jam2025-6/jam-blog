@@ -14,6 +14,7 @@ import SvgIcon from "@/components/SvgIcon/index.vue";
 import "virtual:svg-icons-register"; // svg图标
 import dayjs from "dayjs";
 import dayOfYear from "dayjs/plugin/dayOfYear";
+import i18n from "./i18n/index.js";
 
 dayjs.extend(dayOfYear);
 
@@ -22,6 +23,7 @@ app.component("SvgIcon", SvgIcon);
 // 注册全局指令// 全局注册，名字叫 Icon
 // app.component("SvgIcon", SvgIcon);
 app.use(ElementPlus);
+app.use(i18n);
 app.use(router);
 app.use(pinia); // ✅ 使用 Pinia
 app.mount("#app");

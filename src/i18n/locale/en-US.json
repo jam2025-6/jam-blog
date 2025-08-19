@@ -1,0 +1,19 @@
+{
+  "format": {
+    "day": "MMMM DD,YYYY",
+    "dayTime": "MMMM DD HH:mm",
+    "monthDay": "MMMM DD",
+    "monthYear": "MMMM,YYYY",
+    "time": "MMMM DD,YYYY h:mm:ss A"
+  },
+  "search_prompt": "Enter station name, press Enter to search",
+  "week": {
+    "星期一": "Monday",
+    "星期三": "Wednesday",
+    "星期二": "Tuesday",
+    "星期五": "Friday",
+    "星期六": "Saturday",
+    "星期四": "Thursday",
+    "星期日": "Sunday"
+  }
+}

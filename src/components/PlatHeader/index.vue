@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from "vue";
+import dayjs from "dayjs";
 import SelectSvg from "@/assets/icons/select.svg";
 import SearchSvg from "@/assets/icons/search.svg";
 const selectedValue = ref(null);
@@ -73,15 +74,15 @@ onUnmounted(() => {
         style="width: 188px; height: 38px"
         v-model="selectedValue"
         size="large"
-        placeholder="输入电站名，enter 搜索"
+        :placeholder="$t('search_prompt')"
         :prefix-icon="SearchSvg"
       />
     </div>
     <div class="time">
       <div class="time-text">{{ currentTime }}</div>
       <div class="week">
-        <div class="week-text">{{ currentWeekday }}</div>
-        <div class="date">{{ currentDate }}</div>
+        <div class="week-text">{{ $t(`week.${currentWeekday}`) }}</div>
+        <div class="date">{{ dayjs(currentDate).format($t("format.day")) }}</div>
       </div>
     </div>
   </div>

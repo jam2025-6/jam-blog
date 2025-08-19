@@ -1,0 +1,19 @@
+{
+  "format": {
+    "day": "YYYY/MM/DD",
+    "dayTime": "MM-DD HH:mm",
+    "monthDay": "MM-DD",
+    "monthYear": "YYYY-MM",
+    "time": "YYYY-MM-DD HH:mm:ss"
+  },
+  "search_prompt": "输入电站名，enter 搜索",
+  "week": {
+    "星期一": "星期一",
+    "星期三": "星期三",
+    "星期二": "星期二",
+    "星期五": "星期五",
+    "星期六": "星期六",
+    "星期四": "星期四",
+    "星期日": "星期日"
+  }
+}
