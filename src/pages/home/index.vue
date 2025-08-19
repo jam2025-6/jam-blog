@@ -13,16 +13,21 @@ interface TableRowData {
   address: string;
   zip: string;
 }
+const tooltipX = ref(0);
+const tooltipY = ref(0);
 const router = useRouter();
-const tableRef = ref<HTMLElement | null>(null);
-const tableData = new Array(33).fill({
-  date: "2016-05-03",
-  power: "1",
-  stationName: "浙江****储能站3400kwh",
-  state: "California",
-  city: "Los Angeles",
-  address: "No. 189, Grove St, Los Angeles",
-  zip: "CA 90036",
+const containerRef = ref<HTMLElement | null>(null);
+const stationName = ref("");
+const tableData = new Array(33).fill({}).map((el, index) => {
+  return {
+    date: "2016-05-03",
+    power: "1",
+    stationName: "浙江****储能站3400kwh" + index,
+    state: "California",
+    city: "Los Angeles",
+    address: "No. 189, Grove St, Los Angeles",
+    zip: "CA 90036",
+  };
 });
 
 function clickRow(row: TableRowData, column: TableColumnCtx<TableRowData>, event: Event) {
@@ -30,11 +35,59 @@ function clickRow(row: TableRowData, column: TableColumnCtx<TableRowData>, event
     path: "/system",
   });
 }
+
+const handleMouseMove = (event: MouseEvent) => {
+  const container = containerRef.value;
+  if (!container) return;
+  if (!stationName.value) return;
+  const rect = container.getBoundingClientRect();
+  const scaleX = rect.width / container.offsetWidth;
+  const scaleY = rect.height / container.offsetHeight;
+
+  let x = (event.clientX - rect.left) / scaleX + 10;
+  let y = (event.clientY - rect.top) / scaleY + 10;
+
+  const tooltipEl = document.querySelector(".tooltip") as HTMLElement;
+  if (tooltipEl) {
+    const tooltipWidth = tooltipEl.offsetWidth;
+    const tooltipHeight = tooltipEl.offsetHeight;
+
+    // 容器右边界检测
+    if (x + tooltipWidth > rect.width) {
+      x = rect.width - tooltipWidth - 10;
+    }
+    // 容器下边界检测
+    if (y + tooltipHeight > rect.height) {
+      y = rect.height - tooltipHeight - 10;
+    }
+
+    // 防止左上角越界
+    if (x < 0) x = 0;
+    if (y < 0) y = 0;
+  }
+
+  tooltipX.value = x;
+  tooltipY.value = y;
+};
+
+function cellMouseEnter(row: TableRowData) {
+  stationName.value = row.stationName;
+}
+function cellMouseLeave() {
+  stationName.value = "";
+}
 </script>
 <template>
   <div class="page">
-    <div class="table" ref="tableRef">
-      <el-table :data="tableData" stripe style="width: 100%; height: 100%" @row-click="clickRow">
+    <div ref="containerRef" class="table" @mousemove="handleMouseMove">
+      <el-table
+        @cell-mouse-enter="cellMouseEnter"
+        @cell-mouse-leave="cellMouseLeave"
+        :data="tableData"
+        stripe
+        style="width: 100%; height: 100%"
+        @row-click="clickRow"
+      >
         <el-table-column align="center" sortable prop="stationName" label="站点名" />
         <el-table-column align="center" sortable prop="power" label="累计节约电量" />
         <el-table-column align="center" sortable prop="state" label="累计新能源消纳占比" />
@@ -42,6 +95,16 @@ function clickRow(row: TableRowData, column: TableColumnCtx<TableRowData>, event
         <el-table-column align="center" sortable prop="address" label="投资回收期" />
         <el-table-column align="center" sortable prop="zip" label="减碳" />
       </el-table>
+      <div
+        v-show="!!stationName"
+        class="tooltip"
+        :style="{
+          left: tooltipX + 'px',
+          top: tooltipY + 'px',
+        }"
+      >
+        {{ stationName }}
+      </div>
     </div>
   </div>
 </template>
@@ -170,7 +233,7 @@ function clickRow(row: TableRowData, column: TableColumnCtx<TableRowData>, event
     }
   }
   .tooltip {
-    position: absolute;
+    position: fixed;
     padding: 12px;
     border-radius: 4px;
     pointer-events: none;
@@ -186,6 +249,8 @@ function clickRow(row: TableRowData, column: TableColumnCtx<TableRowData>, event
     line-height: 16px; /* 133.333% */
     letter-spacing: 0.6px;
     border: 1px solid #5084b8;
+    left: 0;
+    top: 0;
     background: #0d2e58;
   }
 }

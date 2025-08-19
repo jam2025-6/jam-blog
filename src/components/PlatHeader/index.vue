@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, onMounted, onUnmounted } from "vue";
 import SelectSvg from "@/assets/icons/select.svg";
 import SearchSvg from "@/assets/icons/search.svg";
 const selectedValue = ref(null);
@@ -7,6 +7,43 @@ const options = [
   { value: "1", label: "选项1" },
   { value: "2", label: "选项2" },
 ];
+
+// 响应式变量
+const currentDate = ref("");
+const currentTime = ref("");
+const currentWeekday = ref("");
+
+// 星期数组
+const weekDays = ["日", "一", "二", "三", "四", "五", "六"];
+
+// 更新时间函数
+function updateTime() {
+  const now = new Date();
+
+  const year = now.getFullYear();
+  const month = String(now.getMonth() + 1).padStart(2, "0");
+  const day = String(now.getDate()).padStart(2, "0");
+
+  currentDate.value = `${year}/${month}/${day}`;
+
+  const hours = String(now.getHours()).padStart(2, "0");
+  const minutes = String(now.getMinutes()).padStart(2, "0");
+  const seconds = String(now.getSeconds()).padStart(2, "0");
+
+  currentTime.value = `${hours}:${minutes}:${seconds}`;
+
+  currentWeekday.value = `星期${weekDays[now.getDay()]}`;
+}
+let timer: ReturnType<typeof setInterval>;
+
+onMounted(() => {
+  updateTime(); // 立即执行一次
+  timer = setInterval(updateTime, 1000); // 每秒更新
+});
+
+onUnmounted(() => {
+  clearInterval(timer); // 清理定时器
+});
 </script>
 <template>
   <div class="plat-header">
@@ -41,10 +78,10 @@ const options = [
       />
     </div>
     <div class="time">
-      <div class="time-text">17:06:42</div>
+      <div class="time-text">{{ currentTime }}</div>
       <div class="week">
-        <div class="week-text">星期五</div>
-        <div class="date">2023/05/05</div>
+        <div class="week-text">{{ currentWeekday }}</div>
+        <div class="date">{{ currentDate }}</div>
       </div>
     </div>
   </div>

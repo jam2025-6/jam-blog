@@ -34,3 +34,32 @@
     }
   }
 }
+
+.el-popper {
+  &.el-select__popper {
+    background-color: #05305d;
+    border: 1px solid #236bab;
+    .el-select-dropdown__item {
+      color: #fff;
+      /* 蓝色文字发光 */
+      text-shadow: 0 0 6.8px rgba(64, 182, 232, 0.7);
+      font-family: "HarmonyOS Sans SC";
+      font-size: 12px;
+      font-style: normal;
+      font-weight: 400;
+      line-height: normal;
+      display: flex;
+      align-items: center;
+      letter-spacing: 1.2px;
+      &.is-hovering {
+        background-color: #034777;
+      }
+    }
+    .el-popper__arrow {
+      &::before {
+        background-color: #05305d;
+        border-color: #05305d;
+      }
+    }
+  }
+}
