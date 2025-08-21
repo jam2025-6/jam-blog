@@ -129,6 +129,7 @@ const options = computed(() => {
     },
     tooltip: {
       show: true,
+      appendToBody: true,
       backgroundColor: "transparent",
       // alwaysShowContent: true,
       trigger: "axis",
