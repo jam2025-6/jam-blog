@@ -24,14 +24,14 @@ const { isChinese } = storeToRefs(useLocaleStore());
           <div class="cell-item-main">
             <div class="name">{{ $t("effectiveHours") }}</div>
             <div class="value">
-              <div class="value-name">光伏</div>
+              <div class="value-name">{{ $t("photovoltaic") }}</div>
               <div class="number">
                 <div class="value-num">456</div>
                 <div class="value-unit">h</div>
               </div>
             </div>
             <div class="value">
-              <div class="value-name">风电</div>
+              <div class="value-name">{{ $t("windPower") }}</div>
               <div class="number">
                 <div class="value-num">456</div>
                 <div class="value-unit">h</div>

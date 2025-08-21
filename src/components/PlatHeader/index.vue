@@ -3,6 +3,9 @@ import { ref, onMounted, onUnmounted } from "vue";
 import dayjs from "dayjs";
 import SelectSvg from "@/assets/icons/select.svg";
 import SearchSvg from "@/assets/icons/search.svg";
+import { useLocaleStore } from "@/stores/modules/locale.js";
+import { storeToRefs } from "pinia";
+const { isChinese } = storeToRefs(useLocaleStore());
 const selectedValue = ref(null);
 const options = [
   { value: "1", label: "选项1" },
@@ -47,11 +50,15 @@ onUnmounted(() => {
 });
 </script>
 <template>
-  <div class="plat-header">
+  <div
+    class="plat-header"
+    :class="{
+      en: !isChinese,
+    }"
+  >
     <img class="logo" src="@/assets/images/global/logo.png" alt="" />
     <header class="plat-title">
-      高特微电网管理平台
-      <img src="@/assets/images/headers/title-back.png" alt="" />
+      {{ $t("gaoteMicrogridManagementPlatform") }} <img src="@/assets/images/headers/title-back.png" alt="" />
     </header>
     <div class="search">
       <el-select
@@ -98,6 +105,12 @@ onUnmounted(() => {
   //   align-items: center;
   //   justify-content: space-between;
   position: relative;
+  &.en {
+    .plat-title {
+      font-size: 22px;
+      letter-spacing: 2px;
+    }
+  }
   &::before {
     content: "";
     display: inline-block;

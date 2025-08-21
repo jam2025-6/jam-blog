@@ -1,8 +1,17 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { useLocaleStore } from "@/stores/modules/locale.js";
+import { storeToRefs } from "pinia";
+const { isChinese } = storeToRefs(useLocaleStore());
+</script>
 <template>
-  <div class="system-header">
+  <div
+    class="system-header"
+    :class="{
+      en: !isChinese,
+    }"
+  >
     <img class="logo" src="@/assets/images/global/logo.png" alt="" />
-    <div class="title">高特微电网管理系统</div>
+    <div class="title">{{ $t("gaoteMicrogridManagementSystem") }}</div>
   </div>
 </template>
 
@@ -17,6 +26,11 @@
   //   align-items: center;
   //   justify-content: space-between;
   position: relative;
+  &.en {
+    .title {
+      font-size: 28px;
+    }
+  }
   &::before {
     content: "";
     display: inline-block;

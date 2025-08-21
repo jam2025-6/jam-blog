@@ -1,4 +1,9 @@
 <script setup lang="ts">
+import { useI18n } from "vue-i18n";
+import { useLocaleStore } from "@/stores/modules/locale.js";
+import { storeToRefs } from "pinia";
+const { isChinese } = storeToRefs(useLocaleStore());
+const { t } = useI18n();
 import Line from "./line.vue";
 import Modal from "./modal.vue";
 const point1 = [
@@ -38,91 +43,104 @@ const point6 = [
 ];
 const modal1 = [
   {
-    name: "充电功率",
+    name: t("chargingPower"),
     value: 12.4,
     unit: "kW",
   },
   {
-    name: "储能SOC",
+    name: t("essSOC"),
     value: 94,
     unit: "%",
   },
 ];
 const modal2 = [
   {
-    name: "日发电量",
+    name: t("dailyGeneration"),
     value: 12.4,
     unit: "kW·h",
   },
   {
-    name: "日收益",
+    name: t("dailyRevenue"),
     value: 94,
-    unit: "元",
+    unit: t("yuan"),
   },
 ];
 const modal3 = [
   {
-    name: "上网电量",
+    name: t("gridFeedIn"),
     value: 12.4,
     unit: "kW·h",
   },
   {
-    name: "日消纳量",
+    name: t("dailyUtilization"),
     value: 12.4,
     unit: "kW·h",
   },
   {
-    name: "日收益",
+    name: t("dailyRevenue"),
     value: 94,
-    unit: "元",
+    unit: t("yuan"),
   },
 ];
 const modal4 = [
   {
-    name: "日用电量",
+    name: t("dailyConsumption"),
     value: 12.4,
     unit: "kW·h",
   },
 ];
 const modal5 = [
   {
-    name: "日充电量",
+    name: t("dailyCharging"),
     value: 12.4,
     unit: "kW·h",
   },
   {
-    name: "日充电收益",
+    name: t("dailyChargingRevenue"),
     value: 94,
-    unit: "元",
+    unit: t("yuan"),
   },
 ];
 const modal6 = [
   {
-    name: "上网电量",
+    name: t("gridFeedIn"),
     value: 12.4,
     unit: "kW·h",
   },
   {
-    name: "下网电量",
+    name: t("gridDraw"),
     value: 12.4,
     unit: "kW·h",
   },
 ];
 </script>
 <template>
-  <div class="center-panel">
+  <div
+    class="center-panel"
+    :class="{
+      en: !isChinese,
+    }"
+  >
     <Line :status="true" :points="point1" />
     <Line :status="true" :points="point2" />
     <Line :status="true" :points="point3" />
     <Line :status="true" :forward="false" :points="point4" />
     <Line :status="true" :points="point5" />
     <Line :status="true" :points="point6" />
-    <Modal title="储能" :list="modal1" :position="{ right: '807px', top: '149px' }" />
-    <Modal title="风电" :list="modal2" :position="{ right: '617px', top: '0' }" />
-    <Modal title="光伏" :list="modal3" :position="{ left: '784px', top: '70px' }" />
-    <Modal title="负荷" :list="modal4" :position="{ left: '786px', top: '245px' }" />
-    <Modal title="充电桩" :list="modal5" :position="{ left: '603px', top: '367px' }" />
-    <Modal title="市电" :list="modal6" :position="{ right: '796px', top: '348px' }" />
+    <Modal :title="$t('energyStorage')" :list="modal1" :position="{ right: '807px', top: '149px' }" />
+    <Modal :title="$t('windPower')" :list="modal2" :position="{ right: '617px', top: '0' }" />
+    <Modal
+      :title="$t('photovoltaic')"
+      :list="modal3"
+      :position="{ left: isChinese ? '784px' : '764px', top: '70px' }"
+    />
+    <Modal :title="$t('load')" :list="modal4" :position="{ left: '786px', top: '245px' }" />
+    <Modal :title="$t('chargingPile')" :list="modal5" :position="{ left: '603px', top: '367px' }" />
+    <Modal
+      :title="$t('gridPower')"
+      :list="modal6"
+      :position="{ right: isChinese ? '796px' : '777px', top: isChinese ? '348px' : '288px' }"
+    />
     <div class="energy-storage">
       <img src="@/assets/images/station/energyStorage-active.png" alt="" />
       <!-- <div class="name">储能</div> -->
@@ -150,7 +168,7 @@ const modal6 = [
     <div class="advertising-board">
       <img src="@/assets/images/station/advertisingBoard.png" alt="" />
       <div class="value">
-        <div class="name">新能源占比</div>
+        <div class="name">{{ $t("renewableEnergyPercentage") }}</div>
         <div class="num">89%</div>
       </div>
     </div>
@@ -166,6 +184,17 @@ const modal6 = [
   left: 472px;
   top: 203px;
   right: 493px;
+  &.en {
+    .advertising-board {
+      .value {
+        left: 15px;
+        transform: translateY(-60%) skew(0deg, -30deg);
+        .num {
+          transform: translate(-10px, 4px);
+        }
+      }
+    }
+  }
   .energy-storage {
     position: absolute;
     left: 157px;
