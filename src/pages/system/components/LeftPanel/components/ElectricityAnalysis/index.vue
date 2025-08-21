@@ -1,5 +1,8 @@
 <script setup lang="ts">
 import { PanelTitle, SemiCircleProgress } from "@/components";
+import { useLocaleStore } from "@/stores/modules/locale.js";
+import { storeToRefs } from "pinia";
+const { isChinese } = storeToRefs(useLocaleStore());
 </script>
 <template>
   <div class="electricity-analysis">
@@ -7,7 +10,8 @@ import { PanelTitle, SemiCircleProgress } from "@/components";
     <div class="container">
       <div class="cell">
         <div class="cell-item">
-          <svg-icon name="year" style="font-size: 42px" />
+          <svg-icon v-if="isChinese" name="year" style="font-size: 42px" />
+          <svg-icon v-else name="elec" style="font-size: 42px" />
           <div class="info">
             <div class="name">{{ $t("annualPowerConsumption") }}</div>
             <div class="value">
@@ -18,7 +22,8 @@ import { PanelTitle, SemiCircleProgress } from "@/components";
         </div>
 
         <div class="cell-item">
-          <svg-icon name="month" style="font-size: 42px" />
+          <svg-icon v-if="isChinese" name="month" style="font-size: 42px" />
+          <svg-icon v-else name="elec" style="font-size: 42px" />
           <div class="info">
             <div class="name">{{ $t("monthlyPowerConsumption") }}</div>
             <div class="value">
@@ -28,7 +33,8 @@ import { PanelTitle, SemiCircleProgress } from "@/components";
           </div>
         </div>
         <div class="cell-item">
-          <svg-icon name="day" style="font-size: 42px" />
+          <svg-icon v-if="isChinese" name="day" style="font-size: 42px" />
+          <svg-icon v-else name="elec" style="font-size: 42px" />
           <div class="info">
             <div class="name">{{ $t("dailyPowerConsumption") }}</div>
             <div class="value">
@@ -38,7 +44,8 @@ import { PanelTitle, SemiCircleProgress } from "@/components";
           </div>
         </div>
         <div class="cell-item">
-          <svg-icon name="demand" style="font-size: 42px" />
+          <svg-icon v-if="isChinese" name="demand" style="font-size: 42px" />
+          <svg-icon v-else name="elec" style="font-size: 42px" />
           <div class="info">
             <div class="name">{{ $t("currentMonthDemand") }}</div>
             <div class="value">
