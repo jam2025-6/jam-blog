@@ -13,6 +13,7 @@ export const useLocaleStore = defineStore("lang", {
   state: () => ({
     lang: Cookies.get("saas-locale") || "zh-CN",
     elementPlusLocale: zhCn,
+    isChinese: (Cookies.get("saas-locale") || "zh-CN") === "zh-CN",
   }),
   actions: {
     setLang(lang: LangType) {

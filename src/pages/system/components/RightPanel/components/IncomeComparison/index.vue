@@ -2,6 +2,8 @@
 import { PanelTitle, gdCharts } from "@/components";
 import { ref, computed } from "vue";
 import * as echarts from "echarts";
+import { useI18n } from "vue-i18n";
+const { t } = useI18n();
 const options = computed(() => {
   return {
     xAxis: {
@@ -20,7 +22,7 @@ const options = computed(() => {
     },
     yAxis: {
       type: "value",
-      name: "元",
+      name: t("yuan"),
       nameTextStyle: {
         color: "rgba(182, 212, 254, 0.8)",
         fontSize: 12,
@@ -74,7 +76,7 @@ const options = computed(() => {
             <span class="item-point blue"></span>
             <span class="item-name">${value[0].seriesName}</span>
             <span class="item-value">${value[0].value}</span>
-            <span class="item-unit">元</span>
+            <span class="item-unit">${t("yuan")}</span>
           </div>
         </div>
       </div>
@@ -84,7 +86,7 @@ const options = computed(() => {
     },
     series: [
       {
-        name: "收益",
+        name: t("revenue"),
         data: [20, 32, 91, 34, 90, 30, 20],
         type: "bar",
         barWidth: 12,
@@ -123,7 +125,7 @@ const options = computed(() => {
 </script>
 <template>
   <div class="income-comparison">
-    <PanelTitle title="近7日收益对比" />
+    <PanelTitle :title="$t('recent7DaysRevenueComparison')" />
     <div class="container">
       <gdCharts height="100%" :option="options" />
     </div>

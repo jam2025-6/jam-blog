@@ -22,11 +22,9 @@
         y="110"
         text-anchor="middle"
         dominant-baseline="middle"
-        font-size="24"
         fill="#FFFFFF"
-      >
-        {{ text }}
-      </text>
+        v-html="text"
+      ></text>
     </svg>
   </div>
 </template>

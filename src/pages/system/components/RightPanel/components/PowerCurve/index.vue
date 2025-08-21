@@ -2,6 +2,8 @@
 import { PanelTitle, gdCharts } from "@/components";
 import { ref, computed } from "vue";
 import * as echarts from "echarts";
+import { useI18n } from "vue-i18n";
+const { t } = useI18n();
 const options = computed(() => {
   const times: any = [];
   for (let h = 0; h < 24; h++) {
@@ -163,7 +165,7 @@ const options = computed(() => {
     },
     series: [
       {
-        name: "负荷",
+        name: t("load"),
         data: powerData1,
         type: "line",
         smooth: true,
@@ -194,7 +196,7 @@ const options = computed(() => {
         },
       },
       {
-        name: "储能",
+        name: t("energyStorage"),
         data: powerData2,
         type: "line",
         smooth: true,
@@ -225,7 +227,7 @@ const options = computed(() => {
         },
       },
       {
-        name: "市电",
+        name: t("gridPower"),
         data: powerData3,
         type: "line",
         smooth: true,
@@ -256,7 +258,7 @@ const options = computed(() => {
         },
       },
       {
-        name: "新能源",
+        name: t("renewableEnergy"),
         data: powerData4,
         type: "line",
         smooth: true,
@@ -292,7 +294,7 @@ const options = computed(() => {
 </script>
 <template>
   <div class="power-curve">
-    <PanelTitle title="运行功率曲线" />
+    <PanelTitle :title="$t('operatingPowerCurve')" />
     <div class="container">
       <gdCharts height="100%" :option="options" />
     </div>

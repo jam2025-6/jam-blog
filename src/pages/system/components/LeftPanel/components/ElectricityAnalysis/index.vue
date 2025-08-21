@@ -3,13 +3,13 @@ import { PanelTitle, SemiCircleProgress } from "@/components";
 </script>
 <template>
   <div class="electricity-analysis">
-    <PanelTitle title="用电情况分析" />
+    <PanelTitle :title="$t('powerUsageAnalysis')" />
     <div class="container">
       <div class="cell">
         <div class="cell-item">
-          <svg-icon name="year" style="font-size: 42px; margin-right: 4px; margin-left: 6px" />
+          <svg-icon name="year" style="font-size: 42px" />
           <div class="info">
-            <div class="name">年用电量</div>
+            <div class="name">{{ $t("annualPowerConsumption") }}</div>
             <div class="value">
               <div class="num">40.5</div>
               <div class="unit">MW·h</div>
@@ -18,9 +18,9 @@ import { PanelTitle, SemiCircleProgress } from "@/components";
         </div>
 
         <div class="cell-item">
-          <svg-icon name="month" style="font-size: 42px; margin-right: 4px; margin-left: 6px" />
+          <svg-icon name="month" style="font-size: 42px" />
           <div class="info">
-            <div class="name">月用电量</div>
+            <div class="name">{{ $t("monthlyPowerConsumption") }}</div>
             <div class="value">
               <div class="num">40.5</div>
               <div class="unit">MW·h</div>
@@ -28,9 +28,9 @@ import { PanelTitle, SemiCircleProgress } from "@/components";
           </div>
         </div>
         <div class="cell-item">
-          <svg-icon name="day" style="font-size: 42px; margin-right: 4px; margin-left: 6px" />
+          <svg-icon name="day" style="font-size: 42px" />
           <div class="info">
-            <div class="name">日用电量</div>
+            <div class="name">{{ $t("dailyPowerConsumption") }}</div>
             <div class="value">
               <div class="num">40.5</div>
               <div class="unit">MW·h</div>
@@ -38,9 +38,9 @@ import { PanelTitle, SemiCircleProgress } from "@/components";
           </div>
         </div>
         <div class="cell-item">
-          <svg-icon name="demand" style="font-size: 42px; margin-right: 4px; margin-left: 6px" />
+          <svg-icon name="demand" style="font-size: 42px" />
           <div class="info">
-            <div class="name">当月需量</div>
+            <div class="name">{{ $t("currentMonthDemand") }}</div>
             <div class="value">
               <div class="num">40.5</div>
               <div class="unit">MW·h</div>
@@ -51,52 +51,52 @@ import { PanelTitle, SemiCircleProgress } from "@/components";
       <div class="rate">
         <div class="rate-item">
           <div class="rate-item-pic">
-            <SemiCircleProgress :bluePercent="60" :orangePercent="40" text="月对比" />
+            <SemiCircleProgress :bluePercent="60" :orangePercent="40" :text="$t('monthlyComparison')" />
           </div>
           <div class="rate-item-main">
             <div class="item">
               <div class="point"></div>
-              <div class="name">电网月供电</div>
+              <div class="name">{{ $t("gridMonthlySupply") }}</div>
               <div class="value">
                 <div class="num">40.5</div>
                 <div class="unit">MW·h</div>
               </div>
-              <div class="percent">（50%）</div>
+              <div class="percent">(50%)</div>
             </div>
             <div class="item orange">
               <div class="point"></div>
-              <div class="name">新能源年消纳</div>
+              <div class="name">{{ $t("renewableEnergyAnnualUtilization") }}</div>
               <div class="value">
                 <div class="num">40.5</div>
                 <div class="unit">MW·h</div>
               </div>
-              <div class="percent">（50%）</div>
+              <div class="percent">(50%)</div>
             </div>
           </div>
           <!-- <SemiCircleProgress :progress="85" title="月对比" :size="100" progress-color="#2196F3" /> -->
         </div>
         <div class="rate-item">
           <div class="rate-item-pic">
-            <SemiCircleProgress :bluePercent="40" :orangePercent="60" text="月对比" />
+            <SemiCircleProgress :bluePercent="40" :orangePercent="60" :text="$t('monthlyComparison')" />
           </div>
           <div class="rate-item-main">
             <div class="item">
               <div class="point"></div>
-              <div class="name">电网月供电</div>
+              <div class="name">{{ $t("gridMonthlySupply") }}</div>
               <div class="value">
                 <div class="num">40.5</div>
                 <div class="unit">MW·h</div>
               </div>
-              <div class="percent">（50%）</div>
+              <div class="percent">(50%)</div>
             </div>
             <div class="item orange">
               <div class="point"></div>
-              <div class="name">新能源年消纳</div>
+              <div class="name">{{ $t("renewableEnergyAnnualUtilization") }}</div>
               <div class="value">
                 <div class="num">40.5</div>
                 <div class="unit">MW·h</div>
               </div>
-              <div class="percent">（50%）</div>
+              <div class="percent">(100%)</div>
             </div>
           </div>
         </div>
@@ -123,7 +123,7 @@ import { PanelTitle, SemiCircleProgress } from "@/components";
         display: flex;
         align-items: center;
         .info {
-          width: calc(100% - 52px);
+          width: calc(100% - 42px);
           .value {
             display: flex;
             align-items: baseline;
@@ -131,6 +131,7 @@ import { PanelTitle, SemiCircleProgress } from "@/components";
         }
         // padding: 0 10px;
         .name {
+          white-space: nowrap;
           background: linear-gradient(211deg, #f7fcfa 18.65%, #cbdaf5 94.38%);
           background-clip: text;
           -webkit-background-clip: text;
@@ -172,7 +173,7 @@ import { PanelTitle, SemiCircleProgress } from "@/components";
           font-style: normal;
           font-weight: 700;
           line-height: normal;
-          letter-spacing: 0.6px;
+          letter-spacing: 0.4px;
         }
       }
     }
@@ -193,7 +194,8 @@ import { PanelTitle, SemiCircleProgress } from "@/components";
           .item {
             display: flex;
             align-items: center;
-            height: 14px;
+            min-height: 14px;
+            width: 100%;
             &.orange {
               .point {
                 background: linear-gradient(231deg, #f5b04f 0.05%, #fe9347 113.94%);
@@ -213,6 +215,7 @@ import { PanelTitle, SemiCircleProgress } from "@/components";
               background: linear-gradient(220deg, #26cefd 7.64%, #2b8ef3 100.06%);
               width: 6px;
               height: 6px;
+              flex-shrink: 0;
               border-radius: 50%;
               margin-right: 11px;
             }
@@ -228,7 +231,7 @@ import { PanelTitle, SemiCircleProgress } from "@/components";
               font-size: 12px;
               font-style: normal;
               font-weight: 900;
-              line-height: normal;
+              // line-height: normal;
               letter-spacing: 0.6px;
               margin-right: 6px;
             }
@@ -255,6 +258,7 @@ import { PanelTitle, SemiCircleProgress } from "@/components";
               }
             }
             .percent {
+              display: inline-block;
               background: linear-gradient(220deg, #26cefd 7.64%, #2b8ef3 100.06%);
               background-clip: text;
               -webkit-background-clip: text;

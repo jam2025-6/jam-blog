@@ -2,6 +2,8 @@
 import { PanelTitle, gdCharts } from "@/components";
 import { ref } from "vue";
 import * as echarts from "echarts";
+import { useI18n } from "vue-i18n";
+const { t } = useI18n();
 const options = ref({
   xAxis: {
     type: "category",
@@ -19,7 +21,7 @@ const options = ref({
   },
   yAxis: {
     type: "value",
-    name: "吨",
+    name: t("ton"),
     nameTextStyle: {
       color: "rgba(182, 212, 254, 0.8)",
       fontSize: 12,
@@ -106,7 +108,7 @@ const options = ref({
   },
   series: [
     {
-      name: "碳排放量",
+      name: t("carbonEmission"),
       data: [20, 32, 91, 34, 90, 30, 20],
       type: "line",
       smooth: true,
@@ -141,7 +143,7 @@ const options = ref({
 </script>
 <template>
   <div class="carbon-curve">
-    <PanelTitle title="碳排放曲线" />
+    <PanelTitle :title="$t('carbonEmissionCurve')" />
     <div class="container">
       <gdCharts height="100%" :option="options" />
     </div>

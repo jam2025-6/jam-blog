@@ -1,15 +1,18 @@
 <script setup lang="ts">
 import { PanelTitle } from "@/components";
+import { useLocaleStore } from "@/stores/modules/locale.js";
+import { storeToRefs } from "pinia";
+const { isChinese } = storeToRefs(useLocaleStore());
 </script>
 <template>
   <div class="power-curve">
-    <PanelTitle title="新能源社会效益" />
+    <PanelTitle :title="$t('renewableEnergySocialBenefits')" />
     <div class="container">
       <div class="cell">
         <div class="cell-item">
-          <svg-icon name="fdl" style="font-size: 48px; margin-right: 16px"></svg-icon>
+          <svg-icon name="fdl" style="font-size: 48px; margin-right: 16px; flex-shrink: 0"></svg-icon>
           <div class="cell-item-main">
-            <div class="name">新能源年发电量</div>
+            <div class="name">{{ $t("annualRenewableEnergyGeneration") }}</div>
             <div class="value">
               <div class="value-num">456</div>
               <div class="value-unit">kW·h</div>
@@ -17,9 +20,9 @@ import { PanelTitle } from "@/components";
           </div>
         </div>
         <div class="cell-item">
-          <svg-icon name="yxxss" style="font-size: 48px; margin-right: 16px"></svg-icon>
+          <svg-icon name="yxxss" style="font-size: 48px; margin-right: 16px; flex-shrink: 0"></svg-icon>
           <div class="cell-item-main">
-            <div class="name">新能源年发电量</div>
+            <div class="name">{{ $t("effectiveHours") }}</div>
             <div class="value">
               <div class="value-name">光伏</div>
               <div class="number">
@@ -37,9 +40,9 @@ import { PanelTitle } from "@/components";
           </div>
         </div>
         <div class="cell-item">
-          <svg-icon name="zydl" style="font-size: 48px; margin-right: 16px"></svg-icon>
+          <svg-icon name="zydl" style="font-size: 48px; margin-right: 16px; flex-shrink: 0"></svg-icon>
           <div class="cell-item-main">
-            <div class="name">新能源年自用电量</div>
+            <div class="name">{{ $t("annualRenewableEnergySelfConsumption") }}</div>
             <div class="value">
               <div class="value-num">456</div>
               <div class="value-unit">kW·h</div>
@@ -47,9 +50,9 @@ import { PanelTitle } from "@/components";
           </div>
         </div>
         <div class="cell-item">
-          <svg-icon name="swdl" style="font-size: 48px; margin-right: 16px"></svg-icon>
+          <svg-icon name="swdl" style="font-size: 48px; margin-right: 16px; flex-shrink: 0"></svg-icon>
           <div class="cell-item-main">
-            <div class="name">新能源年上网电量</div>
+            <div class="name">{{ $t("annualRenewableEnergyGridFeedIn") }}</div>
             <div class="value">
               <div class="value-num">456</div>
               <div class="value-unit">kW·h</div>
@@ -63,28 +66,56 @@ import { PanelTitle } from "@/components";
             <div class="num">1000</div>
             <div class="unit">t</div>
           </div>
-          <div class="section-item-text">减少碳排放</div>
+          <div
+            class="section-item-text"
+            :class="{
+              en: !isChinese,
+            }"
+          >
+            {{ $t("carbonReduction") }}
+          </div>
         </div>
         <div class="section-item">
           <div class="section-item-main">
             <div class="num">1000</div>
             <div class="unit">t</div>
           </div>
-          <div class="section-item-text">节约标准煤</div>
+          <div
+            class="section-item-text"
+            :class="{
+              en: !isChinese,
+            }"
+          >
+            {{ $t("standardCoalSaving") }}
+          </div>
         </div>
         <div class="section-item">
           <div class="section-item-main">
             <div class="num">1000</div>
-            <div class="unit">棵</div>
+            <div class="unit">{{ $t("treeUnit") }}</div>
           </div>
-          <div class="section-item-text">等效植树数</div>
+          <div
+            class="section-item-text"
+            :class="{
+              en: !isChinese,
+            }"
+          >
+            {{ $t("equivalentTreesPlanted") }}
+          </div>
         </div>
         <div class="section-item">
           <div class="section-item-main">
             <div class="num">1000</div>
-            <div class="unit">张</div>
+            <div class="unit">{{ $t("certificateUnit") }}</div>
           </div>
-          <div class="section-item-text">等效绿证数</div>
+          <div
+            class="section-item-text"
+            :class="{
+              en: !isChinese,
+            }"
+          >
+            {{ $t("equivalentGreenCertificates") }}
+          </div>
         </div>
       </div>
     </div>
@@ -113,6 +144,9 @@ import { PanelTitle } from "@/components";
         width: 190px;
         display: flex;
         align-items: flex-start;
+        &:nth-last-of-type(2n-1) {
+          flex: 1;
+        }
         .name {
           padding-top: 3px;
           /* 二级标题投影 */
@@ -182,7 +216,6 @@ import { PanelTitle } from "@/components";
       height: 78px;
       &-item {
         &-main {
-          margin-bottom: 12px;
           width: 92px;
           height: 51px;
           background-image: url("@/assets/icons/social.svg");
@@ -224,6 +257,7 @@ import { PanelTitle } from "@/components";
           }
         }
         &-text {
+          margin-top: 12px;
           background: linear-gradient(211deg, #f7fcfa 18.65%, #cbdaf5 94.38%);
           background-clip: text;
           -webkit-background-clip: text;
@@ -241,6 +275,10 @@ import { PanelTitle } from "@/components";
           display: flex;
           align-items: center;
           justify-content: center;
+          &.en {
+            letter-spacing: 0.2px;
+            margin-top: 4px;
+          }
         }
       }
     }

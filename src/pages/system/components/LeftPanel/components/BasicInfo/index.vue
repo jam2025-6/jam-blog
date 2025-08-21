@@ -1,37 +1,76 @@
 <script setup lang="ts">
 import { PanelTitle } from "@/components";
+import { useLocaleStore } from "@/stores/modules/locale.js";
+import { storeToRefs } from "pinia";
+const { isChinese } = storeToRefs(useLocaleStore());
 </script>
 <template>
   <div class="basic-info">
-    <PanelTitle title="基本信息" />
+    <PanelTitle :title="$t('basicInfo')" />
     <div class="container">
       <div class="pic">
         <div class="pic-item">
-          <div class="pic-item-main valtafe">
+          <div
+            class="pic-item-main valtafe"
+            :class="{
+              'mb-8': isChinese,
+            }"
+          >
             <div class="word">
               <div>0.4</div>
               <div>kV</div>
             </div>
           </div>
-          <div class="pic-item-title valtafe">电压等级</div>
+          <div
+            class="pic-item-title valtafe"
+            :style="{
+              'letter-spacing': isChinese ? '1.4px' : '1px',
+            }"
+          >
+            {{ $t("voltageLevel") }}
+          </div>
         </div>
         <div class="pic-item">
-          <div class="pic-item-main transformer">
+          <div
+            class="pic-item-main transformer"
+            :class="{
+              'mb-8': isChinese,
+            }"
+          >
             <div class="word">
               <div>500</div>
               <div>kVA</div>
             </div>
           </div>
-          <div class="pic-item-title transformer">变压器容量</div>
+          <div
+            class="pic-item-title transformer"
+            :style="{
+              'letter-spacing': isChinese ? '1.4px' : '1px',
+            }"
+          >
+            {{ $t("transformerCapacity") }}
+          </div>
         </div>
         <div class="pic-item">
-          <div class="pic-item-main photovoltaic">
+          <div
+            class="pic-item-main photovoltaic"
+            :class="{
+              'mb-8': isChinese,
+            }"
+          >
             <div class="word">
               <div>300</div>
               <div>kW</div>
             </div>
           </div>
-          <div class="pic-item-title photovoltaic">光伏容量</div>
+          <div
+            class="pic-item-title photovoltaic"
+            :style="{
+              'letter-spacing': isChinese ? '1.4px' : '1px',
+            }"
+          >
+            {{ $t("pvCapacity") }}
+          </div>
         </div>
       </div>
 
@@ -39,7 +78,7 @@ import { PanelTitle } from "@/components";
         <div class="info-item">
           <svg-icon name="wind-power" style="font-size: 36px; margin-right: 11px" />
           <div class="info-item-word">
-            <div class="info-item-word-title">风电容量</div>
+            <div class="info-item-word-title">{{ $t("windPowerCapacity") }}</div>
             <div class="info-item-word-value">
               <div class="info-item-word-value-num">5</div>
               <div class="info-item-word-value-unit">kV</div>
@@ -49,7 +88,7 @@ import { PanelTitle } from "@/components";
         <div class="info-item">
           <svg-icon name="stored-energy" style="font-size: 36px; margin-right: 11px" />
           <div class="info-item-word">
-            <div class="info-item-word-title">储能容量</div>
+            <div class="info-item-word-title">{{ $t("energyStorageCapacity") }}</div>
             <div class="info-item-word-value">
               <div class="info-item-word-value-num">60</div>
               <div class="info-item-word-value-unit">kV</div>
@@ -62,7 +101,7 @@ import { PanelTitle } from "@/components";
         <div class="info-item">
           <svg-icon name="charging-pile" style="font-size: 36px; margin-right: 11px" />
           <div class="info-item-word">
-            <div class="info-item-word-title">直流充电桩</div>
+            <div class="info-item-word-title">{{ $t("dcChargingPile") }}</div>
             <div class="info-item-word-value">
               <div class="info-item-word-value-num">140</div>
               <div class="info-item-word-value-unit">kW</div>
@@ -72,7 +111,7 @@ import { PanelTitle } from "@/components";
         <div class="info-item">
           <svg-icon name="charging-pile" style="font-size: 36px; margin-right: 11px" />
           <div class="info-item-word">
-            <div class="info-item-word-title">交流充电桩</div>
+            <div class="info-item-word-title">{{ $t("acChargingPile") }}</div>
             <div class="info-item-word-value">
               <div class="info-item-word-value-num">35</div>
               <div class="info-item-word-value-unit">kW</div>
@@ -102,7 +141,7 @@ import { PanelTitle } from "@/components";
         margin-right: 42px;
         height: 126px;
         &-main {
-          margin-bottom: 8px;
+          //
           height: calc(100% - 25px);
           position: relative;
           display: flex;
@@ -229,7 +268,7 @@ import { PanelTitle } from "@/components";
           }
         }
         &-title {
-          height: 17px;
+          // height: 17px;
           text-align: center;
           /* 二级标题投影 */
           font-family: "Alimama FangYuanTi VF";
@@ -267,18 +306,21 @@ import { PanelTitle } from "@/components";
     }
     .info {
       padding-left: 7px;
-      width: 365px;
+      width: 100%;
       display: flex;
       flex-wrap: wrap;
       gap: 16px 0;
       &-item {
-        width: 50%;
+        white-space: nowrap;
+        // width: 50%;
+        min-width: 190px;
         display: flex;
         align-items: center;
         &-word {
           width: calc(100% - 47px);
           white-space: nowrap;
           &-title {
+            white-space: nowrap;
             background: linear-gradient(211deg, #f7fcfa 18.65%, #cbdaf5 94.38%);
             background-clip: text;
             -webkit-background-clip: text;

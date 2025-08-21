@@ -2,24 +2,24 @@
 import { PanelTitle, gdCharts, Tabs } from "@/components";
 import { ref, computed, watch } from "vue";
 import * as echarts from "echarts";
-
+import { useI18n } from "vue-i18n";
+const { t } = useI18n();
 const tabList = [
   {
-    label: "负荷预测曲线",
+    label: t("loadForecastCurves"),
     value: "负荷预测曲线",
   },
   {
-    label: "发电预测曲线",
+    label: t("generationForecastCurve"),
     value: "发电预测曲线",
   },
   {
-    label: "现货价格预测",
+    label: t("spotPriceForecast"),
     value: "现货价格预测",
   },
 ];
 const tabValue = ref("");
 const options = computed(() => {
-  console.log("%c [  ]-22", "font-size:13px; background:pink; color:#bf2c9f;", tabValue.value);
   if (!tabValue.value) {
     return;
   }
@@ -44,31 +44,31 @@ const options = computed(() => {
   > = {
     负荷预测曲线: [
       {
-        name: "负荷实况",
+        name: t("loadActual"),
         data: generatePowerData(50, 100),
       },
       {
-        name: "负荷预测",
+        name: t("loadForecast"),
         data: generatePowerData(40, 130),
       },
     ],
     发电预测曲线: [
       {
-        name: "发电实况",
+        name: t("generationActual"),
         data: generatePowerData(60, 100),
       },
       {
-        name: "发电预测",
+        name: t("generationForecast"),
         data: generatePowerData(50, 90),
       },
     ],
     现货价格预测: [
       {
-        name: "现货实况",
+        name: t("spotActual"),
         data: generatePowerData(20, 29),
       },
       {
-        name: "现货预测",
+        name: t("spotForecast"),
         data: generatePowerData(30, 50),
       },
     ],
@@ -239,7 +239,7 @@ const options = computed(() => {
 </script>
 <template>
   <div class="bottom-panel">
-    <PanelTitle title="负荷预测曲线" size="large" />
+    <PanelTitle :title="$t('loadForecastCurve')" size="large" />
     <div class="container">
       <Tabs :list="tabList" v-model="tabValue" />
       <gdCharts v-if="tabValue" :option="options" />

@@ -1,36 +1,45 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { useLocaleStore } from "@/stores/modules/locale.js";
+import { storeToRefs } from "pinia";
+const { isChinese } = storeToRefs(useLocaleStore());
+</script>
 <template>
-  <div class="indicator-card">
+  <div
+    class="indicator-card"
+    :class="{
+      en: !isChinese,
+    }"
+  >
     <div class="item">
-      <div class="item-title">累计节约电量</div>
+      <div class="item-title">{{ $t("cumulativeEnergySaved") }}</div>
       <div class="item-indicator">
         <div class="item-indicator-num">40.7</div>
         <div class="item-indicator-unit">kW·h</div>
       </div>
     </div>
     <div class="item">
-      <div class="item-title">累计新能源消纳占比</div>
+      <div class="item-title">{{ $t("renewableEnergyUtilizationRate") }}</div>
       <div class="item-indicator">
         <div class="item-indicator-num">40.7</div>
         <div class="item-indicator-unit">%</div>
       </div>
     </div>
     <div class="item">
-      <div class="item-title">累计系统收益</div>
+      <div class="item-title">{{ $t("cumulativeSystemRevenue") }}</div>
       <div class="item-indicator">
         <div class="item-indicator-num">400</div>
-        <div class="item-indicator-unit">元</div>
+        <div class="item-indicator-unit">{{ $t("yuan") }}</div>
       </div>
     </div>
     <div class="item">
-      <div class="item-title">投资回收期</div>
+      <div class="item-title">{{ $t("investmentPaybackPeriod") }}</div>
       <div class="item-indicator">
         <div class="item-indicator-num">2</div>
-        <div class="item-indicator-unit">年</div>
+        <div class="item-indicator-unit">{{ $t("year") }}</div>
       </div>
     </div>
     <div class="item">
-      <div class="item-title">减碳</div>
+      <div class="item-title">{{ $t("carbonReductions") }}</div>
       <div class="item-indicator">
         <div class="item-indicator-num orange">100</div>
         <div class="item-indicator-unit orange">t</div>
@@ -55,6 +64,15 @@
   padding-top: 16px;
   justify-content: center;
   gap: 0 52px;
+  &.en {
+    gap: 0 24px;
+    .item {
+      &-title {
+        font-size: 14px;
+        letter-spacing: 1px;
+      }
+    }
+  }
   .item {
     &-title {
       background: linear-gradient(211deg, #f7fcfa 18.65%, #cbdaf5 94.38%);

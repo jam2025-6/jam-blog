@@ -1,60 +1,69 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { useLocaleStore } from "@/stores/modules/locale.js";
+import { storeToRefs } from "pinia";
+const { isChinese } = storeToRefs(useLocaleStore());
+</script>
 <template>
-  <div class="info-card">
+  <div
+    class="info-card"
+    :class="{
+      en: !isChinese,
+    }"
+  >
     <div class="item">
-      <div class="item-title">峰谷套利</div>
+      <div class="item-title">{{ $t("peakValleyArbitrage") }}</div>
       <div class="item-section">
         <div class="flex">
           <div class="flex-point"></div>
-          <div class="flex-name">当月节约电费</div>
+          <div class="flex-name">{{ $t("monthlyElectricitySavings") }}</div>
           <div class="flex-num">405</div>
-          <div class="flex-unit">元</div>
+          <div class="flex-unit">{{ $t("yuan") }}</div>
         </div>
         <div class="flex orange">
           <div class="flex-point"></div>
-          <div class="flex-name">累计节约电费</div>
+          <div class="flex-name">{{ $t("cumulativeElectricitySavings") }}</div>
           <div class="flex-num">405</div>
-          <div class="flex-unit">元</div>
+          <div class="flex-unit">{{ $t("yuan") }}</div>
         </div>
       </div>
     </div>
     <div class="item">
-      <div class="item-title">需量管理</div>
+      <div class="item-title">{{ $t("demandManagement") }}</div>
       <div class="item-section">
         <div class="flex">
           <div class="flex-point"></div>
-          <div class="flex-name">当月降低需量</div>
+          <div class="flex-name">{{ $t("monthlyDemandReduction") }}</div>
           <div class="flex-num">405</div>
           <div class="flex-unit">kW</div>
         </div>
         <div class="flex orange">
           <div class="flex-point"></div>
-          <div class="flex-name">当月节约电费</div>
+          <div class="flex-name">{{ $t("monthlyElectricitySavings") }}</div>
           <div class="flex-num">405</div>
-          <div class="flex-unit">元</div>
+          <div class="flex-unit">{{ $t("yuan") }}</div>
         </div>
         <div class="flex orange">
           <div class="flex-point"></div>
-          <div class="flex-name">累计节约电费</div>
+          <div class="flex-name">{{ $t("cumulativeElectricitySavings") }}</div>
           <div class="flex-num">405</div>
-          <div class="flex-unit">元</div>
+          <div class="flex-unit">{{ $t("yuan") }}</div>
         </div>
       </div>
     </div>
     <div class="item">
-      <div class="item-title">新能源消纳</div>
+      <div class="item-title">{{ $t("renewableEnergyUtilization") }}</div>
       <div class="item-section">
         <div class="flex">
           <div class="flex-point"></div>
-          <div class="flex-name">当月消纳电量</div>
+          <div class="flex-name">{{ $t("monthlyUtilizedEnergy") }}</div>
           <div class="flex-num">405</div>
           <div class="flex-unit">MW·h</div>
         </div>
         <div class="flex orange">
           <div class="flex-point"></div>
-          <div class="flex-name">累计节约电费</div>
+          <div class="flex-name">{{ $t("cumulativeElectricitySavings") }}</div>
           <div class="flex-num">405</div>
-          <div class="flex-unit">元</div>
+          <div class="flex-unit">{{ $t("yuan") }}</div>
         </div>
       </div>
     </div>
@@ -73,6 +82,21 @@
   display: flex;
   justify-content: center;
   gap: 0 28px;
+  &.en {
+    .item {
+      &-section {
+        .flex {
+          padding: 0 8px;
+          &-point {
+            margin-right: 4px;
+          }
+          &-name {
+            letter-spacing: 0;
+          }
+        }
+      }
+    }
+  }
   .item {
     width: 262px;
     min-height: 80px;
