@@ -136,6 +136,7 @@ onUnmounted(() => {
     /* 一级标题投影 */
     text-shadow: 0 0 6px rgba(229, 239, 249, 0.36), 0 0 25px rgba(48, 126, 229, 0.6);
     font-family: "Alimama FangYuanTi VF";
+    font-variation-settings: "BEVL" 1, "wght" 700;
     font-size: 36px;
     font-style: normal;
     font-weight: 700;

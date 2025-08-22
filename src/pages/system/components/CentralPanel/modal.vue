@@ -104,6 +104,7 @@ const props = withDefaults(defineProps<Props>(), {
       /* 橙色文字投影 */
       text-shadow: 0 2px 5px rgba(0, 0, 0, 0.4), 0 0 6px rgba(249, 243, 229, 0.36), 0 0 10px rgba(229, 145, 48, 0.6);
       font-family: "Alimama FangYuanTi VF";
+      font-variation-settings: "BEVL" 1, "wght" 700;
       font-size: 12px;
       font-style: normal;
       font-weight: 700;

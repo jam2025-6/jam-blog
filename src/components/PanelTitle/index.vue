@@ -26,6 +26,7 @@ const props = withDefaults(defineProps<Props>(), {
   width: 100%;
   background-repeat: no-repeat;
   padding-left: 52px;
+  padding-top: 3px;
   &.small {
     background-image: url("@/assets/images/system/title-bg.png");
   }
@@ -34,8 +35,10 @@ const props = withDefaults(defineProps<Props>(), {
   }
   .title {
     /* 二级标题投影 */
+
     text-shadow: 0 2px 5px rgba(0, 0, 0, 0.4), 0 0 6px rgba(229, 240, 249, 0.36), 0 0 10px rgba(48, 139, 229, 0.6);
     font-family: "Alimama FangYuanTi VF";
+    font-variation-settings: "BEVL" 1, "wght" 700;
     font-size: 18px;
     font-style: normal;
     font-weight: 700;

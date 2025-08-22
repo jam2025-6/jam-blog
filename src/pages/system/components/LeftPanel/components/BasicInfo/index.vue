@@ -274,7 +274,7 @@ const { isChinese } = storeToRefs(useLocaleStore());
           font-family: "Alimama FangYuanTi VF";
           font-size: 14px;
           font-style: normal;
-          font-weight: 700;
+          font-variation-settings: "BEVL" 1, "wght" 700;
           line-height: normal;
           letter-spacing: 1.4px;
           &.valtafe {

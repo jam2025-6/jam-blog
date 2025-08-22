@@ -50,14 +50,17 @@ const { isChinese } = storeToRefs(useLocaleStore());
     margin-right: 43px;
   }
   .title {
+    leading-trim: both;
+    text-edge: cap;
     margin-top: 26px;
     /* 一级标题投影 */
     text-shadow: 0 0 6px rgba(229, 239, 249, 0.36), 0 0 25px rgba(48, 126, 229, 0.6);
     font-family: "Alimama FangYuanTi VF";
     font-size: 36px;
     font-style: normal;
-    font-weight: 700;
     line-height: normal;
+    font-weight: 700;
+    font-variation-settings: "BEVL" 1, "wght" 700;
     letter-spacing: 5.04px;
     background: linear-gradient(211deg, #f7fcfa 18.65%, #cbdaf5 94.38%);
     background-clip: text;
