@@ -37,11 +37,13 @@ interface Props {
   points?: { x: number; y: number }[];
   status?: boolean; // 线条状态
   forward?: boolean; // 流动方向
+  bgForward?: boolean; //背景样式
 }
 const props = withDefaults(defineProps<Props>(), {
   points: () => [],
   status: true,
   forward: true,
+  bgForward: true,
 });
 
 const pathLength = ref(0);
@@ -138,20 +140,23 @@ onMounted(() => {
       <path
         :d="pathData"
         fill="none"
-        :stroke="props.status ? 'url(#gradStroke)' : 'url(#gradStrokeInActive)'"
-        stroke-width="6"
+        :stroke="props.bgForward ? 'url(#gradStroke)' : 'url(#gradStrokeBack )'"
+        stroke-width="8"
         stroke-linecap="round"
+        stroke-linejoin="round"
       />
 
       <!-- 流动路径 -->
-      <path
+      <!-- <path
         :d="pathData"
         fill="none"
-        :stroke="props.status ? 'url(#gradStroke)' : 'url(#gradStrokeInActive)'"
-        stroke-width="6"
+        stroke="url(#gradStrokeInActive)"
+        stroke-width="8"
         :stroke-dasharray="pathLength"
         :stroke-dashoffset="dashOffset"
-      />
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      /> -->
 
       <!-- 箭头 -->
       <g :transform="arrowTransform">
@@ -166,9 +171,13 @@ onMounted(() => {
           <stop offset="0%" stop-color="#2A7EB1" />
           <stop offset="100%" stop-color="#00E1FF" />
         </linearGradient>
+        <linearGradient id="gradStrokeBack" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" stop-color="#00E1FF" />
+          <stop offset="100%" stop-color="#2A7EB1" />
+        </linearGradient>
         <linearGradient id="gradStrokeInActive" x1="0%" y1="0%" x2="100%" y2="0%">
-          <stop stop-color="#2A7EB1" />
-          <stop offset="1" stop-color="#2A7EB1" />
+          <stop stop-color="#00E1FF" />
+          <stop offset="1" stop-color="#00E1FF" />
         </linearGradient>
       </defs>
     </svg>

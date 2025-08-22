@@ -7,39 +7,39 @@ const { t } = useI18n();
 import Line from "./line.vue";
 import Modal from "./modal.vue";
 const point1 = [
-  { x: 440, y: 448 },
-  { x: 720, y: 285 },
-  { x: 720, y: 220 },
+  { x: 442, y: 448 },
+  { x: 698, y: 300 },
+  { x: 698, y: 250 },
 ];
 const point2 = [
   { x: 480, y: 250 },
-  { x: 630, y: 335 },
-  { x: 720, y: 285 },
-  { x: 720, y: 220 },
+  { x: 635, y: 336 },
+  { x: 705, y: 297 },
+  { x: 705, y: 245 },
 ];
 const point3 = [
   { x: 655, y: 425 },
-  { x: 565, y: 375 },
-  { x: 720, y: 285 },
-  { x: 720, y: 220 },
+  { x: 568, y: 374 },
+  { x: 712, y: 293 },
+  { x: 712, y: 240 },
 ];
 const point4 = [
   { x: 730, y: 100 },
   { x: 890, y: 190 },
-  { x: 720, y: 285 },
-  { x: 720, y: 220 },
+  { x: 719, y: 289 },
+  { x: 719, y: 220 },
 ];
 const point5 = [
   { x: 980, y: 140 },
   { x: 890, y: 190 },
-  { x: 720, y: 285 },
-  { x: 720, y: 220 },
+  { x: 726, y: 285 },
+  { x: 726, y: 220 },
 ];
 const point6 = [
   { x: 945, y: 250 },
   { x: 865, y: 205 },
-  { x: 720, y: 285 },
-  { x: 720, y: 220 },
+  { x: 732, y: 281 },
+  { x: 732, y: 220 },
 ];
 const modal1 = [
   {
@@ -124,9 +124,9 @@ const modal6 = [
     <Line :status="true" :points="point1" />
     <Line :status="true" :points="point2" />
     <Line :status="true" :points="point3" />
-    <Line :status="true" :forward="false" :points="point4" />
-    <Line :status="true" :points="point5" />
-    <Line :status="true" :points="point6" />
+    <Line :status="true" :bgForward="false" :points="point4" />
+    <Line :status="true" :bgForward="false" :points="point5" />
+    <Line :status="true" :bgForward="false" :points="point6" />
     <Modal :title="$t('energyStorage')" :list="modal1" :position="{ right: '807px', top: '149px' }" />
     <Modal :title="$t('windPower')" :list="modal2" :position="{ right: '617px', top: '0' }" />
     <Modal
@@ -143,7 +143,6 @@ const modal6 = [
     />
     <div class="energy-storage">
       <img src="@/assets/images/station/energyStorage-active.png" alt="" />
-      <!-- <div class="name">储能</div> -->
     </div>
     <div class="wind-power">
       <img src="@/assets/images/station/windPower-active.png" alt="" />
@@ -200,25 +199,23 @@ const modal6 = [
     left: 157px;
     top: 96px;
     .name {
-      /* 倾斜效果：x 轴倾斜 15 度，y 轴不倾斜（可根据需求调整角度） */
-      // transform: skew(52deg, -32deg);
-      transform: skew(65deg, -31deg);
+      transform: skew(75deg, -55deg) rotate(20deg);
       text-align: center;
       /* 橙色文字投影 */
-      text-shadow: 0 2px 5px rgba(0, 0, 0, 0.4), 0 0 6px rgba(249, 243, 229, 0.36), 0 0 10px rgba(229, 145, 48, 0.6);
+      text-shadow: 0 2px 5px rgba(0, 0, 0, 0.1), 0 0 6px rgba(249, 243, 229, 0.36), 0 0 10px rgba(229, 145, 48, 0.6);
       font-family: "Alimama FangYuanTi VF";
-      font-size: 16px;
+      font-size: 6px;
       font-style: normal;
       font-weight: 700;
       line-height: normal;
-      letter-spacing: 1.6px;
+      letter-spacing: 0.8px;
       background: linear-gradient(211deg, #fcfbf7 18.65%, #f5e6cb 94.38%);
       background-clip: text;
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       position: absolute;
-      right: -26px;
-      bottom: 2px;
+      right: 80px;
+      bottom: 6px;
     }
   }
   .wind-power {
