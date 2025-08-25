@@ -88,12 +88,26 @@ function cellMouseLeave() {
         style="width: 100%; height: 100%"
         @row-click="clickRow"
       >
-        <el-table-column align="center" sortable prop="stationName" label="站点名" />
-        <el-table-column align="center" sortable prop="power" label="累计节约电量" />
-        <el-table-column align="center" sortable prop="state" label="累计新能源消纳占比" />
-        <el-table-column align="center" sortable prop="city" label="累计系统收益" />
-        <el-table-column align="center" sortable prop="address" label="投资回收期" />
-        <el-table-column align="center" sortable prop="zip" label="减碳" />
+        <el-table-column type="expand">
+          <template #default="props">
+            <div>
+              <el-table :data="props.row.family" :border="childBorder">
+                <el-table-column align="center" sortable prop="power" label="站点名称" />
+                <el-table-column align="center" sortable prop="power" label="光伏容量" />
+                <el-table-column align="center" sortable prop="state" label="风电容量" />
+                <el-table-column align="center" sortable prop="city" label="储能容量" />
+                <el-table-column align="center" sortable prop="address" label="交流充电桩容量" />
+                <el-table-column align="center" sortable prop="zip" label="直流充电桩容量" />
+              </el-table>
+            </div>
+          </template>
+        </el-table-column>
+        <el-table-column align="center" sortable prop="stationName" label="微电网名称" />
+        <el-table-column align="center" sortable prop="power" label="光伏容量" />
+        <el-table-column align="center" sortable prop="state" label="风电容量" />
+        <el-table-column align="center" sortable prop="city" label="储能容量" />
+        <el-table-column align="center" sortable prop="address" label="交流充电桩容量" />
+        <el-table-column align="center" sortable prop="zip" label="直流充电桩容量" />
       </el-table>
       <div
         v-show="!!stationName"
@@ -151,6 +165,23 @@ function cellMouseLeave() {
       .el-table__row {
         background-color: rgba($color: #1a417e, $alpha: 0.25) !important;
         // background-color: transparent !important;
+        .el-table__expand-column {
+          .cell {
+            display: flex;
+            align-items: center;
+          }
+          .el-icon {
+            font-size: 20px;
+            color: #fff;
+          }
+        }
+      }
+      .el-table__expanded-cell {
+        padding: 0;
+        // background-color: rgba($color: #0d1b36, $alpha: 0.75);
+        .el-table {
+          // background-color: rgba($color: #0d1b36, $alpha: 0.75);
+        }
       }
       .el-table__row--striped {
         background-color: rgba($color: #0d1b36, $alpha: 0.25) !important;
@@ -159,8 +190,32 @@ function cellMouseLeave() {
         &::before {
           display: none;
         }
-
-        tr {
+        .el-table__header {
+          tr {
+            background-color: rgba($color: #0d1b36, $alpha: 0.25);
+            th {
+              &.el-table__cell {
+                background-color: transparent;
+                &.is-leaf {
+                  border-bottom: none;
+                }
+                .cell {
+                  color: #fff;
+                  font-family: "HarmonyOS Sans SC";
+                  font-size: 18px;
+                  font-style: normal;
+                  font-weight: 700;
+                  line-height: normal;
+                  height: 36px;
+                  line-height: 36px;
+                }
+              }
+            }
+          }
+        }
+        .el-table__row {
+          // .el-table__expanded-cell {
+          // }
           background-color: rgba($color: #0d1b36, $alpha: 0.25);
           &:hover {
             cursor: pointer;
@@ -181,24 +236,7 @@ function cellMouseLeave() {
               }
             }
           }
-          th {
-            &.el-table__cell {
-              background-color: transparent;
-              &.is-leaf {
-                border-bottom: none;
-              }
-              .cell {
-                color: #fff;
-                font-family: "HarmonyOS Sans SC";
-                font-size: 18px;
-                font-style: normal;
-                font-weight: 700;
-                line-height: normal;
-                height: 36px;
-                line-height: 36px;
-              }
-            }
-          }
+
           td {
             &.el-table__cell {
               background-color: transparent;
