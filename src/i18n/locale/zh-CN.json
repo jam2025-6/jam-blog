@@ -1,5 +1,6 @@
 {
   "acChargingPile": "交流充电桩",
+  "acChargingPileCapacity": "交流充电桩容量",
   "annualPowerConsumption": "年用电量",
   "annualRenewableEnergyGeneration": "新能源年发电量",
   "annualRenewableEnergyGridFeedIn": "新能源年上网电量",
@@ -24,6 +25,7 @@
   "dailyRevenue": "日收益",
   "dailyUtilization": "日消纳量",
   "dcChargingPile": "直流充电桩",
+  "dcChargingPileCapacity": "直流充电桩容量",
   "demandManagement": "需量管理",
   "effectiveHours": "新能源年有效小时数",
   "energyStorage": "储能",
@@ -58,6 +60,7 @@
   "monthlyElectricitySavings": "当月节约电费",
   "monthlyPowerConsumption": "月用电量",
   "monthlyUtilizedEnergy": "当月消纳电量",
+  "name": "名称",
   "operatingPowerCurve": "运行功率曲线",
   "peakValleyArbitrage": "峰谷套利",
   "photovoltaic": "光伏",

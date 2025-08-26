@@ -1,5 +1,6 @@
 {
   "acChargingPile": "AC Charging Pile",
+  "acChargingPileCapacity": "AC Charging Pile Capacity",
   "annualPowerConsumption": "Annual",
   "annualRenewableEnergyGeneration": "Annual Power Generation",
   "annualRenewableEnergyGridFeedIn": "Annual Grid Feed-in",
@@ -24,6 +25,7 @@
   "dailyRevenue": "Daily Revenue",
   "dailyUtilization": "Daily Utilization",
   "dcChargingPile": "DC Charging Pile",
+  "dcChargingPileCapacity": "DC Charging Pile Capacity",
   "demandManagement": "Demand Management",
   "effectiveHours": "Effective Hours",
   "energyStorage": "Energy Storage",
@@ -58,6 +60,7 @@
   "monthlyElectricitySavings": "Monthly Electricity Savings",
   "monthlyPowerConsumption": "Monthly",
   "monthlyUtilizedEnergy": "Monthly Utilized Energy",
+  "name": "Name",
   "operatingPowerCurve": "Operating Power Curve",
   "peakValleyArbitrage": "Peak-Valley Arbitrage",
   "photovoltaic": "Photovoltaic",

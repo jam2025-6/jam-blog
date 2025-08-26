@@ -5,6 +5,7 @@ import { debounce } from "lodash";
 import { useRouter } from "vue-router";
 // 定义行数据类型
 interface TableRowData {
+  id: number;
   date: string;
   power: string;
   stationName: string;
@@ -18,19 +19,82 @@ const tooltipY = ref(0);
 const router = useRouter();
 const containerRef = ref<HTMLElement | null>(null);
 const stationName = ref("");
-const tableData = new Array(33).fill({}).map((el, index) => {
-  return {
-    date: "2016-05-03",
-    power: "1",
-    stationName: "浙江****储能站3400kwh" + index,
-    state: "California",
-    city: "Los Angeles",
+const tableData = ref([
+  {
+    id: 1,
+    date: "2016-05-02",
+    stationName: "wangxiaohu",
     address: "No. 189, Grove St, Los Angeles",
-    zip: "CA 90036",
-  };
-});
+  },
+  {
+    id: 2,
+    date: "2016-05-04",
+    stationName: "wangxiaohu",
+    address: "No. 189, Grove St, Los Angeles",
+  },
+  {
+    id: 3,
+    date: "2016-05-01",
+    stationName: "wangxiaohu",
+    address: "No. 189, Grove St, Los Angeles",
+    children: [
+      {
+        id: 31,
+        date: "2016-05-01",
+        stationName: "wangxiaohu",
+        address: "No. 189, Grove St, Los Angeles",
+      },
+      {
+        id: 32,
+        date: "2016-05-01",
+        stationName: "wangxiaohu",
+        address: "No. 189, Grove St, Los Angeles",
+      },
+      {
+        id: 33,
+        date: "2016-05-01",
+        stationName: "wangxiaohu",
+        address: "No. 189, Grove St, Los Angeles",
+      },
+    ],
+  },
+  {
+    id: 4,
+    date: "2016-05-03",
+    stationName: "wangxiaohu",
+    address: "No. 189, Grove St, Los Angeles",
+  },
+  {
+    id: 5,
+    date: "2016-05-01",
+    stationName: "wangxiaohu",
+    address: "No. 189, Grove St, Los Angeles",
+    children: [
+      {
+        id: 51,
+        date: "2016-05-01",
+        stationName: "wangxiaohu",
+        address: "No. 189, Grove St, Los Angeles",
+      },
+      {
+        id: 52,
+        date: "2016-05-01",
+        stationName: "wangxiaohu",
+        address: "No. 189, Grove St, Los Angeles",
+      },
+      {
+        id: 53,
+        date: "2016-05-01",
+        stationName: "wangxiaohu",
+        address: "No. 189, Grove St, Los Angeles",
+      },
+    ],
+  },
+]);
 
 function clickRow(row: TableRowData, column: TableColumnCtx<TableRowData>, event: Event) {
+  const index = tableData.value.findIndex((el) => el.id === row.id);
+  if (index === -1) return;
   router.push({
     path: "/system",
   });
@@ -70,12 +134,42 @@ const handleMouseMove = (event: MouseEvent) => {
   tooltipY.value = y;
 };
 
-function cellMouseEnter(row: TableRowData) {
-  stationName.value = row.stationName;
+function cellMouseEnter(
+  row: TableRowData,
+  column: TableColumnCtx<TableRowData>,
+  cell: HTMLTableCellElement,
+  event: Event
+) {
+  const index = tableData.value.findIndex((el) => el.id === row.id);
+  if (index > -1) {
+    stationName.value = row.stationName;
+  } else {
+    stationName.value = "";
+  }
 }
 function cellMouseLeave() {
   stationName.value = "";
 }
+
+interface Row {
+  id: number;
+  name: string;
+  value: string;
+  children?: Row[];
+}
+
+// 自定义行样式
+const tableRowClassName = ({ row, rowIndex }: { row: Row; rowIndex: number }) => {
+  const index = tableData.value.findIndex((el) => el.id === row.id);
+  if (index === -1) {
+    const i = tableData.value.findIndex(
+      (item) => item.children && item.children?.findIndex((el) => el.id === row.id) > -1
+    );
+    return i % 2 != 0 ? "table-row-stripe" : "";
+  } else {
+    return index % 2 != 0 ? "table-row-stripe" : "";
+  }
+};
 </script>
 <template>
   <div class="page">
@@ -84,30 +178,18 @@ function cellMouseLeave() {
         @cell-mouse-enter="cellMouseEnter"
         @cell-mouse-leave="cellMouseLeave"
         :data="tableData"
-        stripe
+        :row-class-name="tableRowClassName"
         style="width: 100%; height: 100%"
         @row-click="clickRow"
+        row-key="id"
+        default-expand-all
       >
-        <el-table-column type="expand">
-          <template #default="props">
-            <div>
-              <el-table :data="props.row.family" :border="childBorder">
-                <el-table-column align="center" sortable prop="power" label="站点名称" />
-                <el-table-column align="center" sortable prop="power" label="光伏容量" />
-                <el-table-column align="center" sortable prop="state" label="风电容量" />
-                <el-table-column align="center" sortable prop="city" label="储能容量" />
-                <el-table-column align="center" sortable prop="address" label="交流充电桩容量" />
-                <el-table-column align="center" sortable prop="zip" label="直流充电桩容量" />
-              </el-table>
-            </div>
-          </template>
-        </el-table-column>
-        <el-table-column align="center" sortable prop="stationName" label="微电网名称" />
-        <el-table-column align="center" sortable prop="power" label="光伏容量" />
-        <el-table-column align="center" sortable prop="state" label="风电容量" />
-        <el-table-column align="center" sortable prop="city" label="储能容量" />
-        <el-table-column align="center" sortable prop="address" label="交流充电桩容量" />
-        <el-table-column align="center" sortable prop="zip" label="直流充电桩容量" />
+        <el-table-column align="center" sortable prop="stationName" :label="$t('name')" />
+        <el-table-column align="center" sortable prop="power" :label="$t('pvCapacity')" />
+        <el-table-column align="center" sortable prop="state" :label="$t('windPowerCapacity')" />
+        <el-table-column align="center" sortable prop="city" :label="$t('energyStorageCapacity')" />
+        <el-table-column align="center" sortable prop="address" :label="$t('acChargingPileCapacity')" />
+        <el-table-column align="center" sortable prop="zip" :label="$t('dcChargingPileCapacity')" />
       </el-table>
       <div
         v-show="!!stationName"
@@ -161,29 +243,34 @@ function cellMouseLeave() {
     :deep(.el-table) {
       background-color: transparent;
       z-index: 2025;
-      //
       .el-table__row {
         background-color: rgba($color: #1a417e, $alpha: 0.25) !important;
-        // background-color: transparent !important;
-        .el-table__expand-column {
-          .cell {
+        .cell {
+          display: flex;
+          align-items: center;
+          padding: 0;
+          .el-table__indent {
+            // padding-left: 0 !important;
+          }
+          .el-table__placeholder {
+            width: 76px;
+            height: 32px;
+          }
+          .el-table__expand-icon {
+            width: 76px;
+            height: 32px;
             display: flex;
             align-items: center;
-          }
-          .el-icon {
-            font-size: 20px;
-            color: #fff;
+            justify-content: center;
+            margin-right: 0;
+            .el-icon {
+              font-size: 20px;
+              color: #fff;
+            }
           }
         }
       }
-      .el-table__expanded-cell {
-        padding: 0;
-        // background-color: rgba($color: #0d1b36, $alpha: 0.75);
-        .el-table {
-          // background-color: rgba($color: #0d1b36, $alpha: 0.75);
-        }
-      }
-      .el-table__row--striped {
+      .table-row-stripe {
         background-color: rgba($color: #0d1b36, $alpha: 0.25) !important;
       }
       .el-table__inner-wrapper {
@@ -217,21 +304,23 @@ function cellMouseLeave() {
           // .el-table__expanded-cell {
           // }
           background-color: rgba($color: #0d1b36, $alpha: 0.25);
-          &:hover {
-            cursor: pointer;
-            box-shadow: 0 0 20px 0 rgba(104, 187, 255, 0.18);
-            td {
-              &.el-table__cell {
-                border-top: 1.2px solid #68bbff;
-                border-bottom: 1.2px solid #68bbff;
-                // background: rgba(36, 87, 164, 0.4);
-                //
-                background: rgba(36, 87, 164, 0.25);
-                &:first-child {
-                  border-left: 1.2px solid #68bbff;
-                }
-                &:last-child {
-                  border-right: 1.2px solid #68bbff;
+          &:not(.el-table__row--level-1) {
+            &:hover {
+              cursor: pointer;
+              box-shadow: 0 0 20px 0 rgba(104, 187, 255, 0.18);
+              td {
+                &.el-table__cell {
+                  border-top: 1.2px solid #68bbff;
+                  border-bottom: 1.2px solid #68bbff;
+                  // background: rgba(36, 87, 164, 0.4);
+                  //
+                  background: rgba(36, 87, 164, 0.25);
+                  &:first-child {
+                    border-left: 1.2px solid #68bbff;
+                  }
+                  &:last-child {
+                    border-right: 1.2px solid #68bbff;
+                  }
                 }
               }
             }
