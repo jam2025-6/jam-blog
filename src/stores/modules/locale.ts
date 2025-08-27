@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 import Cookies from "js-cookie";
-import i18n from "@/i18n/index.js";
+import i18n from "@/i18n/index";
 import zhCn from "element-plus/dist/locale/zh-cn.mjs";
 import en from "element-plus/dist/locale/en.mjs";
 type LangType = "zh-CN" | "en-US";

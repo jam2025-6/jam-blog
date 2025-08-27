@@ -3,10 +3,15 @@ import { ref, onMounted, onUnmounted } from "vue";
 import dayjs from "dayjs";
 import SelectSvg from "@/assets/icons/select.svg";
 import SearchSvg from "@/assets/icons/search.svg";
-import { useLocaleStore } from "@/stores/modules/locale.js";
+import { useLocaleStore } from "@/stores/modules/locale";
 import { storeToRefs } from "pinia";
+import bus from "@/utils/bus";
+import { getMicrogridList } from "@/api/home";
 const { isChinese } = storeToRefs(useLocaleStore());
-const selectedValue = ref(null);
+const formData = ref({
+  stationName: "",
+  microgridName: "",
+});
 const options = [
   { value: "1", label: "选项1" },
   { value: "2", label: "选项2" },
@@ -39,7 +44,9 @@ function updateTime() {
   currentWeekday.value = `星期${weekDays[now.getDay()]}`;
 }
 let timer: ReturnType<typeof setInterval>;
-
+function search() {
+  bus.emit("globalSearch", formData.value);
+}
 onMounted(() => {
   updateTime(); // 立即执行一次
   timer = setInterval(updateTime, 1000); // 每秒更新
@@ -61,7 +68,7 @@ onUnmounted(() => {
       {{ $t("gaoteMicrogridManagementPlatform") }} <img src="@/assets/images/headers/title-back.png" alt="" />
     </header>
     <div class="search">
-      <el-select
+      <!-- <el-select
         style="width: 188px; height: 38px"
         v-model="selectedValue"
         :suffix-icon="SelectSvg"
@@ -76,13 +83,26 @@ onUnmounted(() => {
         placeholder="某某字段"
       >
         <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
-      </el-select>
+      </el-select> -->
+      <!-- <span class="search-label">微电网</span> -->
+      <el-input
+        style="width: 208px; height: 38px"
+        v-model="formData.microgridName"
+        size="large"
+        clearable
+        placeholder="输入微电网名称，enter搜索"
+        :prefix-icon="SearchSvg"
+        @change="search"
+      />
+      <!-- <span class="search-label">站点名称</span> -->
       <el-input
         style="width: 188px; height: 38px"
-        v-model="selectedValue"
+        v-model="formData.stationName"
         size="large"
+        clearable
         :placeholder="$t('search_prompt')"
         :prefix-icon="SearchSvg"
+        @change="search"
       />
     </div>
     <div class="time">
@@ -161,6 +181,10 @@ onUnmounted(() => {
     display: flex;
     justify-content: flex-end;
     gap: 0 24px;
+    // &-label {
+    //   line-height: 38px;
+    //   color: #fff;
+    // }
   }
   .time {
     /* 标题发光 */

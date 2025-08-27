@@ -7,7 +7,7 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import { useScreenAdapts } from "@/hooks";
-import { useLocaleStore } from "@/stores/modules/locale.js";
+import { useLocaleStore } from "@/stores/modules/locale";
 import { useTabVisibility } from "@/hooks/useTabVisibility";
 import Cookies from "js-cookie";
 type LangType = "zh-CN" | "en-US";

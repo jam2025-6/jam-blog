@@ -1,25 +1,26 @@
 <script setup lang="ts">
-import { ref, watch, computed, onMounted } from "vue";
+import { ref, watch, computed, onMounted, onUnmounted } from "vue";
 import type { TableColumnCtx } from "element-plus";
 import { debounce } from "lodash";
 import { useRouter } from "vue-router";
+import bus from "@/utils/bus";
+import { getMicrogridList } from "@/api/home";
 // 定义行数据类型
 interface TableRowData {
   id: number;
   date: string;
-  power: string;
   stationName: string;
-  state: string;
-  city: string;
-  address: string;
-  zip: string;
+  address?: string;
+  children?: TableRowData[];
 }
 const tooltipX = ref(0);
 const tooltipY = ref(0);
+const loading = ref(false);
 const router = useRouter();
 const containerRef = ref<HTMLElement | null>(null);
 const stationName = ref("");
-const tableData = ref([
+const hoverId = ref<number | undefined | null>(null);
+const tableData = ref<TableRowData[]>([
   {
     id: 1,
     date: "2016-05-02",
@@ -63,6 +64,26 @@ const tableData = ref([
     date: "2016-05-03",
     stationName: "wangxiaohu",
     address: "No. 189, Grove St, Los Angeles",
+    children: [
+      {
+        id: 41,
+        date: "2016-05-01",
+        stationName: "wangxiaohu",
+        address: "No. 189, Grove St, Los Angeles",
+      },
+      {
+        id: 42,
+        date: "2016-05-01",
+        stationName: "wangxiaohu",
+        address: "No. 189, Grove St, Los Angeles",
+      },
+      {
+        id: 43,
+        date: "2016-05-01",
+        stationName: "wangxiaohu",
+        address: "No. 189, Grove St, Los Angeles",
+      },
+    ],
   },
   {
     id: 5,
@@ -97,6 +118,9 @@ function clickRow(row: TableRowData, column: TableColumnCtx<TableRowData>, event
   if (index === -1) return;
   router.push({
     path: "/system",
+    query: {
+      id: row.id,
+    },
   });
 }
 
@@ -141,14 +165,22 @@ function cellMouseEnter(
   event: Event
 ) {
   const index = tableData.value.findIndex((el) => el.id === row.id);
+  // 如果是父节点
   if (index > -1) {
     stationName.value = row.stationName;
+    hoverId.value = row.id;
   } else {
+    // 子节点
     stationName.value = "";
+    const obj = tableData.value.find((item) => item.children && item.children.find((el) => el.id === row.id));
+    if (obj) {
+      hoverId.value = obj.id;
+    }
   }
 }
 function cellMouseLeave() {
   stationName.value = "";
+  hoverId.value = null;
 }
 
 interface Row {
@@ -157,19 +189,113 @@ interface Row {
   value: string;
   children?: Row[];
 }
-
+const params = ref({
+  pageNum: 1,
+  pageSize: 20,
+  microgridName: "",
+  stationName: "",
+});
+const total = ref(0);
 // 自定义行样式
 const tableRowClassName = ({ row, rowIndex }: { row: Row; rowIndex: number }) => {
   const index = tableData.value.findIndex((el) => el.id === row.id);
+  // 该行是否为父节点-否
   if (index === -1) {
+    // 子节点的父节点在数据中的位置
     const i = tableData.value.findIndex(
       (item) => item.children && item.children?.findIndex((el) => el.id === row.id) > -1
     );
-    return i % 2 != 0 ? "table-row-stripe" : "";
+    const hasChildren = tableData.value.find((item) => item.children && item.children.find((el) => el.id === row.id));
+    // 子节点跟着父节点的斑马纹
+    if (i % 2 != 0) {
+      if (hasChildren?.id === hoverId.value) {
+        // 选中子项
+        if (hasChildren?.children && hasChildren.children.length) {
+          const lastChild = hasChildren?.children[hasChildren?.children.length - 1];
+          if (lastChild.id === row.id) {
+            return "table-row-stripe hover-item last-child";
+          } else {
+            return "table-row-stripe hover-item";
+          }
+        }
+      } else {
+        return "table-row-stripe";
+      }
+    } else {
+      if (hasChildren?.id === hoverId.value) {
+        if (hasChildren?.children && hasChildren.children.length) {
+          const lastChild = hasChildren?.children[hasChildren?.children.length - 1];
+          if (lastChild.id === row.id) {
+            return "hover-item last-child";
+          } else {
+            return "hover-item";
+          }
+        }
+      } else {
+        return "";
+      }
+    }
   } else {
-    return index % 2 != 0 ? "table-row-stripe" : "";
+    if (index % 2 != 0) {
+      if (row.id === hoverId.value) {
+        // 选中项
+        if (tableData.value[index].children && tableData.value[index].children.length) {
+          return "table-row-stripe hover-item first-child";
+        } else {
+          return "table-row-stripe hover-item only-child";
+        }
+      } else {
+        return "table-row-stripe";
+      }
+    } else {
+      if (row.id === hoverId.value) {
+        if (tableData.value[index].children && tableData.value[index].children.length) {
+          return "hover-item first-child";
+        } else {
+          return "hover-item only-child";
+        }
+      } else {
+        return "";
+      }
+    }
+    // return index % 2 != 0 ? "table-row-stripe" : "";
   }
 };
+async function getList() {
+  try {
+    loading.value = true;
+    let res = await getMicrogridList(params.value);
+    if (res.data.code === 200) {
+      tableData.value = res.data.list;
+      total.value = res.data.total;
+    }
+  } catch (err) {
+    console.log(err);
+  } finally {
+    loading.value = false;
+  }
+}
+const currentChangeHandle = (val: number) => {
+  params.value.pageNum = val;
+  getList();
+};
+
+const pageSizeChangeHandle = (val: number) => {
+  params.value.pageSize = val;
+  getList();
+};
+onMounted(() => {
+  bus.on("globalSearch", (user) => {
+    params.value.microgridName = user.microgridName;
+    params.value.stationName = user.stationName;
+    params.value.pageNum = 1;
+    params.value.pageSize = 20;
+    getList();
+  });
+});
+onUnmounted(() => {
+  bus.off("globalSearch");
+});
 </script>
 <template>
   <div class="page">
@@ -202,18 +328,31 @@ const tableRowClassName = ({ row, rowIndex }: { row: Row; rowIndex: number }) =>
         {{ stationName }}
       </div>
     </div>
+    <div class="table-pagination">
+      <el-pagination
+        v-model:current-page="params.pageNum"
+        v-model:page-size="params.pageSize"
+        :page-sizes="[10, 20, 30, 50, 100]"
+        :disabled="false"
+        :background="false"
+        layout="total, prev, pager, next, sizes, jumper"
+        :total="total"
+        @size-change="pageSizeChangeHandle"
+        @current-change="currentChangeHandle"
+      />
+    </div>
   </div>
 </template>
 
 <style scoped lang="scss">
 .page {
-  padding: 30px 48px;
+  padding: 30px 48px 10px 48px;
   height: 100%;
   width: 100%;
   overflow: hidden;
   position: relative;
   .table {
-    height: 100%;
+    height: calc(100% - 52px);
     width: 100%;
     background-color: transparent !important;
     background-color: transparent !important;
@@ -300,31 +439,32 @@ const tableRowClassName = ({ row, rowIndex }: { row: Row; rowIndex: number }) =>
             }
           }
         }
+
         .el-table__row {
           // .el-table__expanded-cell {
           // }
           background-color: rgba($color: #0d1b36, $alpha: 0.25);
-          &:not(.el-table__row--level-1) {
-            &:hover {
-              cursor: pointer;
-              box-shadow: 0 0 20px 0 rgba(104, 187, 255, 0.18);
-              td {
-                &.el-table__cell {
-                  border-top: 1.2px solid #68bbff;
-                  border-bottom: 1.2px solid #68bbff;
-                  // background: rgba(36, 87, 164, 0.4);
-                  //
-                  background: rgba(36, 87, 164, 0.25);
-                  &:first-child {
-                    border-left: 1.2px solid #68bbff;
-                  }
-                  &:last-child {
-                    border-right: 1.2px solid #68bbff;
-                  }
-                }
-              }
-            }
-          }
+          // &:not(.el-table__row--level-1) {
+          //   &:hover {
+          //     cursor: pointer;
+          //     box-shadow: 0 0 20px 0 rgba(104, 187, 255, 0.18);
+          //     td {
+          //       &.el-table__cell {
+          //         border-top: 1.2px solid #68bbff;
+          //         border-bottom: 1.2px solid #68bbff;
+          //         // background: rgba(36, 87, 164, 0.4);
+          //         //
+          //         background: rgba(36, 87, 164, 0.25);
+          //         &:first-child {
+          //           border-left: 1.2px solid #68bbff;
+          //         }
+          //         &:last-child {
+          //           border-right: 1.2px solid #68bbff;
+          //         }
+          //       }
+          //     }
+          //   }
+          // }
 
           td {
             &.el-table__cell {
@@ -356,7 +496,61 @@ const tableRowClassName = ({ row, rowIndex }: { row: Row; rowIndex: number }) =>
         }
         .el-table__body-wrapper {
         }
+        .hover-item {
+          cursor: pointer;
+          // box-shadow: 0 0 20px 0 rgba(104, 187, 255, 0.18);
+          td {
+            &.el-table__cell {
+              background: rgba(36, 87, 164, 0.25);
+              &:first-child {
+                border-left: 1.2px solid #68bbff;
+              }
+              &:last-child {
+                border-right: 1.2px solid #68bbff;
+              }
+            }
+          }
+          &.only-child {
+            td {
+              &.el-table__cell {
+                border-top: 1.2px solid #68bbff;
+                border-bottom: 1.2px solid #68bbff;
+              }
+            }
+          }
+          &.first-child {
+            td {
+              &.el-table__cell {
+                border-top: 1.2px solid #68bbff;
+                background: rgba(36, 87, 164, 0.25);
+                &:first-child {
+                  border-left: 1.2px solid #68bbff;
+                }
+                &:last-child {
+                  border-right: 1.2px solid #68bbff;
+                }
+              }
+            }
+          }
+          &.last-child {
+            td {
+              &.el-table__cell {
+                border-bottom: 1.2px solid #68bbff;
+              }
+            }
+          }
+        }
       }
+    }
+  }
+  .table-pagination {
+    height: 52px;
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    :deep(.el-pagination) {
+      text-align: center;
     }
   }
   .tooltip {

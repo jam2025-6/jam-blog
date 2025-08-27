@@ -1,4 +1,3 @@
-// src/i18n/index.js
 import { createI18n } from "vue-i18n";
 import Cookies from "js-cookie";
 import enUS from "./locale/en-US.json";

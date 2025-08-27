@@ -1,6 +1,6 @@
 import axios, { type Method } from "axios";
 import { getToken } from "@/utils/auth";
-import i18n from "@/i18n/index.js";
+import i18n from "@/i18n/index";
 interface RequestOptions {
   url: string;
   method?: Method;

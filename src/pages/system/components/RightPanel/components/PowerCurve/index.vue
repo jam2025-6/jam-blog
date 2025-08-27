@@ -3,6 +3,8 @@ import { PanelTitle, gdCharts } from "@/components";
 import { ref, computed } from "vue";
 import * as echarts from "echarts";
 import { useI18n } from "vue-i18n";
+import { useRoute } from "vue-router";
+import { getPowerCurve } from "@/api/system";
 const { t } = useI18n();
 const options = computed(() => {
   const times: any = [];
@@ -292,11 +294,26 @@ const options = computed(() => {
     ],
   };
 });
+const route = useRoute();
+const formData = ref(false);
+const loading = ref(false);
+async function getData() {
+  try {
+    loading.value = true;
+    const id = route.query.id as string;
+    const res = await getPowerCurve(id);
+    formData.value = res.data;
+  } catch (e) {
+  } finally {
+    loading.value = false;
+  }
+}
+getData();
 </script>
 <template>
   <div class="power-curve">
     <PanelTitle :title="$t('operatingPowerCurve')" />
-    <div class="container">
+    <div class="container" v-loading="loading">
       <gdCharts height="100%" :option="options" />
     </div>
   </div>

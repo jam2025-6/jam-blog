@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useLocaleStore } from "@/stores/modules/locale.js";
+import { useLocaleStore } from "@/stores/modules/locale";
 import { storeToRefs } from "pinia";
 const { isChinese } = storeToRefs(useLocaleStore());
 </script>

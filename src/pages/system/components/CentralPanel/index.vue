@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useI18n } from "vue-i18n";
-import { useLocaleStore } from "@/stores/modules/locale.js";
+import { useLocaleStore } from "@/stores/modules/locale";
 import { storeToRefs } from "pinia";
 const { isChinese } = storeToRefs(useLocaleStore());
 const { t } = useI18n();

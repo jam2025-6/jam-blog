@@ -1,13 +1,31 @@
 <script setup lang="ts">
+import { ref, watch, onMounted } from "vue";
 import { PanelTitle } from "@/components";
-import { useLocaleStore } from "@/stores/modules/locale.js";
+import { useLocaleStore } from "@/stores/modules/locale";
 import { storeToRefs } from "pinia";
+import { useRoute } from "vue-router";
+import { getSearchById } from "@/api/system";
 const { isChinese } = storeToRefs(useLocaleStore());
+const route = useRoute();
+const formData = ref(false);
+const loading = ref(false);
+async function getData() {
+  try {
+    loading.value = true;
+    const id = route.query.id as string;
+    const res = await getSearchById(id);
+    formData.value = res.data;
+  } catch (e) {
+  } finally {
+    loading.value = false;
+  }
+}
+getData();
 </script>
 <template>
   <div class="basic-info">
     <PanelTitle :title="$t('basicInfo')" />
-    <div class="container">
+    <div v-loading="loading" class="container">
       <div class="pic">
         <div class="pic-item">
           <div

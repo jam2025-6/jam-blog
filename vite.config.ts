@@ -33,7 +33,7 @@ export default defineConfig(({ mode }): Promise<UserConfig> => {
           // "@": fileURLToPath(new URL("./src", import.meta.url)),
           "@": path.resolve(__dirname, "./src"), // ⬅️ 不再用 fileURLToPath 写法
         },
-        extensions: [".ts", ".js", ".vue"],
+        extensions: [".ts", ".ts", ".vue"],
       },
       server: {
         port: 1111,

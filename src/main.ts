@@ -13,8 +13,8 @@ import SvgIcon from "@/components/SvgIcon/index.vue";
 
 import "virtual:svg-icons-register"; // svg图标
 import dayjs from "dayjs";
-import dayOfYear from "dayjs/plugin/dayOfYear";
-import i18n from "./i18n/index.js";
+import dayOfYear from "dayjs/plugin/dayOfYear.js";
+import i18n from "./i18n/index";
 
 dayjs.extend(dayOfYear);
 

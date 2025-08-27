@@ -3,6 +3,8 @@ import { PanelTitle, gdCharts } from "@/components";
 import { ref, computed } from "vue";
 import * as echarts from "echarts";
 import { useI18n } from "vue-i18n";
+import { useRoute } from "vue-router";
+import { getCompareEarn } from "@/api/system";
 const { t } = useI18n();
 const options = computed(() => {
   return {
@@ -122,6 +124,21 @@ const options = computed(() => {
     ],
   };
 });
+const route = useRoute();
+const formData = ref(false);
+const loading = ref(false);
+async function getData() {
+  try {
+    loading.value = true;
+    const id = route.query.id as string;
+    const res = await getCompareEarn(id);
+    formData.value = res.data;
+  } catch (e) {
+  } finally {
+    loading.value = false;
+  }
+}
+getData();
 </script>
 <template>
   <div class="income-comparison">
