@@ -263,6 +263,9 @@ const options = computed(() => {
     height: calc(100% - 42px);
     width: 100%;
     position: relative;
+    .chart-container {
+      height: 100% !important;
+    }
   }
 }
 </style>

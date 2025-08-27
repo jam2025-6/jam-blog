@@ -296,7 +296,7 @@ getData();
           align-items: center;
           justify-content: center;
           &.en {
-            letter-spacing: 0.2px;
+            letter-spacing: -0.8px;
             margin-top: 4px;
           }
         }

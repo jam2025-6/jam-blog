@@ -23,12 +23,11 @@ const { isChinese } = storeToRefs(useLocaleStore());
   background-attachment: fixed; /* 可选：固定背景不随滚动移动 */
   display: flex;
   justify-content: center;
-  //   align-items: center;
-  //   justify-content: space-between;
   position: relative;
   &.en {
     .title {
       font-size: 28px;
+      letter-spacing: 3px;
     }
   }
   &::before {
