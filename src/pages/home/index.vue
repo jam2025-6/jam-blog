@@ -13,6 +13,13 @@ interface TableRowData {
   address?: string;
   children?: TableRowData[];
 }
+interface Row {
+  id: number;
+  date: string;
+  stationName: string;
+  address?: string;
+  children?: Row[];
+}
 const tooltipX = ref(0);
 const tooltipY = ref(0);
 const loading = ref(false);
@@ -26,6 +33,26 @@ const tableData = ref<TableRowData[]>([
     date: "2016-05-02",
     stationName: "wangxiaohu",
     address: "No. 189, Grove St, Los Angeles",
+    children: [
+      {
+        id: 11,
+        date: "2016-05-01",
+        stationName: "wangxiaohu",
+        address: "No. 189, Grove St, Los Angeles",
+      },
+      {
+        id: 12,
+        date: "2016-05-01",
+        stationName: "wangxiaohu",
+        address: "No. 189, Grove St, Los Angeles",
+      },
+      {
+        id: 13,
+        date: "2016-05-01",
+        stationName: "wangxiaohu",
+        address: "No. 189, Grove St, Los Angeles",
+      },
+    ],
   },
   {
     id: 2,
@@ -111,7 +138,63 @@ const tableData = ref<TableRowData[]>([
       },
     ],
   },
+  {
+    id: 6,
+    date: "2016-05-01",
+    stationName: "wangxiaohu",
+    address: "No. 189, Grove St, Los Angeles",
+    children: [
+      {
+        id: 61,
+        date: "2016-05-01",
+        stationName: "wangxiaohu",
+        address: "No. 189, Grove St, Los Angeles",
+      },
+    ],
+  },
+  {
+    id: 7,
+    date: "2016-05-01",
+    stationName: "wangxiaohu",
+    address: "No. 189, Grove St, Los Angeles",
+    children: [
+      {
+        id: 71,
+        date: "2016-05-01",
+        stationName: "wangxiaohu",
+        address: "No. 189, Grove St, Los Angeles",
+      },
+    ],
+  },
+  {
+    id: 8,
+    date: "2016-05-01",
+    stationName: "wangxiaohu",
+    address: "No. 189, Grove St, Los Angeles",
+    children: [
+      {
+        id: 81,
+        date: "2016-05-01",
+        stationName: "wangxiaohu",
+        address: "No. 189, Grove St, Los Angeles",
+      },
+      {
+        id: 82,
+        date: "2016-05-01",
+        stationName: "wangxiaohu",
+        address: "No. 189, Grove St, Los Angeles",
+      },
+    ],
+  },
 ]);
+const params = ref({
+  pageNum: 1,
+  pageSize: 20,
+  microgridName: "",
+  stationName: "",
+});
+const total = ref(0);
+const expandedKeys = ref<number[]>([]);
 
 function clickRow(row: TableRowData, column: TableColumnCtx<TableRowData>, event: Event) {
   const index = tableData.value.findIndex((el) => el.id === row.id);
@@ -171,9 +254,9 @@ function cellMouseEnter(
     hoverId.value = row.id;
   } else {
     // 子节点
-    stationName.value = "";
     const obj = tableData.value.find((item) => item.children && item.children.find((el) => el.id === row.id));
     if (obj) {
+      stationName.value = obj.stationName;
       hoverId.value = obj.id;
     }
   }
@@ -183,64 +266,48 @@ function cellMouseLeave() {
   hoverId.value = null;
 }
 
-interface Row {
-  id: number;
-  name: string;
-  value: string;
-  children?: Row[];
-}
-const params = ref({
-  pageNum: 1,
-  pageSize: 20,
-  microgridName: "",
-  stationName: "",
-});
-const total = ref(0);
 // 自定义行样式
 const tableRowClassName = ({ row, rowIndex }: { row: Row; rowIndex: number }) => {
+  if (!tableData.value || tableData.value.length === 0) {
+    return "";
+  }
+
   const index = tableData.value.findIndex((el) => el.id === row.id);
-  // 该行是否为父节点-否
+
+  // 是子节点
   if (index === -1) {
-    // 子节点的父节点在数据中的位置
-    const i = tableData.value.findIndex(
-      (item) => item.children && item.children?.findIndex((el) => el.id === row.id) > -1
+    const parentIndex = tableData.value.findIndex(
+      (item) => item.children && item.children.some((el) => el.id === row.id)
     );
-    const hasChildren = tableData.value.find((item) => item.children && item.children.find((el) => el.id === row.id));
-    // 子节点跟着父节点的斑马纹
-    if (i % 2 != 0) {
-      if (hasChildren?.id === hoverId.value) {
-        // 选中子项
-        if (hasChildren?.children && hasChildren.children.length) {
-          const lastChild = hasChildren?.children[hasChildren?.children.length - 1];
-          if (lastChild.id === row.id) {
-            return "table-row-stripe hover-item last-child";
-          } else {
-            return "table-row-stripe hover-item";
-          }
-        }
-      } else {
-        return "table-row-stripe";
+    const parentItem = tableData.value.find((item) => item.children && item.children.some((el) => el.id === row.id));
+
+    if (parentIndex === -1 || !parentItem) return "";
+
+    const isParentHovered = parentItem.id === hoverId.value;
+    const isParentExpanded = expandedKeys.value?.includes(parentItem.id);
+    const isLastChild = parentItem.children?.[parentItem.children.length - 1]?.id === row.id;
+
+    if (parentIndex % 2 !== 0) {
+      if (isParentHovered) {
+        return isLastChild ? "table-row-stripe hover-item last-child" : "table-row-stripe hover-item";
       }
+      return "table-row-stripe";
     } else {
-      if (hasChildren?.id === hoverId.value) {
-        if (hasChildren?.children && hasChildren.children.length) {
-          const lastChild = hasChildren?.children[hasChildren?.children.length - 1];
-          if (lastChild.id === row.id) {
-            return "hover-item last-child";
-          } else {
-            return "hover-item";
-          }
-        }
-      } else {
-        return "";
+      if (isParentHovered) {
+        return isLastChild ? "hover-item last-child" : "hover-item";
       }
+      return "";
     }
   } else {
-    if (index % 2 != 0) {
-      if (row.id === hoverId.value) {
-        // 选中项
-        if (tableData.value[index].children && tableData.value[index].children.length) {
-          return "table-row-stripe hover-item first-child";
+    // 是父节点
+    const isHovered = row.id === hoverId.value;
+    const hasChildren = tableData.value[index]?.children && tableData.value[index].children.length > 0;
+    const isExpanded = expandedKeys.value?.includes(row.id);
+
+    if (index % 2 !== 0) {
+      if (isHovered) {
+        if (hasChildren) {
+          return "table-row-stripe hover-item first-child" + (!isExpanded ? " only-child" : "");
         } else {
           return "table-row-stripe hover-item only-child";
         }
@@ -248,9 +315,9 @@ const tableRowClassName = ({ row, rowIndex }: { row: Row; rowIndex: number }) =>
         return "table-row-stripe";
       }
     } else {
-      if (row.id === hoverId.value) {
-        if (tableData.value[index].children && tableData.value[index].children.length) {
-          return "hover-item first-child";
+      if (isHovered) {
+        if (hasChildren) {
+          return "hover-item first-child" + (!isExpanded ? " only-child" : "");
         } else {
           return "hover-item only-child";
         }
@@ -258,9 +325,9 @@ const tableRowClassName = ({ row, rowIndex }: { row: Row; rowIndex: number }) =>
         return "";
       }
     }
-    // return index % 2 != 0 ? "table-row-stripe" : "";
   }
 };
+// 获取列表
 async function getList() {
   try {
     loading.value = true;
@@ -284,6 +351,15 @@ const pageSizeChangeHandle = (val: number) => {
   params.value.pageSize = val;
   getList();
 };
+const handleExpandChange = (row: Row, expanded: boolean) => {
+  if (expanded) {
+    expandedKeys.value.push(row.id);
+  } else {
+    expandedKeys.value = expandedKeys.value.filter((id) => id !== row.id);
+  }
+  console.log("%c [  ]-343", "font-size:13px; background:pink; color:#bf2c9f;", expandedKeys.value);
+};
+
 onMounted(() => {
   bus.on("globalSearch", (user) => {
     params.value.microgridName = user.microgridName;
@@ -308,7 +384,7 @@ onUnmounted(() => {
         style="width: 100%; height: 100%"
         @row-click="clickRow"
         row-key="id"
-        default-expand-all
+        @expand-change="handleExpandChange"
       >
         <el-table-column align="center" sortable prop="stationName" :label="$t('name')" />
         <el-table-column align="center" sortable prop="power" :label="$t('pvCapacity')" />
@@ -498,7 +574,6 @@ onUnmounted(() => {
         }
         .hover-item {
           cursor: pointer;
-          // box-shadow: 0 0 20px 0 rgba(104, 187, 255, 0.18);
           td {
             &.el-table__cell {
               background: rgba(36, 87, 164, 0.25);
@@ -513,8 +588,8 @@ onUnmounted(() => {
           &.only-child {
             td {
               &.el-table__cell {
-                border-top: 1.2px solid #68bbff;
-                border-bottom: 1.2px solid #68bbff;
+                border-top: 1.2px solid #68bbff !important;
+                border-bottom: 1.2px solid #68bbff !important;
               }
             }
           }
@@ -522,13 +597,7 @@ onUnmounted(() => {
             td {
               &.el-table__cell {
                 border-top: 1.2px solid #68bbff;
-                background: rgba(36, 87, 164, 0.25);
-                &:first-child {
-                  border-left: 1.2px solid #68bbff;
-                }
-                &:last-child {
-                  border-right: 1.2px solid #68bbff;
-                }
+                // border-bottom: 1.2px solid #68bbff;
               }
             }
           }
