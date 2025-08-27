@@ -141,26 +141,26 @@ const modal6 = [
       :list="modal6"
       :position="{ right: isChinese ? '796px' : '777px', top: isChinese ? '348px' : '288px' }"
     />
-    <div class="energy-storage">
+    <div class="energy-storage scale-item">
       <img src="@/assets/images/station/energyStorage-active.png" alt="" />
     </div>
-    <div class="wind-power">
+    <div class="wind-power scale-item">
       <img src="@/assets/images/station/windPower-active.png" alt="" />
       <!-- <div class="name">风电</div> -->
     </div>
-    <div class="photovoltaic">
+    <div class="photovoltaic scale-item">
       <img src="@/assets/images/station/photovoltaic-active.png" alt="" />
       <!-- <div class="name">光伏</div> -->
     </div>
-    <div class="load">
+    <div class="load scale-item">
       <img src="@/assets/images/station/load-active.png" alt="" />
       <!-- <div class="name">负荷</div> -->
     </div>
-    <div class="charging-pile">
+    <div class="charging-pile scale-item">
       <img src="@/assets/images/station/chargingPile-active.png" alt="" />
       <!-- <div class="name">充电桩</div> -->
     </div>
-    <div class="electric-supply">
+    <div class="electric-supply scale-item">
       <img src="@/assets/images/station/electricSupply-active.png" alt="" />
       <!-- <div class="name">市电</div> -->
     </div>
@@ -183,21 +183,25 @@ const modal6 = [
   left: 472px;
   top: 203px;
   right: 493px;
+
   &.en {
     .advertising-board {
       .value {
         left: 15px;
         transform: translateY(-60%) skew(0deg, -30deg);
+
         .num {
           transform: translate(-10px, 4px);
         }
       }
     }
   }
+
   .energy-storage {
     position: absolute;
     left: 157px;
     top: 96px;
+
     .name {
       transform: skew(75deg, -55deg) rotate(20deg);
       text-align: center;
@@ -219,35 +223,42 @@ const modal6 = [
       bottom: 6px;
     }
   }
+
   .wind-power {
     position: absolute;
     left: 342px;
     top: -27px;
   }
+
   .photovoltaic {
     position: absolute;
     left: 603px;
     top: 27px;
   }
+
   .load {
     position: absolute;
     left: 604px;
     top: 217px;
   }
+
   .charging-pile {
     position: absolute;
     left: 396px;
     top: 267px;
   }
+
   .electric-supply {
     position: absolute;
     left: 178px;
     top: 244px;
   }
+
   .advertising-board {
     position: absolute;
     left: 373px;
     top: 10px;
+
     .value {
       transform: translateY(-50%) skew(0deg, -29deg);
       position: absolute;
@@ -255,6 +266,7 @@ const modal6 = [
       left: 21px;
       display: flex;
       align-items: center;
+
       .name {
         text-align: center;
         background: linear-gradient(211deg, #f7fcfa 18.65%, #cbdaf5 94.38%);
@@ -272,6 +284,7 @@ const modal6 = [
         letter-spacing: 1.4px;
         margin-right: 5px;
       }
+
       .num {
         background: linear-gradient(231deg, #f5b04f 0.05%, #fe9347 113.94%);
         background-clip: text;
@@ -286,6 +299,16 @@ const modal6 = [
         line-height: normal;
         letter-spacing: 1.2px;
       }
+    }
+  }
+
+  .scale-item {
+    transition: transform 0.5s ease;
+    cursor: pointer;
+    z-index: 2025;
+    /* 0.3秒平滑过渡 */
+    &:hover {
+      transform: scale(1.05);
     }
   }
 }

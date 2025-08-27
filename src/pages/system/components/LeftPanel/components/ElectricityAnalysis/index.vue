@@ -14,6 +14,7 @@ async function getData() {
     loading.value = true;
     const id = route.query.id as string;
     const res = await getCalcElectricity(id);
+    console.log("%c [ res ]-17", "font-size:13px; background:pink; color:#bf2c9f;", res);
     formData.value = res.data;
   } catch (e) {
   } finally {

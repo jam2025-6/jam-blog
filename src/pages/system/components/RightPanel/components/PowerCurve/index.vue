@@ -5,6 +5,7 @@ import * as echarts from "echarts";
 import { useI18n } from "vue-i18n";
 import { useRoute } from "vue-router";
 import { getPowerCurve } from "@/api/system";
+import { EnergyCurves } from '@/types/system'
 const { t } = useI18n();
 const options = computed(() => {
   const times: any = [];
@@ -295,14 +296,22 @@ const options = computed(() => {
   };
 });
 const route = useRoute();
-const formData = ref(false);
+const formData = ref<EnergyCurves>({
+  loadCurve: [],
+  storeEnergyCurve: [],
+  mainsElectricity: [],
+  photovoltaic: []
+});
 const loading = ref(false);
 async function getData() {
   try {
     loading.value = true;
     const id = route.query.id as string;
     const res = await getPowerCurve(id);
-    formData.value = res.data;
+    if (res.code === 200) {
+      formData.value = res.data;
+    }
+
   } catch (e) {
   } finally {
     loading.value = false;
@@ -323,6 +332,7 @@ getData();
 .power-curve {
   height: 315px;
   width: 100%;
+
   .container {
     padding: 12px 21px 16px 43px;
     width: calc(100%);

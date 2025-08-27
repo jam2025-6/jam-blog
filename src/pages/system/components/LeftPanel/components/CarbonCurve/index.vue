@@ -5,12 +5,14 @@ import * as echarts from "echarts";
 import { useI18n } from "vue-i18n";
 import { useRoute } from "vue-router";
 import { getCalcCarbonEmissions } from "@/api/system";
+import { AmountRecord } from "@/types/system";
 const { t } = useI18n();
+
 const options = computed(() => {
   return {
     xAxis: {
       type: "category",
-      data: ["07-17", "07-18", "07-19", "07-20", "07-21", "07-22", "07-23"],
+      data: formData.value.map((el) => el.gmtCreate),
       axisLabel: {
         show: true,
         color: "rgba(182, 212, 254, 0.8)",
@@ -112,7 +114,7 @@ const options = computed(() => {
     series: [
       {
         name: t("carbonEmission"),
-        data: [20, 32, 91, 34, 90, 30, 20],
+        data: formData.value.map((el) => el.amount),
         type: "line",
         smooth: true,
         symbol: "circle",
@@ -145,14 +147,17 @@ const options = computed(() => {
   };
 });
 const route = useRoute();
-const formData = ref(false);
+const formData = ref<AmountRecord[]>([]);
 const loading = ref(false);
 async function getData() {
   try {
     loading.value = true;
     const id = route.query.id as string;
     const res = await getCalcCarbonEmissions(id);
-    formData.value = res.data;
+    if (res.code === 200) {
+      formData.value = res.data;
+    }
+
   } catch (e) {
   } finally {
     loading.value = false;
@@ -173,6 +178,7 @@ getData();
 .carbon-curve {
   height: 305px;
   width: 100%;
+
   .container {
     padding: 24px 40px 17px 24px;
     width: calc(100%);

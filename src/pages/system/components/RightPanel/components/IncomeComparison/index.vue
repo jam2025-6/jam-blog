@@ -5,12 +5,13 @@ import * as echarts from "echarts";
 import { useI18n } from "vue-i18n";
 import { useRoute } from "vue-router";
 import { getCompareEarn } from "@/api/system";
+import { EarningsRecord } from "@/types/system";
 const { t } = useI18n();
 const options = computed(() => {
   return {
     xAxis: {
       type: "category",
-      data: ["07-17", "07-18", "07-19", "07-20", "07-21", "07-22", "07-23"],
+      data: formData.value.map((el) => el.time),
       axisLabel: {
         show: true,
         color: "rgba(182, 212, 254, 0.8)",
@@ -89,7 +90,7 @@ const options = computed(() => {
     series: [
       {
         name: t("revenue"),
-        data: [20, 32, 91, 34, 90, 30, 20],
+        data: formData.value.map((el) => el.earnings),
         type: "bar",
         barWidth: 12,
         itemStyle: {
@@ -125,7 +126,7 @@ const options = computed(() => {
   };
 });
 const route = useRoute();
-const formData = ref(false);
+const formData = ref<EarningsRecord[]>([]);
 const loading = ref(false);
 async function getData() {
   try {

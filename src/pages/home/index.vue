@@ -5,188 +5,15 @@ import { debounce } from "lodash";
 import { useRouter } from "vue-router";
 import bus from "@/utils/bus";
 import { getMicrogridList } from "@/api/home";
-// 定义行数据类型
-interface TableRowData {
-  id: number;
-  date: string;
-  stationName: string;
-  address?: string;
-  children?: TableRowData[];
-}
-interface Row {
-  id: number;
-  date: string;
-  stationName: string;
-  address?: string;
-  children?: Row[];
-}
+import { Microgrid, Station } from "@/types/home";
 const tooltipX = ref(0);
 const tooltipY = ref(0);
 const loading = ref(false);
 const router = useRouter();
 const containerRef = ref<HTMLElement | null>(null);
 const stationName = ref("");
-const hoverId = ref<number | undefined | null>(null);
-const tableData = ref<TableRowData[]>([
-  {
-    id: 1,
-    date: "2016-05-02",
-    stationName: "wangxiaohu",
-    address: "No. 189, Grove St, Los Angeles",
-    children: [
-      {
-        id: 11,
-        date: "2016-05-01",
-        stationName: "wangxiaohu",
-        address: "No. 189, Grove St, Los Angeles",
-      },
-      {
-        id: 12,
-        date: "2016-05-01",
-        stationName: "wangxiaohu",
-        address: "No. 189, Grove St, Los Angeles",
-      },
-      {
-        id: 13,
-        date: "2016-05-01",
-        stationName: "wangxiaohu",
-        address: "No. 189, Grove St, Los Angeles",
-      },
-    ],
-  },
-  {
-    id: 2,
-    date: "2016-05-04",
-    stationName: "wangxiaohu",
-    address: "No. 189, Grove St, Los Angeles",
-  },
-  {
-    id: 3,
-    date: "2016-05-01",
-    stationName: "wangxiaohu",
-    address: "No. 189, Grove St, Los Angeles",
-    children: [
-      {
-        id: 31,
-        date: "2016-05-01",
-        stationName: "wangxiaohu",
-        address: "No. 189, Grove St, Los Angeles",
-      },
-      {
-        id: 32,
-        date: "2016-05-01",
-        stationName: "wangxiaohu",
-        address: "No. 189, Grove St, Los Angeles",
-      },
-      {
-        id: 33,
-        date: "2016-05-01",
-        stationName: "wangxiaohu",
-        address: "No. 189, Grove St, Los Angeles",
-      },
-    ],
-  },
-  {
-    id: 4,
-    date: "2016-05-03",
-    stationName: "wangxiaohu",
-    address: "No. 189, Grove St, Los Angeles",
-    children: [
-      {
-        id: 41,
-        date: "2016-05-01",
-        stationName: "wangxiaohu",
-        address: "No. 189, Grove St, Los Angeles",
-      },
-      {
-        id: 42,
-        date: "2016-05-01",
-        stationName: "wangxiaohu",
-        address: "No. 189, Grove St, Los Angeles",
-      },
-      {
-        id: 43,
-        date: "2016-05-01",
-        stationName: "wangxiaohu",
-        address: "No. 189, Grove St, Los Angeles",
-      },
-    ],
-  },
-  {
-    id: 5,
-    date: "2016-05-01",
-    stationName: "wangxiaohu",
-    address: "No. 189, Grove St, Los Angeles",
-    children: [
-      {
-        id: 51,
-        date: "2016-05-01",
-        stationName: "wangxiaohu",
-        address: "No. 189, Grove St, Los Angeles",
-      },
-      {
-        id: 52,
-        date: "2016-05-01",
-        stationName: "wangxiaohu",
-        address: "No. 189, Grove St, Los Angeles",
-      },
-      {
-        id: 53,
-        date: "2016-05-01",
-        stationName: "wangxiaohu",
-        address: "No. 189, Grove St, Los Angeles",
-      },
-    ],
-  },
-  {
-    id: 6,
-    date: "2016-05-01",
-    stationName: "wangxiaohu",
-    address: "No. 189, Grove St, Los Angeles",
-    children: [
-      {
-        id: 61,
-        date: "2016-05-01",
-        stationName: "wangxiaohu",
-        address: "No. 189, Grove St, Los Angeles",
-      },
-    ],
-  },
-  {
-    id: 7,
-    date: "2016-05-01",
-    stationName: "wangxiaohu",
-    address: "No. 189, Grove St, Los Angeles",
-    children: [
-      {
-        id: 71,
-        date: "2016-05-01",
-        stationName: "wangxiaohu",
-        address: "No. 189, Grove St, Los Angeles",
-      },
-    ],
-  },
-  {
-    id: 8,
-    date: "2016-05-01",
-    stationName: "wangxiaohu",
-    address: "No. 189, Grove St, Los Angeles",
-    children: [
-      {
-        id: 81,
-        date: "2016-05-01",
-        stationName: "wangxiaohu",
-        address: "No. 189, Grove St, Los Angeles",
-      },
-      {
-        id: 82,
-        date: "2016-05-01",
-        stationName: "wangxiaohu",
-        address: "No. 189, Grove St, Los Angeles",
-      },
-    ],
-  },
-]);
+const hoverId = ref<string | undefined | null>(null);
+const tableData = ref<Microgrid[]>([]);
 const params = ref({
   pageNum: 1,
   pageSize: 20,
@@ -194,9 +21,9 @@ const params = ref({
   stationName: "",
 });
 const total = ref(0);
-const expandedKeys = ref<number[]>([]);
+const expandedKeys = ref<string[]>([]);
 
-function clickRow(row: TableRowData, column: TableColumnCtx<TableRowData>, event: Event) {
+function clickRow(row: Microgrid, column: TableColumnCtx<Microgrid>, event: Event) {
   const index = tableData.value.findIndex((el) => el.id === row.id);
   if (index === -1) return;
   router.push({
@@ -241,22 +68,17 @@ const handleMouseMove = (event: MouseEvent) => {
   tooltipY.value = y;
 };
 
-function cellMouseEnter(
-  row: TableRowData,
-  column: TableColumnCtx<TableRowData>,
-  cell: HTMLTableCellElement,
-  event: Event
-) {
+function cellMouseEnter(row: Microgrid, column: TableColumnCtx<Microgrid>, cell: HTMLTableCellElement, event: Event) {
   const index = tableData.value.findIndex((el) => el.id === row.id);
   // 如果是父节点
   if (index > -1) {
-    stationName.value = row.stationName;
+    stationName.value = row.microgridName;
     hoverId.value = row.id;
   } else {
     // 子节点
     const obj = tableData.value.find((item) => item.children && item.children.find((el) => el.id === row.id));
     if (obj) {
-      stationName.value = obj.stationName;
+      stationName.value = obj.microgridName;
       hoverId.value = obj.id;
     }
   }
@@ -267,7 +89,7 @@ function cellMouseLeave() {
 }
 
 // 自定义行样式
-const tableRowClassName = ({ row, rowIndex }: { row: Row; rowIndex: number }) => {
+const tableRowClassName = ({ row, rowIndex }: { row: Microgrid; rowIndex: number }) => {
   if (!tableData.value || tableData.value.length === 0) {
     return "";
   }
@@ -332,9 +154,22 @@ async function getList() {
   try {
     loading.value = true;
     let res = await getMicrogridList(params.value);
-    if (res.data.code === 200) {
-      tableData.value = res.data.list;
-      total.value = res.data.total;
+    if (res.code === 200) {
+      tableData.value = res.data.list.map((item: Microgrid) => {
+        if (item.children && item.children.length) {
+          item.children = item.children.map((child: Station) => {
+            child.pvInstalledPowerSum = child.pvInstalledPower;
+            child.windCapacitySum = child.windCapacity;
+            child.installedCapacitySum = child.installedCapacity;
+            child.pileInstalledPowerSum = child.pileInstalledPower;
+            child.directCurrentPileInstalledPowerSum = child.directCurrentPileInstalledPower;
+            child.id = item.id + child.stationId;
+            return child;
+          });
+        }
+        return item;
+      });
+      total.value = res.data.totalCount;
     }
   } catch (err) {
     console.log(err);
@@ -351,16 +186,16 @@ const pageSizeChangeHandle = (val: number) => {
   params.value.pageSize = val;
   getList();
 };
-const handleExpandChange = (row: Row, expanded: boolean) => {
+const handleExpandChange = (row: Microgrid, expanded: boolean) => {
   if (expanded) {
     expandedKeys.value.push(row.id);
   } else {
     expandedKeys.value = expandedKeys.value.filter((id) => id !== row.id);
   }
-  console.log("%c [  ]-343", "font-size:13px; background:pink; color:#bf2c9f;", expandedKeys.value);
 };
 
 onMounted(() => {
+  getList();
   bus.on("globalSearch", (user) => {
     params.value.microgridName = user.microgridName;
     params.value.stationName = user.stationName;
@@ -376,46 +211,33 @@ onUnmounted(() => {
 <template>
   <div class="page">
     <div ref="containerRef" class="table" @mousemove="handleMouseMove">
-      <el-table
-        @cell-mouse-enter="cellMouseEnter"
-        @cell-mouse-leave="cellMouseLeave"
-        :data="tableData"
-        :row-class-name="tableRowClassName"
-        style="width: 100%; height: 100%"
-        @row-click="clickRow"
-        row-key="id"
-        @expand-change="handleExpandChange"
-      >
-        <el-table-column align="center" sortable prop="stationName" :label="$t('name')" />
-        <el-table-column align="center" sortable prop="power" :label="$t('pvCapacity')" />
-        <el-table-column align="center" sortable prop="state" :label="$t('windPowerCapacity')" />
-        <el-table-column align="center" sortable prop="city" :label="$t('energyStorageCapacity')" />
-        <el-table-column align="center" sortable prop="address" :label="$t('acChargingPileCapacity')" />
-        <el-table-column align="center" sortable prop="zip" :label="$t('dcChargingPileCapacity')" />
+      <el-table @cell-mouse-enter="cellMouseEnter" @cell-mouse-leave="cellMouseLeave" :data="tableData"
+        :row-class-name="tableRowClassName" style="width: 100%; height: 100%" @row-click="clickRow" row-key="id"
+        @expand-change="handleExpandChange">
+        <el-table-column min-width="200" sortable prop="stationName" :label="$t('name')">
+          <template #default="{ row }">
+            {{ row.microgridName || row.stationName }}
+          </template>
+        </el-table-column>
+        <el-table-column prop="pvInstalledPowerSum" align="center" sortable :label="$t('pvCapacity')" />
+        <el-table-column prop="windCapacitySum" align="center" sortable :label="$t('windPowerCapacity')" />
+        <el-table-column prop="installedCapacitySum" align="center" sortable :label="$t('energyStorageCapacity')" />
+        <el-table-column prop="pileInstalledPowerSum" align="center" sortable :label="$t('acChargingPileCapacity')" />
+        <el-table-column prop="directCurrentPileInstalledPowerSum" align="center" sortable
+          :label="$t('dcChargingPileCapacity')" />
       </el-table>
-      <div
-        v-show="!!stationName"
-        class="tooltip"
-        :style="{
-          left: tooltipX + 'px',
-          top: tooltipY + 'px',
-        }"
-      >
+      <div v-show="!!stationName" class="tooltip" :style="{
+        left: tooltipX + 'px',
+        top: tooltipY + 'px',
+      }">
         {{ stationName }}
       </div>
     </div>
     <div class="table-pagination">
-      <el-pagination
-        v-model:current-page="params.pageNum"
-        v-model:page-size="params.pageSize"
-        :page-sizes="[10, 20, 30, 50, 100]"
-        :disabled="false"
-        :background="false"
-        layout="total, prev, pager, next, sizes, jumper"
-        :total="total"
-        @size-change="pageSizeChangeHandle"
-        @current-change="currentChangeHandle"
-      />
+      <el-pagination v-model:current-page="params.pageNum" v-model:page-size="params.pageSize"
+        :page-sizes="[10, 20, 30, 50, 100]" :disabled="false" :background="false"
+        layout="total, prev, pager, next, sizes, jumper" :total="total" @size-change="pageSizeChangeHandle"
+        @current-change="currentChangeHandle" />
     </div>
   </div>
 </template>
@@ -427,6 +249,7 @@ onUnmounted(() => {
   width: 100%;
   overflow: hidden;
   position: relative;
+
   .table {
     height: calc(100% - 52px);
     width: 100%;
@@ -439,6 +262,7 @@ onUnmounted(() => {
     box-shadow: 0 0 4px rgba(104, 187, 225, 0.5);
     padding: 12px 36px 22px 36px;
     backdrop-filter: blur(12px);
+
     &::before {
       content: "";
       position: absolute;
@@ -455,22 +279,34 @@ onUnmounted(() => {
       pointer-events: none;
       z-index: 1;
     }
+
     :deep(.el-table) {
       background-color: transparent;
       z-index: 2025;
+
       .el-table__row {
         background-color: rgba($color: #1a417e, $alpha: 0.25) !important;
+
+        .is-center {
+          .cell {
+            justify-content: center;
+          }
+        }
+
         .cell {
           display: flex;
           align-items: center;
           padding: 0;
+
           .el-table__indent {
             // padding-left: 0 !important;
           }
+
           .el-table__placeholder {
             width: 76px;
             height: 32px;
           }
+
           .el-table__expand-icon {
             width: 76px;
             height: 32px;
@@ -478,6 +314,7 @@ onUnmounted(() => {
             align-items: center;
             justify-content: center;
             margin-right: 0;
+
             .el-icon {
               font-size: 20px;
               color: #fff;
@@ -485,23 +322,30 @@ onUnmounted(() => {
           }
         }
       }
+
       .table-row-stripe {
         background-color: rgba($color: #0d1b36, $alpha: 0.25) !important;
       }
+
       .el-table__inner-wrapper {
         &::before {
           display: none;
         }
+
         .el-table__header {
           tr {
             background-color: rgba($color: #0d1b36, $alpha: 0.25);
+
             th {
               &.el-table__cell {
                 background-color: transparent;
+
                 &.is-leaf {
                   border-bottom: none;
                 }
+
                 .cell {
+                  text-align: center;
                   color: #fff;
                   font-family: "HarmonyOS Sans SC";
                   font-size: 18px;
@@ -558,33 +402,41 @@ onUnmounted(() => {
                 font-weight: 400;
                 line-height: normal;
               }
+
               &:first-child {
                 border-left: 1.2px solid transparent;
               }
+
               &:last-child {
                 border-right: 1.2px solid transparent;
               }
+
               &.is-leaf {
                 border-bottom: none;
               }
             }
           }
         }
-        .el-table__body-wrapper {
-        }
+
+        .el-table__body-wrapper {}
+
         .hover-item {
           cursor: pointer;
+
           td {
             &.el-table__cell {
               background: rgba(36, 87, 164, 0.25);
+
               &:first-child {
                 border-left: 1.2px solid #68bbff;
               }
+
               &:last-child {
                 border-right: 1.2px solid #68bbff;
               }
             }
           }
+
           &.only-child {
             td {
               &.el-table__cell {
@@ -593,6 +445,7 @@ onUnmounted(() => {
               }
             }
           }
+
           &.first-child {
             td {
               &.el-table__cell {
@@ -601,6 +454,7 @@ onUnmounted(() => {
               }
             }
           }
+
           &.last-child {
             td {
               &.el-table__cell {
@@ -612,16 +466,19 @@ onUnmounted(() => {
       }
     }
   }
+
   .table-pagination {
     height: 52px;
     display: flex;
     width: 100%;
     align-items: center;
     justify-content: center;
+
     :deep(.el-pagination) {
       text-align: center;
     }
   }
+
   .tooltip {
     position: fixed;
     padding: 12px;
@@ -636,7 +493,8 @@ onUnmounted(() => {
     font-size: 12px;
     font-style: normal;
     font-weight: 400;
-    line-height: 16px; /* 133.333% */
+    line-height: 16px;
+    /* 133.333% */
     letter-spacing: 0.6px;
     border: 1px solid #5084b8;
     left: 0;
