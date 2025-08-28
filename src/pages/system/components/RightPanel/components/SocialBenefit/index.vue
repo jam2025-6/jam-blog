@@ -3,11 +3,37 @@ import { ref, watch, onMounted } from "vue";
 import { PanelTitle } from "@/components";
 import { useLocaleStore } from "@/stores/modules/locale";
 import { storeToRefs } from "pinia";
+import { round } from "lodash";
 import { useRoute } from "vue-router";
 import { getSocialBenefitsNewEnergy } from "@/api/system";
+import { PvStatistics } from "@/types/system";
 const { isChinese } = storeToRefs(useLocaleStore());
 const route = useRoute();
-const formData = ref(false);
+const formData = ref<PvStatistics>({
+  pvYearDisChargeCapacity: 0,
+  pvYearDisChargeCapacityOld: 0,
+  pvYearDisChargeCapacityUnit: "",
+
+  pvDayDisChargeCapacity: 0,
+  pvDayDisChargeCapacityOld: 0,
+  pvDayDisChargeCapacityUnit: "",
+
+  pvCapacity: 0,
+  pvYearEffHours: 0,
+
+  pvYearSelfConsumElec: 0,
+  pvYearSelfConsumElecOld: 0,
+  pvYearSelfConsumElecUnit: "",
+
+  pvYearOnGridElec: 0,
+  pvYearOnGridElecOld: 0,
+  pvYearOnGridElecUnit: "",
+
+  reduceCarbonEmissions: 0,
+  saveStandardCoal: 0,
+  treesPlantedNumber: 0,
+  greenCertificatesNumber: 0,
+});
 const loading = ref(false);
 async function getData() {
   try {
@@ -17,7 +43,9 @@ async function getData() {
       return;
     }
     const res = await getSocialBenefitsNewEnergy(id);
-    formData.value = res.data;
+    if (res.code === 200) {
+      formData.value = res.data;
+    }
   } catch (e) {
   } finally {
     loading.value = false;
@@ -35,7 +63,7 @@ getData();
           <div class="cell-item-main">
             <div class="name">{{ $t("annualRenewableEnergyGeneration") }}</div>
             <div class="value">
-              <div class="value-num">456</div>
+              <div class="value-num">{{ formData.pvYearDisChargeCapacity }}</div>
               <div class="value-unit">kW·h</div>
             </div>
           </div>
@@ -47,17 +75,17 @@ getData();
             <div class="value">
               <div class="value-name">{{ $t("photovoltaic") }}</div>
               <div class="number">
-                <div class="value-num">456</div>
+                <div class="value-num">{{ formData.pvYearEffHours }}</div>
                 <div class="value-unit">h</div>
               </div>
             </div>
-            <div class="value">
+            <!-- <div class="value">
               <div class="value-name">{{ $t("windPower") }}</div>
               <div class="number">
                 <div class="value-num">456</div>
                 <div class="value-unit">h</div>
               </div>
-            </div>
+            </div> -->
           </div>
         </div>
         <div class="cell-item">
@@ -65,7 +93,7 @@ getData();
           <div class="cell-item-main">
             <div class="name">{{ $t("annualRenewableEnergySelfConsumption") }}</div>
             <div class="value">
-              <div class="value-num">456</div>
+              <div class="value-num">{{ formData.pvYearSelfConsumElec }}</div>
               <div class="value-unit">kW·h</div>
             </div>
           </div>
@@ -75,7 +103,7 @@ getData();
           <div class="cell-item-main">
             <div class="name">{{ $t("annualRenewableEnergyGridFeedIn") }}</div>
             <div class="value">
-              <div class="value-num">456</div>
+              <div class="value-num">{{ formData.pvYearOnGridElec }}</div>
               <div class="value-unit">kW·h</div>
             </div>
           </div>
@@ -84,7 +112,7 @@ getData();
       <div class="section">
         <div class="section-item">
           <div class="section-item-main">
-            <div class="num">1000</div>
+            <div class="num">{{ round(+formData.reduceCarbonEmissions, 2) }}</div>
             <div class="unit">t</div>
           </div>
           <div
@@ -98,7 +126,7 @@ getData();
         </div>
         <div class="section-item">
           <div class="section-item-main">
-            <div class="num">1000</div>
+            <div class="num">{{ round(+formData.saveStandardCoal, 2) }}</div>
             <div class="unit">t</div>
           </div>
           <div
@@ -112,7 +140,7 @@ getData();
         </div>
         <div class="section-item">
           <div class="section-item-main">
-            <div class="num">1000</div>
+            <div class="num">{{ round(+formData.treesPlantedNumber, 2) }}</div>
             <div class="unit">{{ $t("treeUnit") }}</div>
           </div>
           <div
@@ -126,7 +154,7 @@ getData();
         </div>
         <div class="section-item">
           <div class="section-item-main">
-            <div class="num">1000</div>
+            <div class="num">{{ round(+formData.greenCertificatesNumber, 2) }}</div>
             <div class="unit">{{ $t("certificateUnit") }}</div>
           </div>
           <div
@@ -186,6 +214,7 @@ getData();
           margin-bottom: 2px;
         }
         .value {
+          margin-top: 4px;
           display: flex;
           align-items: baseline;
           background: linear-gradient(51deg, #e5b02b 6.53%, #ead08f 88.38%);
@@ -254,7 +283,7 @@ getData();
             text-shadow: 0 2px 5px rgba(0, 0, 0, 0.4), 0 0 6px rgba(229, 239, 249, 0.36),
               0 0 10px rgba(48, 126, 229, 0.6);
             font-family: Rubik;
-            font-size: 24px;
+            font-size: 18px;
             font-style: normal;
             font-weight: 700;
             line-height: normal;

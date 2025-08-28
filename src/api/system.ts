@@ -1,7 +1,7 @@
 import { request } from "@/utils/request";
 import { ApiResponse, PageResponse } from "@/types/api";
 import { Microgrid } from "@/types/home";
-import { AmountRecord, EnergyCurves } from "@/types/system";
+import { AmountRecord, EnergyCurves, PvStatistics } from "@/types/system";
 //基本信息
 export function getSearchById(id: string): Promise<ApiResponse<Microgrid>> {
   return request({
@@ -43,7 +43,7 @@ export function getCompareEarn(id: string): Promise<ApiResponse<any>> {
 }
 
 //新能源社会效益
-export function getSocialBenefitsNewEnergy(id: string): Promise<ApiResponse<any>> {
+export function getSocialBenefitsNewEnergy(id: string): Promise<ApiResponse<PvStatistics>> {
   return request({
     method: "GET",
     url: "/microgrid/socialBenefitsNewEnergy/" + id,

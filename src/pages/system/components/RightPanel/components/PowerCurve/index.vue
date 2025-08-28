@@ -5,32 +5,20 @@ import * as echarts from "echarts";
 import { useI18n } from "vue-i18n";
 import { useRoute } from "vue-router";
 import { getPowerCurve } from "@/api/system";
-import { EnergyCurves } from "@/types/system";
+import { EnergyCurves, PowerCurve } from "@/types/system";
+import dayjs from "dayjs";
 const { t } = useI18n();
 const options = computed(() => {
-  const times: any = [];
-  for (let h = 0; h < 24; h++) {
-    for (let m = 0; m < 60; m += 15) {
-      const hh = String(h).padStart(2, "0");
-      const mm = String(m).padStart(2, "0");
-      times.push(`${hh}:${mm}`);
-    }
-  }
-  // 生成指定范围的随机数据
-  const generatePowerData = (min: number, max: number) =>
-    times.map(() => +(min + Math.random() * (max - min)).toFixed(2));
-  // 四组区分明显的数据
-  const powerData1 = generatePowerData(30, 60);
-  const powerData2 = generatePowerData(80, 130);
-  const powerData3 = generatePowerData(180, 220);
-  const powerData4 = generatePowerData(250, 320);
   return {
     xAxis: {
       type: "category",
-      data: times,
+      data: formData.value.loadCurve.map((el) => el.time),
       axisLabel: {
         show: true,
         color: "rgba(182, 212, 254, 0.8)",
+        formatter: (value: string) => {
+          return dayjs(value).format("HH:mm");
+        },
       },
       axisLine: {
         show: true,
@@ -170,7 +158,7 @@ const options = computed(() => {
     series: [
       {
         name: t("load"),
-        data: powerData1,
+        data: formData.value.loadCurve.map((el) => el.value),
         type: "line",
         smooth: true,
         symbol: "circle",
@@ -201,7 +189,7 @@ const options = computed(() => {
       },
       {
         name: t("energyStorage"),
-        data: powerData2,
+        data: formData.value.storeEnergyCurve.map((el) => el.value),
         type: "line",
         smooth: true,
         symbol: "circle",
@@ -232,7 +220,7 @@ const options = computed(() => {
       },
       {
         name: t("gridPower"),
-        data: powerData3,
+        data: formData.value.mainsElectricity.map((el) => el.value),
         type: "line",
         smooth: true,
         symbol: "circle",
@@ -263,7 +251,7 @@ const options = computed(() => {
       },
       {
         name: t("renewableEnergy"),
-        data: powerData4,
+        data: formData.value.photovoltaic.map((el) => el.value),
         type: "line",
         smooth: true,
         symbol: "circle",
