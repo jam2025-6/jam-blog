@@ -153,11 +153,13 @@ async function getData() {
   try {
     loading.value = true;
     const id = route.query.id as string;
+    if (!id) {
+      return;
+    }
     const res = await getCalcCarbonEmissions(id);
     if (res.code === 200) {
       formData.value = res.data;
     }
-
   } catch (e) {
   } finally {
     loading.value = false;

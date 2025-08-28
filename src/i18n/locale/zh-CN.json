@@ -35,10 +35,11 @@
   "essSOC": "储能SOC",
   "format": {
     "day": "YYYY/MM/DD",
-    "dayTime": "MM-DD HH:mm",
+    "dayTime": "YYYY-MM-DD HH:mm:ss",
     "monthDay": "MM-DD",
+    "monthDayTime": "MM-DD HH:mm",
     "monthYear": "YYYY-MM",
-    "time": "YYYY-MM-DD HH:mm:ss"
+    "time": "HH:mm:ss"
   },
   "gaoteMicrogridManagementPlatform": "高特微电网管理平台",
   "gaoteMicrogridManagementSystem": "高特微电网管理系统",
@@ -74,6 +75,7 @@
   "renewableEnergyUtilization": "新能源消纳",
   "renewableEnergyUtilizationRate": "累计新能源消纳占比",
   "revenue": "收益",
+  "searchMicrogridPrompt": "输入微电网名称，enter搜索",
   "search_prompt": "输入电站名，enter 搜索",
   "spotActual": "现货实况",
   "spotForecast": "现货预测",

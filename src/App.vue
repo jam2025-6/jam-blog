@@ -30,6 +30,7 @@ localeStore.setLang((Cookies.get("saas-locale") || "zh-CN") as LangType);
 useTabVisibility({
   onVisible: () => {
     localeStore.setLang((Cookies.get("saas-locale") || "zh-CN") as LangType);
+    window.location.reload();
   },
 });
 useScreenAdapts();

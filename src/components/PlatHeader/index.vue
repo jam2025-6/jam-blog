@@ -6,17 +6,11 @@ import SearchSvg from "@/assets/icons/search.svg";
 import { useLocaleStore } from "@/stores/modules/locale";
 import { storeToRefs } from "pinia";
 import bus from "@/utils/bus";
-import { getMicrogridList } from "@/api/home";
 const { isChinese } = storeToRefs(useLocaleStore());
 const formData = ref({
   stationName: "",
   microgridName: "",
 });
-const options = [
-  { value: "1", label: "选项1" },
-  { value: "2", label: "选项2" },
-];
-
 // 响应式变量
 const currentDate = ref("");
 const currentTime = ref("");
@@ -90,7 +84,7 @@ onUnmounted(() => {
         v-model="formData.microgridName"
         size="large"
         clearable
-        placeholder="输入微电网名称，enter搜索"
+        :placeholder="$t('searchMicrogridPrompt')"
         :prefix-icon="SearchSvg"
         @change="search"
       />
@@ -106,7 +100,7 @@ onUnmounted(() => {
       />
     </div>
     <div class="time">
-      <div class="time-text">{{ currentTime }}</div>
+      <div class="time-text">{{ dayjs(currentDate + currentTime).format($t("format.time")) }}</div>
       <div class="week">
         <div class="week-text">{{ $t(`week.${currentWeekday}`) }}</div>
         <div class="date">{{ dayjs(currentDate).format($t("format.day")) }}</div>
@@ -128,7 +122,7 @@ onUnmounted(() => {
   &.en {
     .plat-title {
       font-size: 22px;
-      letter-spacing: 2px;
+      letter-spacing: 1.5px;
     }
   }
   &::before {

@@ -132,6 +132,9 @@ async function getData() {
   try {
     loading.value = true;
     const id = route.query.id as string;
+    if (!id) {
+      return;
+    }
     const res = await getCompareEarn(id);
     formData.value = res.data;
   } catch (e) {

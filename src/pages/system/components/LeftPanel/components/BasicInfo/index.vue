@@ -3,11 +3,12 @@ import { ref, watch, onMounted } from "vue";
 import { PanelTitle } from "@/components";
 import { useLocaleStore } from "@/stores/modules/locale";
 import { storeToRefs } from "pinia";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import { getSearchById } from "@/api/system";
 import { Microgrid, Station } from "@/types/home";
 const { isChinese } = storeToRefs(useLocaleStore());
 const route = useRoute();
+const router = useRouter();
 const formData = ref<Microgrid>({
   id: "",
   microgridCode: "",
@@ -28,6 +29,9 @@ async function getData() {
   try {
     loading.value = true;
     const id = route.query.id as string;
+    if (!id) {
+      return;
+    }
     const res = await getSearchById(id);
     if (res.code === 200) {
       formData.value = res.data;
@@ -45,47 +49,65 @@ getData();
     <div v-loading="loading" class="container">
       <div class="pic">
         <div class="pic-item">
-          <div class="pic-item-main valtafe" :class="{
-            'mb-8': isChinese,
-          }">
+          <div
+            class="pic-item-main valtafe"
+            :class="{
+              'mb-8': isChinese,
+            }"
+          >
             <div class="word">
               <div>{{ formData.voltageLevel }}</div>
               <div>kV</div>
             </div>
           </div>
-          <div class="pic-item-title valtafe" :style="{
-            'letter-spacing': isChinese ? '1.4px' : '1px',
-          }">
+          <div
+            class="pic-item-title valtafe"
+            :style="{
+              'letter-spacing': isChinese ? '1.4px' : '1px',
+            }"
+          >
             {{ $t("voltageLevel") }}
           </div>
         </div>
         <div class="pic-item">
-          <div class="pic-item-main transformer" :class="{
-            'mb-8': isChinese,
-          }">
+          <div
+            class="pic-item-main transformer"
+            :class="{
+              'mb-8': isChinese,
+            }"
+          >
             <div class="word">
               <div>{{ formData.transformerCapacity }}</div>
               <div>kVA</div>
             </div>
           </div>
-          <div class="pic-item-title transformer" :style="{
-            'letter-spacing': isChinese ? '1.4px' : '1px',
-          }">
+          <div
+            class="pic-item-title transformer"
+            :style="{
+              'letter-spacing': isChinese ? '1.4px' : '1px',
+            }"
+          >
             {{ $t("transformerCapacity") }}
           </div>
         </div>
         <div class="pic-item">
-          <div class="pic-item-main photovoltaic" :class="{
-            'mb-8': isChinese,
-          }">
+          <div
+            class="pic-item-main photovoltaic"
+            :class="{
+              'mb-8': isChinese,
+            }"
+          >
             <div class="word">
               <div>{{ formData.pvInstalledPowerSum }}</div>
               <div>kW</div>
             </div>
           </div>
-          <div class="pic-item-title photovoltaic" :style="{
-            'letter-spacing': isChinese ? '1.4px' : '1px',
-          }">
+          <div
+            class="pic-item-title photovoltaic"
+            :style="{
+              'letter-spacing': isChinese ? '1.4px' : '1px',
+            }"
+          >
             {{ $t("pvCapacity") }}
           </div>
         </div>
@@ -174,7 +196,7 @@ getData();
             left: 50%;
             transform: translateX(-50%);
 
-            >div:first-child {
+            > div:first-child {
               text-align: center;
               font-family: Rubik;
               font-size: 28px;
@@ -184,7 +206,7 @@ getData();
               letter-spacing: 1.4px;
             }
 
-            >div:last-child {
+            > div:last-child {
               text-align: center;
 
               font-family: Rubik;
@@ -200,7 +222,7 @@ getData();
             background-repeat: no-repeat;
 
             .word {
-              >div:first-child {
+              > div:first-child {
                 /* 二级标题投影 */
                 text-shadow: 0 2px 5px rgba(0, 0, 0, 0.4), 0 0 6px rgba(229, 239, 249, 0.36),
                   0 0 10px rgba(48, 126, 229, 0.6);
@@ -210,7 +232,7 @@ getData();
                 -webkit-text-fill-color: transparent;
               }
 
-              >div:last-child {
+              > div:last-child {
                 /* 二级标题投影 */
                 text-shadow: 0 2px 5px rgba(0, 0, 0, 0.4), 0 0 6px rgba(229, 239, 249, 0.36),
                   0 0 10px rgba(48, 126, 229, 0.6);
@@ -236,7 +258,7 @@ getData();
             background-repeat: no-repeat;
 
             .word {
-              >div:first-child {
+              > div:first-child {
                 /* 二级标题投影 */
                 text-shadow: 0 2px 5px rgba(0, 0, 0, 0.4), 0 0 6px rgba(229, 249, 242, 0.36),
                   0 0 10px rgba(48, 229, 184, 0.6);
@@ -246,7 +268,7 @@ getData();
                 -webkit-text-fill-color: transparent;
               }
 
-              >div:last-child {
+              > div:last-child {
                 /* 二级标题投影 */
                 text-shadow: 0 2px 5px rgba(0, 0, 0, 0.4), 0 0 6px rgba(229, 249, 242, 0.36),
                   0 0 10px rgba(48, 229, 184, 0.6);
@@ -272,7 +294,7 @@ getData();
             background-repeat: no-repeat;
 
             .word {
-              >div:first-child {
+              > div:first-child {
                 /* 二级标题投影 */
                 text-shadow: 0 2px 5px rgba(0, 0, 0, 0.4), 0 0 6px rgba(249, 243, 229, 0.36),
                   0 0 10px rgba(229, 145, 48, 0.6);
@@ -282,7 +304,7 @@ getData();
                 -webkit-text-fill-color: transparent;
               }
 
-              >div:last-child {
+              > div:last-child {
                 /* 二级标题投影 */
                 text-shadow: 0 2px 5px rgba(0, 0, 0, 0.4), 0 0 6px rgba(249, 243, 229, 0.36),
                   0 0 10px rgba(229, 145, 48, 0.6);
@@ -385,7 +407,7 @@ getData();
             display: flex;
             align-items: baseline;
 
-            >div {
+            > div {
               background: linear-gradient(51deg, #e5b02b 6.53%, #ead08f 88.38%);
               background-clip: text;
               -webkit-background-clip: text;

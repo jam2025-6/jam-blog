@@ -13,8 +13,10 @@ async function getData() {
   try {
     loading.value = true;
     const id = route.query.id as string;
+    if (!id) {
+      return;
+    }
     const res = await getCalcElectricity(id);
-    console.log("%c [ res ]-17", "font-size:13px; background:pink; color:#bf2c9f;", res);
     formData.value = res.data;
   } catch (e) {
   } finally {

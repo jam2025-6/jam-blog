@@ -35,10 +35,11 @@
   "essSOC": "ESS SOC",
   "format": {
     "day": "MMMM DD,YYYY",
-    "dayTime": "MMMM DD HH:mm",
+    "dayTime": "MMMM DD,YYYY h:mm:ss A",
     "monthDay": "MMMM DD",
+    "monthDayTime": "MMMM DD HH:mm",
     "monthYear": "MMMM,YYYY",
-    "time": "MMMM DD,YYYY h:mm:ss A"
+    "time": "h:mm:ss A"
   },
   "gaoteMicrogridManagementPlatform": "Gold Microgrid Management Platform",
   "gaoteMicrogridManagementSystem": "Gold Microgrid Management System",
@@ -74,6 +75,7 @@
   "renewableEnergyUtilization": "Renewable Energy Utilization",
   "renewableEnergyUtilizationRate": "RE Utilization Rate",
   "revenue": "Revenue",
+  "searchMicrogridPrompt": "Enter microgrid name, press Enter to search",
   "search_prompt": "Enter station name, press Enter to search",
   "spotActual": "Spot Actual",
   "spotForecast": "Spot Forecast",
