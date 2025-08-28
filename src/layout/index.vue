@@ -3,9 +3,15 @@ import PlatHeader from "@/components/PlatHeader/index.vue";
 import SystemHeader from "@/components/SystemHeader/index.vue";
 import { computed } from "vue";
 import { useRoute } from "vue-router";
+
 const route = useRoute();
+
+/**
+ * 计算属性：判断当前是否为首页
+ **/
 const isHome = computed(() => route.path === "/");
 </script>
+
 <template>
   <div class="pages">
     <PlatHeader v-if="isHome" />
@@ -24,6 +30,8 @@ const isHome = computed(() => route.path === "/");
   flex-direction: column;
   position: relative;
 }
+
+/* 主内容区域样式 */
 .pages-content {
   height: calc(100% - 96px);
   width: 100%;

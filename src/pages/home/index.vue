@@ -1,7 +1,6 @@
 <script setup lang="ts">
-import { ref, watch, computed, onMounted, onUnmounted } from "vue";
+import { ref, onMounted, onUnmounted } from "vue";
 import type { TableColumnCtx } from "element-plus";
-import { debounce } from "lodash";
 import { useRouter } from "vue-router";
 import bus from "@/utils/bus";
 import { getMicrogridList } from "@/api/home";
@@ -106,7 +105,7 @@ const tableRowClassName = ({ row, rowIndex }: { row: Microgrid; rowIndex: number
     if (parentIndex === -1 || !parentItem) return "";
 
     const isParentHovered = parentItem.id === hoverId.value;
-    const isParentExpanded = expandedKeys.value?.includes(parentItem.id);
+    // const isParentExpanded = expandedKeys.value?.includes(parentItem.id);
     const isLastChild = parentItem.children?.[parentItem.children.length - 1]?.id === row.id;
 
     if (parentIndex % 2 !== 0) {
@@ -211,9 +210,16 @@ onUnmounted(() => {
 <template>
   <div class="page">
     <div ref="containerRef" class="table" @mousemove="handleMouseMove">
-      <el-table @cell-mouse-enter="cellMouseEnter" @cell-mouse-leave="cellMouseLeave" :data="tableData"
-        :row-class-name="tableRowClassName" style="width: 100%; height: 100%" @row-click="clickRow" row-key="id"
-        @expand-change="handleExpandChange">
+      <el-table
+        @cell-mouse-enter="cellMouseEnter"
+        @cell-mouse-leave="cellMouseLeave"
+        :data="tableData"
+        :row-class-name="tableRowClassName"
+        style="width: 100%; height: 100%"
+        @row-click="clickRow"
+        row-key="id"
+        @expand-change="handleExpandChange"
+      >
         <el-table-column min-width="200" sortable prop="stationName" :label="$t('name')">
           <template #default="{ row }">
             {{ row.microgridName || row.stationName }}
@@ -223,21 +229,36 @@ onUnmounted(() => {
         <el-table-column prop="windCapacitySum" align="center" sortable :label="$t('windPowerCapacity')" />
         <el-table-column prop="installedCapacitySum" align="center" sortable :label="$t('energyStorageCapacity')" />
         <el-table-column prop="pileInstalledPowerSum" align="center" sortable :label="$t('acChargingPileCapacity')" />
-        <el-table-column prop="directCurrentPileInstalledPowerSum" align="center" sortable
-          :label="$t('dcChargingPileCapacity')" />
+        <el-table-column
+          prop="directCurrentPileInstalledPowerSum"
+          align="center"
+          sortable
+          :label="$t('dcChargingPileCapacity')"
+        />
       </el-table>
-      <div v-show="!!stationName" class="tooltip" :style="{
-        left: tooltipX + 'px',
-        top: tooltipY + 'px',
-      }">
+      <div
+        v-show="!!stationName"
+        class="tooltip"
+        :style="{
+          left: tooltipX + 'px',
+          top: tooltipY + 'px',
+        }"
+      >
         {{ stationName }}
       </div>
     </div>
     <div class="table-pagination">
-      <el-pagination v-model:current-page="params.pageNum" v-model:page-size="params.pageSize"
-        :page-sizes="[10, 20, 30, 50, 100]" :disabled="false" :background="false"
-        layout="total, prev, pager, next, sizes, jumper" :total="total" @size-change="pageSizeChangeHandle"
-        @current-change="currentChangeHandle" />
+      <el-pagination
+        v-model:current-page="params.pageNum"
+        v-model:page-size="params.pageSize"
+        :page-sizes="[10, 20, 30, 50, 100]"
+        :disabled="false"
+        :background="false"
+        layout="total, prev, pager, next, sizes, jumper"
+        :total="total"
+        @size-change="pageSizeChangeHandle"
+        @current-change="currentChangeHandle"
+      />
     </div>
   </div>
 </template>
@@ -418,7 +439,8 @@ onUnmounted(() => {
           }
         }
 
-        .el-table__body-wrapper {}
+        .el-table__body-wrapper {
+        }
 
         .hover-item {
           cursor: pointer;
