@@ -11,7 +11,7 @@ interface RequestOptions {
   baseURL?: string; // 可选，自定义 baseURL
 }
 // 基础配置
-const baseURL = import.meta.env.VITE_API_BASE || "https://api.example.com";
+const baseURL = import.meta.env.VITE_API_BASE || "https://ess-ds.com/";
 
 const service = axios.create({
   baseURL,

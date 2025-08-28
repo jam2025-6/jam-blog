@@ -13,3 +13,6 @@ export interface PageResponse<T> {
   totalPage: number; // 总页数
   list: T[]; // 数据列表
 }
+
+// 定义支持的语言类型枚举，限制只能是中文或英文
+export type LangType = "zh-CN" | "en-US";

@@ -2,8 +2,9 @@ import { createI18n } from "vue-i18n";
 import Cookies from "js-cookie";
 import enUS from "./locale/en-US.json";
 import zhCN from "./locale/zh-CN.json";
+import { LangType } from "@/types/api";
 
-const messages = {
+const messages: Record<LangType, any> = {
   "en-US": enUS,
   "zh-CN": zhCN,
 };
