@@ -47,3 +47,15 @@ export interface PvStatistics {
   treesPlantedNumber: number; // 折合植树数量
   greenCertificatesNumber: number; // 绿证数量
 }
+
+export interface RealTimeData {
+  loadRealTime: PowerCurve[]; // 实时负荷数据
+  powerGenerationRealTime: PowerCurve[]; // 实时发电数据
+}
+
+export interface StationInfo {
+  layoutId: number;        // 布局 ID
+  stationCode: string;     // 电站编码
+  stationName: string;     // 电站名称
+  stationType: number;     // 电站类型
+}

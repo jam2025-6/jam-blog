@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, watch, onMounted } from "vue";
+import { ref, watch, onMounted, computed } from "vue";
 import { PanelTitle } from "@/components";
 import { useLocaleStore } from "@/stores/modules/locale";
 import { storeToRefs } from "pinia";
@@ -23,6 +23,14 @@ const formData = ref<Microgrid>({
   directCurrentPileInstalledPowerSum: 0,
   stationCount: 0,
   children: [],
+});
+const maxLength = computed(() => {
+  const max = Math.max(
+    (formData.value.voltageLevel + "").length,
+    (formData.value.transformerCapacity + "").length,
+    (formData.value.pvInstalledPowerSum + "").length
+  );
+  return max;
 });
 const loading = ref(false);
 async function getData() {
@@ -56,7 +64,13 @@ getData();
             }"
           >
             <div class="word">
-              <div>{{ formData.voltageLevel }}</div>
+              <div
+                :style="{
+                  fontSize: 30 - maxLength + 'px',
+                }"
+              >
+                {{ formData.voltageLevel }}
+              </div>
               <div>kV</div>
             </div>
           </div>
@@ -77,7 +91,13 @@ getData();
             }"
           >
             <div class="word">
-              <div>{{ formData.transformerCapacity }}</div>
+              <div
+                :style="{
+                  fontSize: 30 - maxLength + 'px',
+                }"
+              >
+                {{ formData.transformerCapacity }}
+              </div>
               <div>kVA</div>
             </div>
           </div>
@@ -98,7 +118,13 @@ getData();
             }"
           >
             <div class="word">
-              <div>{{ formData.pvInstalledPowerSum }}</div>
+              <div
+                :style="{
+                  fontSize: 30 - maxLength + 'px',
+                }"
+              >
+                {{ formData.pvInstalledPowerSum }}
+              </div>
               <div>kW</div>
             </div>
           </div>
@@ -140,7 +166,7 @@ getData();
         <div class="info-item">
           <svg-icon name="charging-pile" style="font-size: 36px; margin-right: 11px" />
           <div class="info-item-word">
-            <div class="info-item-word-title">{{ $t("dcChargingPile") }}</div>
+            <div class="info-item-word-title">{{ $t("dcChargingPileCapacity") }}</div>
             <div class="info-item-word-value">
               <div class="info-item-word-value-num">{{ formData.pileInstalledPowerSum }}</div>
               <div class="info-item-word-value-unit">kW</div>
@@ -150,7 +176,7 @@ getData();
         <div class="info-item">
           <svg-icon name="charging-pile" style="font-size: 36px; margin-right: 11px" />
           <div class="info-item-word">
-            <div class="info-item-word-title">{{ $t("acChargingPile") }}</div>
+            <div class="info-item-word-title">{{ $t("acChargingPileCapacity") }}</div>
             <div class="info-item-word-value">
               <div class="info-item-word-value-num">{{ formData.directCurrentPileInstalledPowerSum }}</div>
               <div class="info-item-word-value-unit">kW</div>

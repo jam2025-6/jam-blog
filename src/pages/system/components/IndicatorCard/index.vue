@@ -34,15 +34,15 @@ const { isChinese } = storeToRefs(useLocaleStore());
     <div class="item">
       <div class="item-title">{{ $t("investmentPaybackPeriod") }}</div>
       <div class="item-indicator">
-        <div class="item-indicator-num">2</div>
-        <div class="item-indicator-unit">{{ $t("year") }}</div>
+        <div class="item-indicator-num">0.2</div>
+        <div class="item-indicator-unit">t/t标准碳</div>
       </div>
     </div>
     <div class="item">
       <div class="item-title">{{ $t("carbonReductions") }}</div>
       <div class="item-indicator">
         <div class="item-indicator-num orange">100</div>
-        <div class="item-indicator-unit orange">t</div>
+        <div class="item-indicator-unit orange">/tce</div>
       </div>
     </div>
   </div>
@@ -79,6 +79,8 @@ const { isChinese } = storeToRefs(useLocaleStore());
       background-clip: text;
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
+      /* 二级标题投影 */
+
       /* 二级标题投影 */
       text-shadow: 0 2px 5px rgba(0, 0, 0, 0.4), 0 0 6px rgba(229, 239, 249, 0.36), 0 0 10px rgba(48, 126, 229, 0.6);
       font-family: "Alimama FangYuanTi VF";

@@ -3,37 +3,40 @@ import { PanelTitle, gdCharts, Tabs } from "@/components";
 import { ref, computed, watch } from "vue";
 import * as echarts from "echarts";
 import { useI18n } from "vue-i18n";
+import { getLoadForecastCurve } from "@/api/system";
+import { RealTimeData } from "@/types/system";
+import { useRoute } from "vue-router";
+const route = useRoute();
 const { t } = useI18n();
 const tabList = [
   {
     label: t("loadForecastCurves"),
-    value: "负荷预测曲线",
+    value: "loadCurve",
   },
   {
     label: t("generationForecastCurve"),
-    value: "发电预测曲线",
+    value: "powerGenerationCurve",
   },
   {
     label: t("spotPriceForecast"),
-    value: "现货价格预测",
+    value: "spotPrice",
   },
 ];
 const tabValue = ref("");
+const selectVal = ref('thisDay')
+const formData = ref<RealTimeData>({
+  loadRealTime: [],
+  powerGenerationRealTime: [],
+});
 const options = computed(() => {
   if (!tabValue.value) {
     return;
   }
-  const times: any = [];
-  for (let h = 0; h < 24; h++) {
-    for (let m = 0; m < 60; m += 15) {
-      const hh = String(h).padStart(2, "0");
-      const mm = String(m).padStart(2, "0");
-      times.push(`${hh}:${mm}`);
-    }
-  }
-  // 生成指定范围的随机数据
-  const generatePowerData = (min: number, max: number) =>
-    times.map(() => +(min + Math.random() * (max - min)).toFixed(2));
+  const times: any = {
+    loadCurve: formData.value.loadRealTime.map((el) => el.time),
+    powerGenerationCurve: formData.value.powerGenerationRealTime.map((el) => el.time),
+    spotPrice: [],
+  };
   // 四组区分明显的数据
   const data: Record<
     string,
@@ -42,41 +45,41 @@ const options = computed(() => {
       data: number[];
     }[]
   > = {
-    负荷预测曲线: [
+    loadCurve: [
       {
         name: t("loadActual"),
-        data: generatePowerData(50, 100),
+        data: formData.value.loadRealTime.map((el) => el.value),
       },
       {
         name: t("loadForecast"),
-        data: generatePowerData(40, 130),
+        data: [],
       },
     ],
-    发电预测曲线: [
+    powerGenerationCurve: [
       {
         name: t("generationActual"),
-        data: generatePowerData(60, 100),
+        data: formData.value.powerGenerationRealTime.map((el) => el.value),
       },
       {
         name: t("generationForecast"),
-        data: generatePowerData(50, 90),
+        data: [],
       },
     ],
-    现货价格预测: [
+    spotPrice: [
       {
         name: t("spotActual"),
-        data: generatePowerData(20, 29),
+        data: [],
       },
       {
         name: t("spotForecast"),
-        data: generatePowerData(30, 50),
+        data: [],
       },
     ],
   };
   return {
     xAxis: {
       type: "category",
-      data: times,
+      data: times[tabValue.value],
       axisLabel: {
         show: true,
         color: "rgba(182, 212, 254, 0.8)",
@@ -236,11 +239,30 @@ const options = computed(() => {
     ],
   };
 });
+async function getData() {
+  try {
+    const id = route.query.id as string;
+    if (!id) {
+      return;
+    }
+    let res = await getLoadForecastCurve(id);
+    if (res.code === 200) {
+      formData.value = res.data;
+    }
+  } catch (e) {
+  } finally {
+  }
+}
+getData();
 </script>
 <template>
   <div class="bottom-panel">
     <PanelTitle :title="$t('loadForecastCurve')" size="large" />
     <div class="container">
+      <el-select style="width: 120px;position: absolute;right: 365px;top: 0;z-index: 2024;" v-model="selectVal">
+        <el-option label="近七日" value="sevenDay"></el-option>
+        <el-option label="当日" value="thisDay"></el-option>
+      </el-select>
       <Tabs :list="tabList" v-model="tabValue" />
       <gdCharts v-if="tabValue" :option="options" />
     </div>
@@ -258,11 +280,13 @@ const options = computed(() => {
   background: linear-gradient(180deg, rgba(5, 17, 42, 0.02) 0%, rgba(15, 75, 156, 0.03) 100%);
   backdrop-filter: blur(12px);
   padding-top: 34px;
+
   .container {
     padding-top: 5px;
     height: calc(100% - 42px);
     width: 100%;
     position: relative;
+
     .chart-container {
       height: 100% !important;
     }

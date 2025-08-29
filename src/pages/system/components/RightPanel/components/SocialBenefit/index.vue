@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, watch, onMounted } from "vue";
+import { ref, watch, onMounted, computed } from "vue";
 import { PanelTitle } from "@/components";
 import { useLocaleStore } from "@/stores/modules/locale";
 import { storeToRefs } from "pinia";
@@ -13,26 +13,30 @@ const formData = ref<PvStatistics>({
   pvYearDisChargeCapacity: 0,
   pvYearDisChargeCapacityOld: 0,
   pvYearDisChargeCapacityUnit: "",
-
   pvDayDisChargeCapacity: 0,
   pvDayDisChargeCapacityOld: 0,
   pvDayDisChargeCapacityUnit: "",
-
   pvCapacity: 0,
   pvYearEffHours: 0,
-
   pvYearSelfConsumElec: 0,
   pvYearSelfConsumElecOld: 0,
   pvYearSelfConsumElecUnit: "",
-
   pvYearOnGridElec: 0,
   pvYearOnGridElecOld: 0,
   pvYearOnGridElecUnit: "",
-
   reduceCarbonEmissions: 0,
   saveStandardCoal: 0,
   treesPlantedNumber: 0,
   greenCertificatesNumber: 0,
+});
+const maxLength = computed(() => {
+  const max = Math.max(
+    (round(formData.value.reduceCarbonEmissions, 2) + "").length,
+    (round(formData.value.saveStandardCoal, 2) + "").length,
+    (round(formData.value.treesPlantedNumber, 2) + "").length,
+    (round(formData.value.greenCertificatesNumber, 2) + "").length,
+  );
+  return max;
 });
 const loading = ref(false);
 async function getData() {
@@ -58,7 +62,7 @@ getData();
     <PanelTitle :title="$t('renewableEnergySocialBenefits')" />
     <div class="container">
       <div class="cell">
-        <div class="cell-item">
+        <!-- <div class="cell-item">
           <svg-icon name="fdl" style="font-size: 48px; margin-right: 16px; flex-shrink: 0"></svg-icon>
           <div class="cell-item-main">
             <div class="name">{{ $t("annualRenewableEnergyGeneration") }}</div>
@@ -67,7 +71,7 @@ getData();
               <div class="value-unit">kW·h</div>
             </div>
           </div>
-        </div>
+        </div> -->
         <div class="cell-item">
           <svg-icon name="yxxss" style="font-size: 48px; margin-right: 16px; flex-shrink: 0"></svg-icon>
           <div class="cell-item-main">
@@ -88,7 +92,7 @@ getData();
             </div> -->
           </div>
         </div>
-        <div class="cell-item">
+        <!-- <div class="cell-item">
           <svg-icon name="zydl" style="font-size: 48px; margin-right: 16px; flex-shrink: 0"></svg-icon>
           <div class="cell-item-main">
             <div class="name">{{ $t("annualRenewableEnergySelfConsumption") }}</div>
@@ -97,7 +101,7 @@ getData();
               <div class="value-unit">kW·h</div>
             </div>
           </div>
-        </div>
+        </div> -->
         <div class="cell-item">
           <svg-icon name="swdl" style="font-size: 48px; margin-right: 16px; flex-shrink: 0"></svg-icon>
           <div class="cell-item-main">
@@ -112,57 +116,53 @@ getData();
       <div class="section">
         <div class="section-item">
           <div class="section-item-main">
-            <div class="num">{{ round(+formData.reduceCarbonEmissions, 2) }}</div>
-            <div class="unit">t</div>
+            <div class="num" :style="{
+              fontSize: 22 - maxLength + 'px',
+            }">{{ round(+formData.reduceCarbonEmissions, 2) }}</div>
+            <div class="unit">/tce</div>
           </div>
-          <div
-            class="section-item-text"
-            :class="{
-              en: !isChinese,
-            }"
-          >
+          <div class="section-item-text" :class="{
+            en: !isChinese,
+          }">
             {{ $t("carbonReduction") }}
           </div>
         </div>
         <div class="section-item">
           <div class="section-item-main">
-            <div class="num">{{ round(+formData.saveStandardCoal, 2) }}</div>
-            <div class="unit">t</div>
+            <div class="num" :style="{
+              fontSize: 22 - maxLength + 'px',
+            }">{{ round(+formData.saveStandardCoal, 2) }}</div>
+            <div class="unit">/tce</div>
           </div>
-          <div
-            class="section-item-text"
-            :class="{
-              en: !isChinese,
-            }"
-          >
+          <div class="section-item-text" :class="{
+            en: !isChinese,
+          }">
             {{ $t("standardCoalSaving") }}
           </div>
         </div>
         <div class="section-item">
           <div class="section-item-main">
-            <div class="num">{{ round(+formData.treesPlantedNumber, 2) }}</div>
+            <div class="num" :style="{
+              fontSize: 22 - maxLength + 'px',
+            }">{{ round(+formData.treesPlantedNumber, 2) }}</div>
             <div class="unit">{{ $t("treeUnit") }}</div>
           </div>
-          <div
-            class="section-item-text"
-            :class="{
-              en: !isChinese,
-            }"
-          >
+          <div class="section-item-text" :class="{
+            en: !isChinese,
+          }">
             {{ $t("equivalentTreesPlanted") }}
           </div>
         </div>
         <div class="section-item">
           <div class="section-item-main">
-            <div class="num">{{ round(+formData.greenCertificatesNumber, 2) }}</div>
+            <div class="num" :style="{
+              fontSize: 22 - maxLength + 'px',
+            }">{{ round(+formData.greenCertificatesNumber, 2) }}</div>
             <div class="unit">{{ $t("certificateUnit") }}</div>
           </div>
-          <div
-            class="section-item-text"
-            :class="{
-              en: !isChinese,
-            }"
-          >
+          <div class="section-item-text" :class="{
+            en: !isChinese,
+          }">
             {{ $t("equivalentGreenCertificates") }}
           </div>
         </div>
@@ -175,10 +175,12 @@ getData();
 .power-curve {
   height: 305px;
   width: 100%;
+
   .container {
     padding: 20px 0 13px 39px;
     width: calc(100%);
     height: calc(100% - 42px);
+
     .cell {
       display: flex;
       padding-left: 13px;
@@ -186,16 +188,19 @@ getData();
       flex-wrap: wrap;
       width: 100%;
       gap: 16px 12px;
+
       &-item {
         // width: 50%;
         max-height: 64px;
         min-height: 48px;
-        width: 190px;
+        width: 100%;
         display: flex;
         align-items: flex-start;
+
         &:nth-last-of-type(2n-1) {
           flex: 1;
         }
+
         .name {
           padding-top: 3px;
           /* 二级标题投影 */
@@ -213,6 +218,7 @@ getData();
           -webkit-text-fill-color: transparent;
           margin-bottom: 2px;
         }
+
         .value {
           margin-top: 4px;
           display: flex;
@@ -226,10 +232,12 @@ getData();
           font-style: normal;
           font-weight: 700;
           line-height: normal;
+
           .number {
             display: flex;
             align-items: baseline;
           }
+
           &-name {
             background: linear-gradient(211deg, #f7fcfa 18.65%, #cbdaf5 94.38%);
             background-clip: text;
@@ -247,11 +255,13 @@ getData();
             line-height: normal;
             letter-spacing: 1.2px;
           }
+
           &-num {
             margin-right: 5px;
             font-size: 20px;
             letter-spacing: 2px;
           }
+
           &-unit {
             font-size: 12px;
             letter-spacing: 1.2px;
@@ -259,12 +269,14 @@ getData();
         }
       }
     }
+
     .section {
       margin-top: 24px;
       display: flex;
       align-items: center;
       gap: 0 13px;
       height: 78px;
+
       &-item {
         &-main {
           width: 92px;
@@ -273,6 +285,7 @@ getData();
           display: flex;
           align-items: baseline;
           justify-content: center;
+
           .num {
             background: linear-gradient(211deg, #f7fcfa 18.65%, #cbdaf5 94.38%);
             background-clip: text;
@@ -283,13 +296,14 @@ getData();
             text-shadow: 0 2px 5px rgba(0, 0, 0, 0.4), 0 0 6px rgba(229, 239, 249, 0.36),
               0 0 10px rgba(48, 126, 229, 0.6);
             font-family: Rubik;
-            font-size: 18px;
+            font-size: 24px;
             font-style: normal;
             font-weight: 700;
             line-height: normal;
             letter-spacing: 1.2px;
-            margin-right: 4px;
+            margin-right: 2px;
           }
+
           .unit {
             background: linear-gradient(211deg, #f7fcfa 18.65%, #cbdaf5 94.38%);
             background-clip: text;
@@ -307,6 +321,7 @@ getData();
             line-height: normal;
           }
         }
+
         &-text {
           margin-top: 12px;
           background: linear-gradient(211deg, #f7fcfa 18.65%, #cbdaf5 94.38%);
@@ -327,6 +342,7 @@ getData();
           display: flex;
           align-items: center;
           justify-content: center;
+
           &.en {
             letter-spacing: -0.8px;
             margin-top: 4px;

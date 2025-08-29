@@ -1,7 +1,7 @@
 import { request } from "@/utils/request";
 import { ApiResponse, PageResponse } from "@/types/api";
 import { Microgrid } from "@/types/home";
-import { AmountRecord, EnergyCurves, PvStatistics } from "@/types/system";
+import { AmountRecord, EnergyCurves, PvStatistics, RealTimeData,StationInfo } from "@/types/system";
 //基本信息
 export function getSearchById(id: string): Promise<ApiResponse<Microgrid>> {
   return request({
@@ -47,5 +47,22 @@ export function getSocialBenefitsNewEnergy(id: string): Promise<ApiResponse<PvSt
   return request({
     method: "GET",
     url: "/microgrid/socialBenefitsNewEnergy/" + id,
+  });
+}
+
+//
+export function getLoadForecastCurve(id: string): Promise<ApiResponse<RealTimeData>> {
+  return request({
+    method: "GET",
+    url: "microgrid/loadForecastCurve/" + id,
+  });
+}
+
+
+//
+export function getSwitchCentralized(id: string): Promise<ApiResponse<StationInfo[]>> {
+  return request({
+    method: "GET",
+    url: "/microgrid/switchCentralized/" + id,
   });
 }

@@ -105,7 +105,7 @@ getData();
         </div>
         <div class="rate-item">
           <div class="rate-item-pic">
-            <SemiCircleProgress :bluePercent="40" :orangePercent="60" :text="$t('monthlyComparison')" />
+            <SemiCircleProgress :bluePercent="40" :orangePercent="60" text="年对比" />
           </div>
           <div class="rate-item-main">
             <div class="item">

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { ref, computed } from 'vue'
 import { useI18n } from "vue-i18n";
 import { useLocaleStore } from "@/stores/modules/locale";
 import { storeToRefs } from "pinia";
@@ -6,6 +7,12 @@ const { isChinese } = storeToRefs(useLocaleStore());
 const { t } = useI18n();
 import Line from "./line.vue";
 import Modal from "./modal.vue";
+import { Dialog } from "@/components";
+import { useRoute, useRouter } from 'vue-router';
+import { getSwitchCentralized } from '@/api/system'
+import { StationInfo } from '@/types/system'
+const route = useRoute()
+const router = useRouter()
 const point1 = [
   { x: 442, y: 448 },
   { x: 698, y: 300 },
@@ -43,7 +50,7 @@ const point6 = [
 ];
 const modal1 = [
   {
-    name: t("chargingPower"),
+    name: "实时功率",
     value: 12.4,
     unit: "kW",
   },
@@ -55,34 +62,49 @@ const modal1 = [
 ];
 const modal2 = [
   {
+    name: "实时功率",
+    value: 12.4,
+    unit: "kW",
+  },
+  {
     name: t("dailyGeneration"),
     value: 12.4,
     unit: "kW·h",
   },
-  {
-    name: t("dailyRevenue"),
-    value: 94,
-    unit: t("yuan"),
-  },
+  // {
+  //   name: t("dailyRevenue"),
+  //   value: 94,
+  //   unit: t("yuan"),
+  // },
 ];
 const modal3 = [
+  // {
+  //   name: t("gridFeedIn"),
+  //   value: 12.4,
+  //   unit: "kW·h",
+  // },
   {
-    name: t("gridFeedIn"),
+    name: "实时功率",
     value: 12.4,
-    unit: "kW·h",
+    unit: "kW",
   },
   {
     name: t("dailyUtilization"),
     value: 12.4,
     unit: "kW·h",
   },
-  {
-    name: t("dailyRevenue"),
-    value: 94,
-    unit: t("yuan"),
-  },
+  // {
+  //   name: t("dailyRevenue"),
+  //   value: 94,
+  //   unit: t("yuan"),
+  // },
 ];
 const modal4 = [
+  {
+    name: "实时功率",
+    value: 12.4,
+    unit: "kW",
+  },
   {
     name: t("dailyConsumption"),
     value: 12.4,
@@ -91,17 +113,27 @@ const modal4 = [
 ];
 const modal5 = [
   {
+    name: "实时功率",
+    value: 12.4,
+    unit: "kW",
+  },
+  {
     name: t("dailyCharging"),
     value: 12.4,
     unit: "kW·h",
   },
-  {
-    name: t("dailyChargingRevenue"),
-    value: 94,
-    unit: t("yuan"),
-  },
+  // {
+  //   name: t("dailyChargingRevenue"),
+  //   value: 94,
+  //   unit: t("yuan"),
+  // },
 ];
 const modal6 = [
+  {
+    name: "实时功率",
+    value: 12.4,
+    unit: "kW",
+  },
   {
     name: t("gridFeedIn"),
     value: 12.4,
@@ -113,54 +145,89 @@ const modal6 = [
     unit: "kW·h",
   },
 ];
+const showDialog = ref(false)
+const stationList = ref<StationInfo[]>([])
+async function clickGraphic() {
+  getStations()
+  showDialog.value = true
+}
+async function getStations() {
+  const id = route.query.id as string;
+  if (!id) {
+    return;
+  }
+  let res = await getSwitchCentralized(id)
+  stationList.value = res.data
+}
+function clickStationItem(val: StationInfo) {
+  const encoded = btoa(
+    encodeURIComponent(
+      JSON.stringify({
+        stationCode: val.stationCode,
+        viewId: val.layoutId,
+        stationName: val.stationName,
+        type: val.stationType,
+      })
+    )
+  );
+  const baseUrl = import.meta.env.VITE_APP_ENV === "development" ? 'https://test.ess-ds.com' : ''
+  showDialog.value = false
+  window.open(`${baseUrl}/nlgl-web/stationInfo?q=${encoded}`)
+}
 </script>
 <template>
-  <div
-    class="center-panel"
-    :class="{
-      en: !isChinese,
-    }"
-  >
+  <Dialog @update:visible="showDialog = false" title="选择跳转的站点" v-model:visible="showDialog">
+    <div class="station-item" @click="clickStationItem(item)" v-for="item, index in stationList" :key=item.stationCode>
+      <div class="index">{{ index + 1 }}</div>
+      <div class="name">{{
+        item.stationName }}</div>
+      <div class="enter">进入</div>
+    </div>
+  </Dialog>
+  <div class="center-panel" :class="{
+    en: !isChinese,
+  }">
     <Line :status="true" :points="point1" />
     <Line :status="true" :points="point2" />
     <Line :status="true" :points="point3" />
     <Line :status="true" :bgForward="false" :points="point4" />
     <Line :status="true" :bgForward="false" :points="point5" />
     <Line :status="true" :bgForward="false" :points="point6" />
-    <Modal :title="$t('energyStorage')" :list="modal1" :position="{ right: '807px', top: '149px' }" />
+    <Modal :title="$t('energyStorage')" :list="modal1" :position="{ right: '807px', top: '149px' }">
+      <template #right>
+        <div class="status">
+          <div class="status-circle"></div>
+          <div class="status-text">充电</div>
+        </div>
+      </template>
+    </Modal>
     <Modal :title="$t('windPower')" :list="modal2" :position="{ right: '617px', top: '0' }" />
-    <Modal
-      :title="$t('photovoltaic')"
-      :list="modal3"
-      :position="{ left: isChinese ? '784px' : '764px', top: '70px' }"
-    />
+    <Modal :title="$t('photovoltaic')" :list="modal3"
+      :position="{ left: isChinese ? '784px' : '764px', top: '70px' }" />
     <Modal :title="$t('load')" :list="modal4" :position="{ left: '786px', top: '245px' }" />
     <Modal :title="$t('chargingPile')" :list="modal5" :position="{ left: '603px', top: '367px' }" />
-    <Modal
-      :title="$t('gridPower')"
-      :list="modal6"
-      :position="{ right: isChinese ? '796px' : '777px', top: isChinese ? '348px' : '288px' }"
-    />
-    <div class="energy-storage scale-item">
+    <Modal :title="$t('gridPower')" :list="modal6"
+      :position="{ right: isChinese ? '796px' : '777px', top: isChinese ? '348px' : '288px' }" />
+    <div class="energy-storage scale-item" @click="clickGraphic">
       <img src="@/assets/images/station/energyStorage-active.png" alt="" />
     </div>
-    <div class="wind-power scale-item">
+    <div class="wind-power scale-item" @click="clickGraphic">
       <img src="@/assets/images/station/windPower-active.png" alt="" />
       <!-- <div class="name">风电</div> -->
     </div>
-    <div class="photovoltaic scale-item">
+    <div class="photovoltaic scale-item" @click="clickGraphic">
       <img src="@/assets/images/station/photovoltaic-active.png" alt="" />
       <!-- <div class="name">光伏</div> -->
     </div>
-    <div class="load scale-item">
+    <div class="load scale-item" @click="clickGraphic">
       <img src="@/assets/images/station/load-active.png" alt="" />
       <!-- <div class="name">负荷</div> -->
     </div>
-    <div class="charging-pile scale-item">
+    <div class="charging-pile scale-item" @click="clickGraphic">
       <img src="@/assets/images/station/chargingPile-active.png" alt="" />
       <!-- <div class="name">充电桩</div> -->
     </div>
-    <div class="electric-supply scale-item">
+    <div class="electric-supply scale-item" @click="clickGraphic">
       <img src="@/assets/images/station/electricSupply-active.png" alt="" />
       <!-- <div class="name">市电</div> -->
     </div>
@@ -175,6 +242,86 @@ const modal6 = [
 </template>
 
 <style scoped lang="scss">
+.station-item {
+  height: 44px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  border: 1px solid transparent;
+  justify-content: space-between;
+
+  .index {
+    width: 76px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    align-self: stretch;
+  }
+
+  .name {
+    color: #E0F0FF;
+    leading-trim: both;
+    text-edge: cap;
+    font-family: "HarmonyOS Sans SC";
+    font-size: 18px;
+    font-style: normal;
+    flex: 1;
+    font-weight: 400;
+    line-height: normal;
+    letter-spacing: 1.44px;
+  }
+
+  .enter {
+    color: #B6D4FE;
+    leading-trim: both;
+    text-edge: cap;
+    font-family: "HarmonyOS Sans SC";
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    letter-spacing: 1.44px;
+    padding-right: 16px;
+    display: none;
+  }
+
+  &:hover {
+    // background-color: rgba($color: #1a417e, $alpha: 0.25) !important;
+    border: 1px solid #68BBFF;
+    background: rgba(36, 87, 164, 0.40);
+
+    .enter {
+      display: inline-block;
+    }
+  }
+}
+
+.status {
+  display: flex;
+  align-items: center;
+
+  &-circle {
+    width: 6px;
+    height: 6px;
+    background: #00ff37;
+    border-radius: 50%;
+    margin-right: 10px;
+  }
+
+  &-text {
+    color: #dfe8e0;
+
+    /* 绿色文字投影 */
+    text-shadow: 0 2px 5px rgba(0, 0, 0, 0.4), 0 0 6px rgba(229, 249, 242, 0.36), 0 0 10px rgba(48, 229, 184, 0.6);
+    font-family: "HarmonyOS Sans SC";
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 900;
+    line-height: normal;
+    letter-spacing: 1.2px;
+  }
+}
+
 .center-panel {
   width: 955px;
   height: 450px;
@@ -306,6 +453,7 @@ const modal6 = [
     transition: transform 0.5s ease;
     cursor: pointer;
     z-index: 2025;
+
     /* 0.3秒平滑过渡 */
     &:hover {
       transform: scale(1.05);
