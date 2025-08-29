@@ -23,6 +23,29 @@ async function getData() {
     loading.value = false;
   }
 }
+/**
+ * 将 MW·h 转换为合适的电量单位，返回对象 { value, unit }
+ * @param {number} mwh - 电量 (单位: MW·h)
+ * @returns {{value: number, unit: string}} - 数值和单位
+ */
+function convertEnergy(mwh: number) {
+  const kWh = mwh * 1000;
+  let value, unit;
+  if (kWh >= 1e8) {
+    value = +(kWh / 1e8).toFixed(2);
+    unit = "亿kW·h";
+  } else if (kWh >= 1e4) {
+    value = +(kWh / 1e4).toFixed(2);
+    unit = "万kW·h";
+  } else {
+    value = +kWh.toFixed(2);
+    unit = "kW·h";
+  }
+
+  return { value, unit };
+}
+
+
 getData();
 </script>
 <template>
@@ -36,8 +59,8 @@ getData();
           <div class="info">
             <div class="name">{{ $t("annualPowerConsumption") }}</div>
             <div class="value">
-              <div class="num">40.5</div>
-              <div class="unit">MW·h</div>
+              <div class="num">{{ convertEnergy(40.5).value }}</div>
+              <div class="unit">{{ convertEnergy(40.5).unit }}</div>
             </div>
           </div>
         </div>
@@ -48,8 +71,8 @@ getData();
           <div class="info">
             <div class="name">{{ $t("monthlyPowerConsumption") }}</div>
             <div class="value">
-              <div class="num">40.5</div>
-              <div class="unit">MW·h</div>
+              <div class="num">{{ convertEnergy(40.5).value }}</div>
+              <div class="unit">{{ convertEnergy(40.5).unit }}</div>
             </div>
           </div>
         </div>
@@ -59,8 +82,8 @@ getData();
           <div class="info">
             <div class="name">{{ $t("dailyPowerConsumption") }}</div>
             <div class="value">
-              <div class="num">40.5</div>
-              <div class="unit">MW·h</div>
+              <div class="num">{{ convertEnergy(40.5).value }}</div>
+              <div class="unit">{{ convertEnergy(40.5).unit }}</div>
             </div>
           </div>
         </div>
@@ -70,8 +93,8 @@ getData();
           <div class="info">
             <div class="name">{{ $t("currentMonthDemand") }}</div>
             <div class="value">
-              <div class="num">40.5</div>
-              <div class="unit">MW·h</div>
+              <div class="num">{{ convertEnergy(400000.5).value }}</div>
+              <div class="unit">{{ convertEnergy(400000.5).unit }}</div>
             </div>
           </div>
         </div>
@@ -86,8 +109,8 @@ getData();
               <div class="point"></div>
               <div class="name">{{ $t("gridMonthlySupply") }}</div>
               <div class="value">
-                <div class="num">40.5</div>
-                <div class="unit">MW·h</div>
+                <div class="num">{{ convertEnergy(400000.5).value }}</div>
+                <div class="unit">{{ convertEnergy(400000.5).unit }}</div>
               </div>
               <div class="percent">(50%)</div>
             </div>
@@ -95,8 +118,8 @@ getData();
               <div class="point"></div>
               <div class="name">{{ $t("renewableEnergyAnnualUtilization") }}</div>
               <div class="value">
-                <div class="num">40.5</div>
-                <div class="unit">MW·h</div>
+                <div class="num">{{ convertEnergy(400000.5).value }}</div>
+                <div class="unit">{{ convertEnergy(400000.5).unit }}</div>
               </div>
               <div class="percent">(50%)</div>
             </div>
@@ -112,8 +135,8 @@ getData();
               <div class="point"></div>
               <div class="name">{{ $t("gridMonthlySupply") }}</div>
               <div class="value">
-                <div class="num">40.5</div>
-                <div class="unit">MW·h</div>
+                <div class="num">{{ convertEnergy(400000.5).value }}</div>
+                <div class="unit">{{ convertEnergy(400000.5).unit }}</div>
               </div>
               <div class="percent">(50%)</div>
             </div>
@@ -121,8 +144,8 @@ getData();
               <div class="point"></div>
               <div class="name">{{ $t("renewableEnergyAnnualUtilization") }}</div>
               <div class="value">
-                <div class="num">40.5</div>
-                <div class="unit">MW·h</div>
+                <div class="num">{{ convertEnergy(400000.5).value }}</div>
+                <div class="unit">{{ convertEnergy(400000.5).unit }}</div>
               </div>
               <div class="percent">(100%)</div>
             </div>
@@ -137,26 +160,32 @@ getData();
 .electricity-analysis {
   height: 348px;
   width: 100%;
+
   .container {
     padding: 19px 0 19px 39px;
+
     .cell {
       width: 100%;
       display: flex;
       flex-wrap: wrap;
       gap: 16px 20px;
+
       &-item {
         background-image: url("@/assets/images/system/electricity-cell-heigher.png");
         width: 183px;
         height: 48px;
         display: flex;
         align-items: center;
+
         .info {
           width: calc(100% - 42px);
+
           .value {
             display: flex;
             align-items: baseline;
           }
         }
+
         // padding: 0 10px;
         .name {
           white-space: nowrap;
@@ -174,6 +203,7 @@ getData();
           letter-spacing: 0.6px;
           margin-bottom: 4px;
         }
+
         .num {
           background: linear-gradient(51deg, #e5b02b 6.53%, #ead08f 88.38%);
           background-clip: text;
@@ -189,6 +219,7 @@ getData();
           letter-spacing: 1.4px;
           margin-right: 4px;
         }
+
         .unit {
           background: linear-gradient(51deg, #e5b02b 6.53%, #ead08f 88.38%);
           background-clip: text;
@@ -205,8 +236,10 @@ getData();
         }
       }
     }
+
     .rate {
       padding-left: 11px;
+
       &-item {
         height: 58px;
         width: 100%;
@@ -214,20 +247,25 @@ getData();
         // background-color: #fdf;
         display: flex;
         align-items: center;
+
         &-pic {
           flex: 1;
         }
+
         &-main {
           width: calc(100% - 138px);
+
           .item {
             display: flex;
             align-items: center;
             min-height: 14px;
             width: 100%;
+
             &.orange {
               .point {
                 background: linear-gradient(231deg, #f5b04f 0.05%, #fe9347 113.94%);
               }
+
               .value,
               .percent {
                 background: linear-gradient(231deg, #f5b04f 0.05%, #fe9347 113.94%);
@@ -236,9 +274,11 @@ getData();
                 -webkit-text-fill-color: transparent;
               }
             }
+
             &:first-child {
               margin-bottom: 10px;
             }
+
             .point {
               background: linear-gradient(220deg, #26cefd 7.64%, #2b8ef3 100.06%);
               width: 6px;
@@ -247,6 +287,7 @@ getData();
               border-radius: 50%;
               margin-right: 11px;
             }
+
             .name {
               background: linear-gradient(211deg, #f7fcfa 18.65%, #cbdaf5 94.38%);
               background-clip: text;
@@ -263,6 +304,7 @@ getData();
               letter-spacing: 0.6px;
               margin-right: 6px;
             }
+
             .value {
               display: flex;
               align-items: baseline;
@@ -274,17 +316,20 @@ getData();
               font-style: normal;
               font-weight: 700;
               line-height: normal;
+
               .num {
                 font-size: 14px;
                 letter-spacing: 1.4px;
                 margin-right: 4px;
               }
+
               .unit {
                 font-size: 12px;
                 margin-right: 4px;
                 letter-spacing: 0.6px;
               }
             }
+
             .percent {
               display: inline-block;
               background: linear-gradient(220deg, #26cefd 7.64%, #2b8ef3 100.06%);
