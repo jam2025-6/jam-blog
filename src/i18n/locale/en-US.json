@@ -16,7 +16,7 @@
   "cumulativeElectricitySavings": "Cumulative Electricity Savings",
   "cumulativeEnergySaved": "Cumulative Renewable Energy Generation",
   "cumulativeSystemRevenue": "Comprehensive Revenue",
-  "currentMonthDemand": "Demand of the Month",
+  "currentMonthDemand": "Demand of last Month",
   "dailyCharging": "Daily Charging",
   "dailyChargingRevenue": "Daily Charging Revenue",
   "dailyConsumption": "Daily Consumption",

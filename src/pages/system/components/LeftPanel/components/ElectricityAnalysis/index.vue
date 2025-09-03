@@ -5,9 +5,39 @@ import { useLocaleStore } from "@/stores/modules/locale";
 import { storeToRefs } from "pinia";
 import { useRoute } from "vue-router";
 import { getCalcElectricity } from "@/api/system";
+import { EnergyStats } from '@/types/system'
 const { isChinese } = storeToRefs(useLocaleStore());
 const route = useRoute();
-const formData = ref(false);
+const formData = ref<EnergyStats>({
+  yearElecConsum: 0,
+  yearElecConsumOld: 0,
+  yearElecConsumUnit: "kWh",
+  monthElecConsum: 0,
+  monthElecConsumOld: 0,
+  monthElecConsumUnit: "kWh",
+  dayElecConsum: 0,
+  dayElecConsumOld: 0,
+  dayElecConsumUnit: "kWh",
+  lastMonthDemand: 0,
+  lastMonthDemandOld: 0,
+  lastMonthDemandUnit: "kWh",
+  monthPowerGridSupply: 0,
+  monthPowerGridSupplyOld: 0,
+  monthPowerGridSupplyUnit: "kWh",
+  monthPowerGridSupplyPercent: "0%",
+  monthNewEnergyConsum: 0,
+  monthNewEnergyConsumOld: 0,
+  monthNewEnergyConsumUnit: "kWh",
+  monthNewEnergyConsumPercent: "0%",
+  yearPowerGridSupply: 0,
+  yearPowerGridSupplyOld: 0,
+  yearPowerGridSupplyUnit: "kWh",
+  yearPowerGridSupplyPercent: null,
+  yearNewEnergyConsum: 0,
+  yearNewEnergyConsumOld: 0,
+  yearNewEnergyConsumUnit: "kWh",
+  yearNewEnergyConsumPercent: null
+});
 const loading = ref(false);
 async function getData() {
   try {
@@ -28,21 +58,67 @@ async function getData() {
  * @param {number} mwh - 电量 (单位: MW·h)
  * @returns {{value: number, unit: string}} - 数值和单位
  */
-function convertEnergy(mwh: number) {
-  const kWh = mwh * 1000;
-  let value, unit;
-  if (kWh >= 1e8) {
-    value = +(kWh / 1e8).toFixed(2);
-    unit = "亿kW·h";
-  } else if (kWh >= 1e4) {
-    value = +(kWh / 1e4).toFixed(2);
-    unit = "万kW·h";
-  } else {
-    value = +kWh.toFixed(2);
-    unit = "kW·h";
+// function convertEnergy(mwh: number) {
+//   const kWh = mwh * 1000;
+//   let value, unit;
+//   if (kWh >= 1e8) {
+//     value = +(kWh / 1e8).toFixed(2);
+//     unit = "亿kW·h";
+//   } else if (kWh >= 1e4) {
+//     value = +(kWh / 1e4).toFixed(2);
+//     unit = "万kW·h";
+//   } else {
+//     value = +kWh.toFixed(2);
+//     unit = "kW·h";
+//   }
+
+//   return { value, unit };
+// }
+type EnergyUnit = "wh" | "kwh" | "mwh" | "gwh";
+
+function convertEnergy(
+  value: number,
+  unit: string = "kwh",
+  precision: number = 2
+) {
+  // 把传入的单位转小写
+  const normalizedUnit = unit.toLowerCase() as EnergyUnit;
+
+  // 单位映射（统一到 kWh）
+  const unitMap: Record<EnergyUnit, number> = {
+    wh: 1 / 1000,    // 1 Wh = 0.001 kWh
+    kwh: 1,          // 基准
+    mwh: 1000,       // 1 MWh = 1000 kWh
+    gwh: 1_000_000   // 1 GWh = 1,000,000 kWh
+  };
+
+  if (!(normalizedUnit in unitMap)) {
+    throw new Error(`Unsupported unit: ${unit}`);
   }
 
-  return { value, unit };
+  const kWh = value * unitMap[normalizedUnit];
+
+  // 取绝对值进行判断
+  const absKWh = Math.abs(kWh);
+
+  let displayValue: number;
+  let displayUnit: string;
+
+  if (absKWh >= 1e8) {
+    displayValue = absKWh / 1e8;
+    displayUnit = "亿kWh";
+  } else if (absKWh >= 1e4) {
+    displayValue = absKWh / 1e4;
+    displayUnit = "万kWh";
+  } else {
+    displayValue = absKWh;
+    displayUnit = "kWh";
+  }
+
+  // 保留符号 & 小数位
+  displayValue = Number((kWh < 0 ? -displayValue : displayValue).toFixed(precision));
+
+  return { value: displayValue, unit: displayUnit };
 }
 
 
@@ -59,8 +135,8 @@ getData();
           <div class="info">
             <div class="name">{{ $t("annualPowerConsumption") }}</div>
             <div class="value">
-              <div class="num">{{ convertEnergy(40.5).value }}</div>
-              <div class="unit">{{ convertEnergy(40.5).unit }}</div>
+              <div class="num">{{ convertEnergy(formData.yearElecConsum, formData.yearElecConsumUnit).value }}</div>
+              <div class="unit">{{ convertEnergy(formData.yearElecConsum, formData.yearElecConsumUnit).unit }}</div>
             </div>
           </div>
         </div>
@@ -71,8 +147,8 @@ getData();
           <div class="info">
             <div class="name">{{ $t("monthlyPowerConsumption") }}</div>
             <div class="value">
-              <div class="num">{{ convertEnergy(40.5).value }}</div>
-              <div class="unit">{{ convertEnergy(40.5).unit }}</div>
+              <div class="num">{{ convertEnergy(formData.monthElecConsum, formData.monthElecConsumUnit).value }}</div>
+              <div class="unit">{{ convertEnergy(formData.monthElecConsum, formData.monthElecConsumUnit).unit }}</div>
             </div>
           </div>
         </div>
@@ -82,8 +158,8 @@ getData();
           <div class="info">
             <div class="name">{{ $t("dailyPowerConsumption") }}</div>
             <div class="value">
-              <div class="num">{{ convertEnergy(40.5).value }}</div>
-              <div class="unit">{{ convertEnergy(40.5).unit }}</div>
+              <div class="num">{{ convertEnergy(formData.dayElecConsum, formData.dayElecConsumUnit).value }}</div>
+              <div class="unit">{{ convertEnergy(formData.dayElecConsum, formData.dayElecConsumUnit).unit }}</div>
             </div>
           </div>
         </div>
@@ -93,8 +169,8 @@ getData();
           <div class="info">
             <div class="name">{{ $t("currentMonthDemand") }}</div>
             <div class="value">
-              <div class="num">{{ convertEnergy(400000.5).value }}</div>
-              <div class="unit">{{ convertEnergy(400000.5).unit }}</div>
+              <div class="num">{{ convertEnergy(formData.lastMonthDemand, formData.lastMonthDemandUnit).value }}</div>
+              <div class="unit">{{ convertEnergy(formData.lastMonthDemand, formData.lastMonthDemandUnit).unit }}</div>
             </div>
           </div>
         </div>
@@ -102,52 +178,62 @@ getData();
       <div class="rate">
         <div class="rate-item">
           <div class="rate-item-pic">
-            <SemiCircleProgress :bluePercent="60" :orangePercent="40" :text="$t('monthlyComparison')" />
+            <SemiCircleProgress :bluePercent="Number(formData.monthPowerGridSupplyPercent)"
+              :orangePercent="Number(formData.monthNewEnergyConsumPercent)" :text="$t('monthlyComparison')" />
           </div>
           <div class="rate-item-main">
             <div class="item">
               <div class="point"></div>
               <div class="name">{{ $t("gridMonthlySupply") }}</div>
               <div class="value">
-                <div class="num">{{ convertEnergy(400000.5).value }}</div>
-                <div class="unit">{{ convertEnergy(400000.5).unit }}</div>
+                <div class="num">{{ convertEnergy(formData.monthPowerGridSupply,
+                  formData.monthPowerGridSupplyUnit).value }}</div>
+                <div class="unit">{{ convertEnergy(formData.monthPowerGridSupply,
+                  formData.monthPowerGridSupplyUnit).unit }}</div>
               </div>
-              <div class="percent">(50%)</div>
+              <div class="percent">({{ formData.monthPowerGridSupplyPercent || 0 }}%)</div>
             </div>
             <div class="item orange">
               <div class="point"></div>
               <div class="name">{{ $t("renewableEnergyAnnualUtilization") }}</div>
               <div class="value">
-                <div class="num">{{ convertEnergy(400000.5).value }}</div>
-                <div class="unit">{{ convertEnergy(400000.5).unit }}</div>
+                <div class="num">{{ convertEnergy(formData.monthNewEnergyConsum,
+                  formData.monthNewEnergyConsumUnit).value }}</div>
+                <div class="unit">{{ convertEnergy(formData.monthNewEnergyConsum,
+                  formData.monthNewEnergyConsumUnit).unit }}</div>
               </div>
-              <div class="percent">(50%)</div>
+              <div class="percent">({{ formData.monthNewEnergyConsumPercent || 0 }}%)</div>
             </div>
           </div>
           <!-- <SemiCircleProgress :progress="85" title="月对比" :size="100" progress-color="#2196F3" /> -->
         </div>
         <div class="rate-item">
           <div class="rate-item-pic">
-            <SemiCircleProgress :bluePercent="40" :orangePercent="60" text="年对比" />
+            <SemiCircleProgress :bluePercent="Number(formData.yearPowerGridSupplyPercent)"
+              :orangePercent="Number(formData.yearNewEnergyConsumPercent)" text="年对比" />
           </div>
           <div class="rate-item-main">
             <div class="item">
               <div class="point"></div>
               <div class="name">{{ $t("gridMonthlySupply") }}</div>
               <div class="value">
-                <div class="num">{{ convertEnergy(400000.5).value }}</div>
-                <div class="unit">{{ convertEnergy(400000.5).unit }}</div>
+                <div class="num">{{ convertEnergy(formData.yearPowerGridSupply, formData.yearPowerGridSupplyUnit).value
+                }}</div>
+                <div class="unit">{{ convertEnergy(formData.yearPowerGridSupply, formData.yearPowerGridSupplyUnit).unit
+                }}</div>
               </div>
-              <div class="percent">(50%)</div>
+              <div class="percent">({{ formData.yearPowerGridSupplyPercent || 0 }}%)</div>
             </div>
             <div class="item orange">
               <div class="point"></div>
               <div class="name">{{ $t("renewableEnergyAnnualUtilization") }}</div>
               <div class="value">
-                <div class="num">{{ convertEnergy(400000.5).value }}</div>
-                <div class="unit">{{ convertEnergy(400000.5).unit }}</div>
+                <div class="num">{{ convertEnergy(formData.yearNewEnergyConsum, formData.yearNewEnergyConsumUnit).value
+                }}</div>
+                <div class="unit">{{ convertEnergy(formData.yearNewEnergyConsum, formData.yearNewEnergyConsumUnit).unit
+                }}</div>
               </div>
-              <div class="percent">(100%)</div>
+              <div class="percent">({{ formData.yearNewEnergyConsumPercent || 0 }}%)</div>
             </div>
           </div>
         </div>

@@ -3,16 +3,63 @@ import { ref, computed } from 'vue'
 import { useI18n } from "vue-i18n";
 import { useLocaleStore } from "@/stores/modules/locale";
 import { storeToRefs } from "pinia";
-const { isChinese } = storeToRefs(useLocaleStore());
-const { t } = useI18n();
 import Line from "./line.vue";
 import Modal from "./modal.vue";
 import { Dialog } from "@/components";
 import { useRoute, useRouter } from 'vue-router';
 import { getSwitchCentralized } from '@/api/system'
 import { StationInfo } from '@/types/system'
+import { EnergyData } from '@/types/system'
 const route = useRoute()
 const router = useRouter()
+const { t } = useI18n();
+const { isChinese } = storeToRefs(useLocaleStore());
+interface Props {
+  data?: EnergyData;
+}
+// 设置默认props值
+const props = withDefaults(defineProps<Props>(), {
+  data: () => {
+    return {
+      pvcDayCapacity: 0,
+      pvcDayConsumCapacity: 0,
+      pvcDayConsumCapacityUnit: "MWh",
+      pvcDayPower: 0,
+      pvcDayPowerUnit: "kWh",
+      loadDayConsumCapacity: 0,
+      loadDayConsumCapacityUnit: "MWh",
+      loadDayPower: 0,
+      loadDayPowerUnit: "kWh",
+      chargePileDayConsumCapacity: 0,
+      chargePileDayConsumCapacityUnit: "kWh",
+      chargePileDayPower: 0,
+      chargePileDayPowerUnit: "kWh",
+      municipalPowerGridCapacity: 0,
+      municipalPowerGridCapacityUnit: "kWh",
+      municipalPowerGridPower: 0,
+      municipalPowerGridPowerUnit: "kWh",
+      energyStorageChargingPower: 0,
+      energyStorageChargingPowerUnit: "kWh",
+      energyStorageSOC: 0,
+      energyStorageSOCText: "0%",
+      energyStorageStatus: -1,
+      energyStorageStatusText: "未知",
+      newEnergyProportion: "0%",
+      peakValleyArbitrageMonthSaveElec: 0,
+      peakValleyArbitrageMonthSaveElecUnit: "元",
+      peakValleyArbitrageTotalSaveElec: 0,
+      peakValleyArbitrageTotalSaveElecUnit: "元",
+      demandManageMonthReduce: 0,
+      demandManageMonthReduceUnit: "kWh",
+      demandManageMonthSaveElec: 0,
+      demandManageTotalSaveElec: 0,
+      pvcMonthConsumCapacity: 0,
+      pvcMonthConsumCapacityUnit: "kWh",
+      pvcMonthConsumSaveElec: 0,
+      pvcTotalConsumSaveElec: null
+    }
+  }, // 默认值
+});
 const point1 = [
   { x: 442, y: 448 },
   { x: 698, y: 300 },
@@ -48,22 +95,22 @@ const point6 = [
   { x: 732, y: 281 },
   { x: 732, y: 220 },
 ];
-const modal1 = [
+const modal1 = computed(() => [
   {
     name: "实时功率",
-    value: 12.4,
-    unit: "kW",
+    value: +props.data.energyStorageChargingPower,
+    unit: props.data.energyStorageChargingPowerUnit,
   },
   {
     name: t("essSOC"),
-    value: 94,
+    value: +props.data.energyStorageSOCText,
     unit: "%",
   },
-];
-const modal2 = [
+]);
+const modal2 = computed(() => [
   {
     name: "实时功率",
-    value: 12.4,
+    value: 123,
     unit: "kW",
   },
   {
@@ -71,80 +118,60 @@ const modal2 = [
     value: 12.4,
     unit: "kW·h",
   },
-  // {
-  //   name: t("dailyRevenue"),
-  //   value: 94,
-  //   unit: t("yuan"),
-  // },
-];
-const modal3 = [
-  // {
-  //   name: t("gridFeedIn"),
-  //   value: 12.4,
-  //   unit: "kW·h",
-  // },
+]);
+const modal3 = computed(() => [
   {
     name: "实时功率",
-    value: 12.4,
-    unit: "kW",
+    value: props.data.pvcDayPower,
+    unit: props.data.pvcDayPowerUnit,
   },
   {
     name: t("dailyUtilization"),
-    value: 12.4,
-    unit: "kW·h",
+    value: props.data.pvcDayConsumCapacity,
+    unit: props.data.pvcDayConsumCapacityUnit,
   },
-  // {
-  //   name: t("dailyRevenue"),
-  //   value: 94,
-  //   unit: t("yuan"),
-  // },
-];
-const modal4 = [
+]);
+const modal4 = computed(() => [
   {
     name: "实时功率",
-    value: 12.4,
-    unit: "kW",
+    value: props.data.loadDayPower,
+    unit: props.data.loadDayPowerUnit,
   },
   {
     name: t("dailyConsumption"),
-    value: 12.4,
-    unit: "kW·h",
+    value: props.data.loadDayConsumCapacity,
+    unit: props.data.loadDayConsumCapacityUnit,
   },
-];
-const modal5 = [
+]);
+const modal5 = computed(() => [
   {
     name: "实时功率",
-    value: 12.4,
-    unit: "kW",
+    value: props.data.chargePileDayPower,
+    unit: props.data.chargePileDayPowerUnit,
   },
   {
     name: t("dailyCharging"),
-    value: 12.4,
-    unit: "kW·h",
+    value: props.data.chargePileDayConsumCapacity,
+    unit: props.data.chargePileDayConsumCapacityUnit,
   },
-  // {
-  //   name: t("dailyChargingRevenue"),
-  //   value: 94,
-  //   unit: t("yuan"),
-  // },
-];
-const modal6 = [
+]);
+const modal6 = computed(() => [
   {
     name: "实时功率",
-    value: 12.4,
-    unit: "kW",
+    value: props.data.municipalPowerGridPower,
+    unit: props.data.municipalPowerGridPowerUnit,
   },
-  {
-    name: t("gridFeedIn"),
-    value: 12.4,
-    unit: "kW·h",
-  },
+  // {
+  //   name: t("gridFeedIn"),
+  //   value: props.data.chargePileDayPower,
+  //   unit: props.data.chargePileDayPowerUnit,
+  // },
   {
     name: t("gridDraw"),
-    value: 12.4,
-    unit: "kW·h",
+    value: props.data.municipalPowerGridCapacity,
+    unit: props.data.municipalPowerGridCapacityUnit,
   },
-];
+]);
 const showDialog = ref(false)
 const stationList = ref<StationInfo[]>([])
 async function clickGraphic() {
@@ -196,8 +223,79 @@ function clickStationItem(val: StationInfo) {
     <Modal :title="$t('energyStorage')" :list="modal1" :position="{ right: '807px', top: '149px' }">
       <template #right>
         <div class="status">
-          <div class="status-circle"></div>
-          <div class="status-text">充电</div>
+
+          <div class="status-circle" :style="{
+            background: +props.data.energyStorageStatus == 0
+              ? '#BA781C'
+              : +props.data.energyStorageStatus == 1
+                ? '#1CBA21'
+                : +props.data.energyStorageStatus == 2
+                  ? '#4A87FF'
+                  : +props.data.energyStorageStatus == 3
+                    ? '#13BAD0'
+                    : +props.data.energyStorageStatus == 4
+                      ? '#FE7843'
+                      : +props.data.energyStorageStatus == 5
+                        ? '#7D43F1'
+                        : +props.data.energyStorageStatus == 6
+                          ? '#FF9F05'
+                          : +props.data.energyStorageStatus == -1
+                            ? '#808080'
+                            : '#FF3B3B'
+          }"></div>
+          <div class="status-text" :style="{
+            '--bg-color': +props.data.energyStorageStatus == 0
+              ? '#BA781C'
+              : +props.data.energyStorageStatus == 1
+                ? '#1CBA21'
+                : +props.data.energyStorageStatus == 2
+                  ? '#4A87FF'
+                  : +props.data.energyStorageStatus == 3
+                    ? '#13BAD0'
+                    : +props.data.energyStorageStatus == 4
+                      ? '#FE7843'
+                      : +props.data.energyStorageStatus == 5
+                        ? '#7D43F1'
+                        : +props.data.energyStorageStatus == 6
+                          ? '#FF9F05'
+                          : +props.data.energyStorageStatus == -1
+                            ? '#808080'
+                            : '#FF3B3B',
+            '--color': +props.data.energyStorageStatus == 0
+              ? '#F8F1E8'
+              : +props.data.energyStorageStatus == 1
+                ? '#E8F8E8'
+                : +props.data.energyStorageStatus == 2
+                  ? '#ECF2FF'
+                  : +props.data.energyStorageStatus == 3
+                    ? '#E7F8FA'
+                    : +props.data.energyStorageStatus == 4
+                      ? '#FEF1EC'
+                      : +props.data.energyStorageStatus == 5
+                        ? '#F1ECFD'
+                        : +props.data.energyStorageStatus == 6
+                          ? '#FFF5E6'
+                          : +props.data.energyStorageStatus == -1
+                            ? '#F2F2F2'
+                            : '#FFEBEB',
+            color: +props.data.energyStorageStatus == 0
+              ? '#F8F1E8'
+              : +props.data.energyStorageStatus == 1
+                ? '#E8F8E8'
+                : +props.data.energyStorageStatus == 2
+                  ? '#ECF2FF'
+                  : +props.data.energyStorageStatus == 3
+                    ? '#E7F8FA'
+                    : +props.data.energyStorageStatus == 4
+                      ? '#FEF1EC'
+                      : +props.data.energyStorageStatus == 5
+                        ? '#F1ECFD'
+                        : +props.data.energyStorageStatus == 6
+                          ? '#FFF5E6'
+                          : +props.data.energyStorageStatus == -1
+                            ? '#F2F2F2'
+                            : '#FFEBEB'
+          }">{{ props.data.energyStorageStatusText }}</div>
         </div>
       </template>
     </Modal>
@@ -235,7 +333,7 @@ function clickStationItem(val: StationInfo) {
       <img src="@/assets/images/station/advertisingBoard.png" alt="" />
       <div class="value">
         <div class="name">{{ $t("renewableEnergyPercentage") }}</div>
-        <div class="num">89%</div>
+        <div class="num">{{ props.data.newEnergyProportion }}</div>
       </div>
     </div>
   </div>
@@ -310,9 +408,8 @@ function clickStationItem(val: StationInfo) {
 
   &-text {
     color: #dfe8e0;
-
     /* 绿色文字投影 */
-    text-shadow: 0 2px 5px rgba(0, 0, 0, 0.4), 0 0 6px rgba(229, 249, 242, 0.36), 0 0 10px rgba(48, 229, 184, 0.6);
+    text-shadow: 0 2px 5px rgba(0, 0, 0, 0.4), 0 0 6px var(--color), 0 0 10px var(--bg-color);
     font-family: "HarmonyOS Sans SC";
     font-size: 12px;
     font-style: normal;
@@ -440,7 +537,7 @@ function clickStationItem(val: StationInfo) {
         /* 橙色文字投影 */
         text-shadow: 0 2px 5px rgba(0, 0, 0, 0.4), 0 0 6px rgba(249, 243, 229, 0.36), 0 0 10px rgba(229, 145, 48, 0.6);
         font-family: Rubik;
-        font-size: 32px;
+        font-size: 28px;
         font-style: normal;
         font-weight: 700;
         line-height: normal;

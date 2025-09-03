@@ -61,6 +61,7 @@ getData();
   <div class="power-curve">
     <PanelTitle :title="$t('renewableEnergySocialBenefits')" />
     <div class="container">
+
       <div class="cell">
         <!-- <div class="cell-item">
           <svg-icon name="fdl" style="font-size: 48px; margin-right: 16px; flex-shrink: 0"></svg-icon>
@@ -73,7 +74,7 @@ getData();
           </div>
         </div> -->
         <div class="cell-item">
-          <svg-icon name="yxxss" style="font-size: 48px; margin-right: 16px; flex-shrink: 0"></svg-icon>
+          <svg-icon name="yxxss" style="font-size:64px; margin-right: 16px; flex-shrink: 0"></svg-icon>
           <div class="cell-item-main">
             <div class="name">{{ $t("effectiveHours") }}</div>
             <div class="value">
@@ -103,7 +104,7 @@ getData();
           </div>
         </div> -->
         <div class="cell-item">
-          <svg-icon name="swdl" style="font-size: 48px; margin-right: 16px; flex-shrink: 0"></svg-icon>
+          <svg-icon name="swdl" style="font-size: 64px; margin-right: 16px; flex-shrink: 0"></svg-icon>
           <div class="cell-item-main">
             <div class="name">{{ $t("annualRenewableEnergyGridFeedIn") }}</div>
             <div class="value">
@@ -177,25 +178,30 @@ getData();
   width: 100%;
 
   .container {
-    padding: 20px 0 13px 39px;
+    padding: 0px 0 13px 39px;
     width: calc(100%);
-    height: calc(100% - 42px);
+    height: calc(100% - 13px);
 
     .cell {
       display: flex;
-      padding-left: 13px;
+      // padding-left: 13px;
       align-items: flex-start;
       flex-wrap: wrap;
       width: 100%;
       gap: 16px 12px;
+      height: 143px;
+      padding-top: 50px;
 
       &-item {
         // width: 50%;
         max-height: 64px;
         min-height: 48px;
-        width: 100%;
         display: flex;
         align-items: flex-start;
+
+        &-main {
+          padding: 8px 0;
+        }
 
         &:nth-last-of-type(2n-1) {
           flex: 1;
@@ -271,13 +277,15 @@ getData();
     }
 
     .section {
-      margin-top: 24px;
       display: flex;
       align-items: center;
+      flex-wrap: wrap;
       gap: 0 13px;
-      height: 78px;
+      min-height: 78px;
 
       &-item {
+        margin-bottom: 8px;
+
         &-main {
           width: 92px;
           height: 51px;

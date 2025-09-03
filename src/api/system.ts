@@ -1,7 +1,7 @@
 import { request } from "@/utils/request";
 import { ApiResponse, PageResponse } from "@/types/api";
 import { Microgrid } from "@/types/home";
-import { AmountRecord, EnergyCurves, PvStatistics, RealTimeData,StationInfo } from "@/types/system";
+import { AmountRecord, EnergyCurves, PvStatistics, RealTimeData, StationInfo, EnergyData, EnergyStats, EnergyAndEarningsData } from "@/types/system";
 //基本信息
 export function getSearchById(id: string): Promise<ApiResponse<Microgrid>> {
   return request({
@@ -11,7 +11,7 @@ export function getSearchById(id: string): Promise<ApiResponse<Microgrid>> {
 }
 
 //用电情况分析
-export function getCalcElectricity(id: string): Promise<ApiResponse<any>> {
+export function getCalcElectricity(id: string): Promise<ApiResponse<EnergyStats>> {
   return request({
     method: "GET",
     url: "/microgrid/calcElectricity/" + id,
@@ -59,10 +59,27 @@ export function getLoadForecastCurve(id: string): Promise<ApiResponse<RealTimeDa
 }
 
 
-//
+// 获取当前微电网的站点们
 export function getSwitchCentralized(id: string): Promise<ApiResponse<StationInfo[]>> {
   return request({
     method: "GET",
     url: "/microgrid/switchCentralized/" + id,
+  });
+}
+
+
+//图表核心上-标头
+export function getCoreHeader(id: string): Promise<ApiResponse<EnergyAndEarningsData>> {
+  return request({
+    method: "GET",
+    url: "/microgrid/coreHeader/" + id,
+  });
+}
+
+//图表核心中-当日信息
+export function getCoreCenter(id: string): Promise<ApiResponse<EnergyData>> {
+  return request({
+    method: "GET",
+    url: "/microgrid/coreCenter/" + id,
   });
 }

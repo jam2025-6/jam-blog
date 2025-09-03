@@ -1,34 +1,63 @@
 <script setup lang="ts">
+import { ref } from "vue";
 import { useLocaleStore } from "@/stores/modules/locale";
 import { storeToRefs } from "pinia";
+import { getCoreHeader } from '@/api/system'
+import { useRoute } from "vue-router";
+import { EnergyAndEarningsData } from '@/types/system'
+const route = useRoute();
 const { isChinese } = storeToRefs(useLocaleStore());
+const formData = ref<EnergyAndEarningsData>({
+  newEnergyTotalCapacity: 0,
+  newEnergyTotalCapacityOld: 0,
+  newEnergyTotalCapacityUnit: "MWh",
+  newEnergyTotalCapacityPercent: "0%",
+  pvcDisChargeTotalEarnings: 0,
+  pvcDisChargeTotalEarningsUnit: "元",
+  totalEarnings: 0,
+  totalEarningsUnit: "元",
+  carbonReduction: 0,
+  carbonReductionUnit: "t"
+})
+async function getData() {
+  try {
+    const id = route.query.id as string;
+    if (!id) {
+      return;
+    }
+    let res = await getCoreHeader(id);
+    if (res.code === 200) {
+      formData.value = res.data;
+    }
+  } catch (e) {
+  } finally {
+  }
+}
+getData();
 </script>
 <template>
-  <div
-    class="indicator-card"
-    :class="{
-      en: !isChinese,
-    }"
-  >
+  <div class="indicator-card" :class="{
+    en: !isChinese,
+  }">
     <div class="item">
       <div class="item-title">{{ $t("cumulativeEnergySaved") }}</div>
       <div class="item-indicator">
-        <div class="item-indicator-num">40.7</div>
-        <div class="item-indicator-unit">kW·h</div>
+        <div class="item-indicator-num">{{ formData.newEnergyTotalCapacity }}</div>
+        <div class="item-indicator-unit">{{ formData.newEnergyTotalCapacityUnit }}</div>
       </div>
     </div>
     <div class="item">
       <div class="item-title">{{ $t("renewableEnergyUtilizationRate") }}</div>
       <div class="item-indicator">
-        <div class="item-indicator-num">40.7</div>
+        <div class="item-indicator-num">{{ formData.newEnergyTotalCapacityPercent }}</div>
         <div class="item-indicator-unit">%</div>
       </div>
     </div>
     <div class="item">
       <div class="item-title">{{ $t("cumulativeSystemRevenue") }}</div>
       <div class="item-indicator">
-        <div class="item-indicator-num">400</div>
-        <div class="item-indicator-unit">{{ $t("yuan") }}</div>
+        <div class="item-indicator-num">{{ formData.totalEarnings }}</div>
+        <div class="item-indicator-unit">{{ formData.totalEarningsUnit }}</div>
       </div>
     </div>
     <div class="item">
@@ -41,8 +70,8 @@ const { isChinese } = storeToRefs(useLocaleStore());
     <div class="item">
       <div class="item-title">{{ $t("carbonReductions") }}</div>
       <div class="item-indicator">
-        <div class="item-indicator-num orange">100</div>
-        <div class="item-indicator-unit orange">/tce</div>
+        <div class="item-indicator-num">{{ formData.carbonReduction }}</div>
+        <div class="item-indicator-unit">{{ formData.carbonReductionUnit }}</div>
       </div>
     </div>
   </div>
@@ -64,8 +93,10 @@ const { isChinese } = storeToRefs(useLocaleStore());
   padding-top: 16px;
   justify-content: center;
   gap: 0 52px;
+
   &.en {
     gap: 0 24px;
+
     .item {
       &-title {
         font-size: 14px;
@@ -73,6 +104,7 @@ const { isChinese } = storeToRefs(useLocaleStore());
       }
     }
   }
+
   .item {
     &-title {
       background: linear-gradient(211deg, #f7fcfa 18.65%, #cbdaf5 94.38%);
@@ -92,6 +124,7 @@ const { isChinese } = storeToRefs(useLocaleStore());
       letter-spacing: 1.6px;
       margin-bottom: 4px;
     }
+
     &-indicator {
       display: flex;
       align-items: baseline;
@@ -108,12 +141,14 @@ const { isChinese } = storeToRefs(useLocaleStore());
         line-height: normal;
         letter-spacing: 2px;
         margin-right: 5px;
+
         &.orange {
           background: linear-gradient(231deg, #f5b04f 0.05%, #fe9347 113.94%);
           background-clip: text;
           -webkit-background-clip: text;
         }
       }
+
       &-unit {
         background: linear-gradient(51deg, #e5b02b 6.53%, #ead08f 88.38%);
         background-clip: text;
@@ -125,6 +160,7 @@ const { isChinese } = storeToRefs(useLocaleStore());
         line-height: normal;
         letter-spacing: 0.6px;
         -webkit-text-fill-color: transparent;
+
         &.orange {
           background: linear-gradient(231deg, #f5b04f 0.05%, #fe9347 113.94%);
           background-clip: text;

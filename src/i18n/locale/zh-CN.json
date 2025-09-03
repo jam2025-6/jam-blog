@@ -16,7 +16,7 @@
   "cumulativeElectricitySavings": "累计节约需量费用",
   "cumulativeEnergySaved": "累计新能源发电量",
   "cumulativeSystemRevenue": "综合收益",
-  "currentMonthDemand": "当月实际需量",
+  "currentMonthDemand": "上月实际需量",
   "dailyCharging": "日充电量",
   "dailyChargingRevenue": "日充电收益",
   "dailyConsumption": "日用电量",
