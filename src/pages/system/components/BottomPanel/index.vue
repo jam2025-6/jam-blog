@@ -17,10 +17,10 @@ const tabList = [
     label: t("generationForecastCurve"),
     value: "powerGenerationCurve",
   },
-  {
-    label: t("spotPriceForecast"),
-    value: "spotPrice",
-  },
+  // {
+  //   label: t("spotPriceForecast"),
+  //   value: "spotPrice",
+  // },
 ];
 const tabValue = ref("");
 const selectVal = ref('thisDay')
@@ -254,12 +254,16 @@ async function getData() {
   }
 }
 getData();
+defineExpose({
+  getData
+})
 </script>
 <template>
   <div class="bottom-panel">
     <PanelTitle :title="$t('loadForecastCurve')" size="large" />
     <div class="container">
-      <el-select style="width: 120px;position: absolute;right: 365px;top: 0;z-index: 2024;" v-model="selectVal">
+      <el-select style="width: 80px;position: absolute;right: 245px;top: 4px;z-index: 2024;" size="small"
+        v-model="selectVal">
         <el-option label="近七日" value="sevenDay"></el-option>
         <el-option label="当日" value="thisDay"></el-option>
       </el-select>

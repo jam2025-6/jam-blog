@@ -166,6 +166,9 @@ async function getData() {
   }
 }
 getData();
+defineExpose({
+  getData
+})
 </script>
 <template>
   <div class="carbon-curve">

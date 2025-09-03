@@ -5,6 +5,7 @@ import { storeToRefs } from "pinia";
 import { getCoreHeader } from '@/api/system'
 import { useRoute } from "vue-router";
 import { EnergyAndEarningsData } from '@/types/system'
+import { QuestionFilled } from '@element-plus/icons-vue'
 const route = useRoute();
 const { isChinese } = storeToRefs(useLocaleStore());
 const formData = ref<EnergyAndEarningsData>({
@@ -34,6 +35,9 @@ async function getData() {
   }
 }
 getData();
+defineExpose({
+  getData
+})
 </script>
 <template>
   <div class="indicator-card" :class="{
@@ -61,7 +65,22 @@ getData();
       </div>
     </div>
     <div class="item">
-      <div class="item-title">{{ $t("investmentPaybackPeriod") }}</div>
+      <div class="item-title" style="display: flex;align-items: center;">
+        <div style="margin-right: 4px;">{{ $t("investmentPaybackPeriod") }}</div>
+        <el-tooltip popper-class="custon-tooltip">
+          <template #content>
+            <div class="tooltip-text">
+              <div>目标要求：</div>
+              <div style="text-indent: 2em;">年综合能源消费量20～100万吨标准煤的园区≤0.2吨/吨标准煤；</div>
+              <div style="text-indent: 2em;">年综合能源消费量≥100万吨标准煤的园区≤0.3吨/吨标准煤。</div>
+            </div>
+          </template>
+          <el-icon style="cursor: pointer;" size="14" color="#CBDAF5">
+            <QuestionFilled />
+          </el-icon>
+        </el-tooltip>
+
+      </div>
       <div class="item-indicator">
         <div class="item-indicator-num">0.2</div>
         <div class="item-indicator-unit">t/t标准碳</div>
@@ -70,8 +89,8 @@ getData();
     <div class="item">
       <div class="item-title">{{ $t("carbonReductions") }}</div>
       <div class="item-indicator">
-        <div class="item-indicator-num">{{ formData.carbonReduction }}</div>
-        <div class="item-indicator-unit">{{ formData.carbonReductionUnit }}</div>
+        <div class="item-indicator-num orange">{{ formData.carbonReduction }}</div>
+        <div class="item-indicator-unit orange">{{ formData.carbonReductionUnit }}</div>
       </div>
     </div>
   </div>
@@ -168,6 +187,24 @@ getData();
         }
       }
     }
+  }
+}
+
+.tooltip-text {
+  >div {
+    padding: 2px 0;
+    color: #FFF;
+    leading-trim: both;
+    text-edge: cap;
+
+    /* 内容文字1 */
+    font-family: "HarmonyOS Sans SC";
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 16px;
+    /* 133.333% */
+    letter-spacing: 0.6px;
   }
 }
 </style>

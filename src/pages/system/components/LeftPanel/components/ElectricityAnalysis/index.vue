@@ -123,6 +123,9 @@ function convertEnergy(
 
 
 getData();
+defineExpose({
+  getData
+})
 </script>
 <template>
   <div class="electricity-analysis">

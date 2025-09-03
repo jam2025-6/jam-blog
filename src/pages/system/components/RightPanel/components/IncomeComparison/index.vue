@@ -143,6 +143,9 @@ async function getData() {
   }
 }
 getData();
+defineExpose({
+  getData
+})
 </script>
 <template>
   <div class="income-comparison">
@@ -157,6 +160,7 @@ getData();
 .income-comparison {
   height: 348px;
   width: 100%;
+
   .container {
     padding: 20px 14px 19px 32px;
     width: calc(100%);

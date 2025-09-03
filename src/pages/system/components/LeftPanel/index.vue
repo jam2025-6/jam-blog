@@ -1,11 +1,20 @@
 <script setup lang="ts">
 import { BasicInfo, CarbonCurve, ElectricityAnalysis } from "./components";
+import { ref } from 'vue'
+const basicInfoRef = ref()
+const electricityAnalysisRef = ref()
+const carbonCurveRef = ref()
+defineExpose({
+  basicInfoRef,
+  electricityAnalysisRef,
+  carbonCurveRef,
+})
 </script>
 <template>
   <div class="left-panel">
-    <BasicInfo />
-    <ElectricityAnalysis />
-    <CarbonCurve />
+    <BasicInfo ref="basicInfoRef" />
+    <ElectricityAnalysis ref="electricityAnalysisRef" />
+    <CarbonCurve ref="carbonCurveRef" />
   </div>
 </template>
 

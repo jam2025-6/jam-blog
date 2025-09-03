@@ -1,17 +1,20 @@
 // @import url(./theme.scss);
 @import url(./element.scss);
 @import url(./fonts.scss);
+
 * {
   padding: 0;
   margin: 0;
 }
+
 html {
   height: 100%;
   width: 100%;
   overflow: hidden;
-  // background-color: #030e2c;
-  background-color: #fff;
+  background-color: #051229;
+  // background-color: #fff;
 }
+
 body {
   position: absolute;
   top: 50%;
@@ -24,10 +27,14 @@ body {
   overflow: hidden;
   user-select: none;
   background-image: url("@/assets/images/bg.png");
-  background-size: cover; /* 图片覆盖整个容器，可能裁剪 */
-  background-position: center; /* 图片居中 */
-  background-repeat: no-repeat; /* 禁止重复 */
-  background-attachment: fixed; /* 可选：固定背景不随滚动移动 */
+  background-size: cover;
+  /* 图片覆盖整个容器，可能裁剪 */
+  background-position: center;
+  /* 图片居中 */
+  background-repeat: no-repeat;
+  /* 禁止重复 */
+  background-attachment: fixed;
+  /* 可选：固定背景不随滚动移动 */
 }
 
 .page {
@@ -47,19 +54,25 @@ body {
   font-size: 12px;
   font-style: normal;
   font-weight: 400;
-  line-height: 16px; /* 133.333% */
+  line-height: 16px;
+  /* 133.333% */
   letter-spacing: 0.6px;
 }
 
 /* 设置滑块颜色（滑动条中可拖动的部分） */
 ::-webkit-scrollbar-thumb {
-  background-color: #ccc; /* 滑块颜色 */
-  border-radius: 3px; /* 圆角 */
+  background-color: #ccc;
+  /* 滑块颜色 */
+  border-radius: 3px;
+  /* 圆角 */
 }
+
 .tooltip-wrap {
   white-space: normal;
-  max-width: 300px; /* 控制最大宽度让它触发换行 */
-  word-break: break-word; /* 或 break-all */
+  max-width: 300px;
+  /* 控制最大宽度让它触发换行 */
+  word-break: break-word;
+  /* 或 break-all */
 }
 
 .chart-main {
@@ -70,6 +83,7 @@ body {
     background: rgba(7, 21, 46, 0.9);
     box-shadow: 0 0 3px 0 rgba(133, 203, 214, 0.14);
     backdrop-filter: blur(12px);
+
     .name {
       color: #fff;
 
@@ -83,6 +97,7 @@ body {
       letter-spacing: 1.2px;
       margin-bottom: 10px;
     }
+
     .main {
       .item {
         display: flex;
@@ -91,19 +106,23 @@ body {
         gap: 0 8px;
         height: 14px;
         margin-bottom: 10px;
+
         &:last-child {
           margin-bottom: 0;
         }
+
         &-point {
           width: 11px;
           height: 11px;
           border-radius: 50%;
           display: inline-block;
           background: linear-gradient(225deg, #28b558 0%, #114f26 100%);
+
           &.blue {
             background: linear-gradient(225deg, #47eaea 0%, #40ced7 100%);
           }
         }
+
         &-name,
         &-value,
         &-unit {
@@ -125,4 +144,33 @@ body {
 
 .mb-8 {
   margin-bottom: 8px;
+}
+
+.custon-tooltip {
+  display: inline-flex;
+  padding: 12px;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  border: 1px solid #5084B8 !important;
+  background: #0D2E58 !important;
+  border-radius: 0;
+
+  >span {
+    color: #FFF;
+    leading-trim: both;
+    text-edge: cap;
+    /* 内容文字1 */
+    font-family: "HarmonyOS Sans SC";
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 16px;
+    /* 133.333% */
+    letter-spacing: 0.6px;
+  }
+
+  .el-popper__arrow {
+    display: none;
+  }
 }

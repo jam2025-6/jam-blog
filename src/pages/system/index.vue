@@ -1,9 +1,13 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import {
+  ref, onMounted,
+  onUnmounted
+} from 'vue'
 import { getCoreCenter } from '@/api/system'
 import { LeftPanel, RightPanel, CentralPanel, BottomPanel, IndicatorCard, InfoCard } from "./components";
 import { useRoute } from "vue-router";
 import { EnergyData } from '@/types/system'
+import { useMethodPolling } from '@/hooks/useMethodPolling'
 const route = useRoute();
 const data = ref<EnergyData>({
   pvcDayCapacity: 0,
@@ -43,6 +47,10 @@ const data = ref<EnergyData>({
   pvcMonthConsumSaveElec: 0,
   pvcTotalConsumSaveElec: null
 })
+const bottomPanelRef = ref()
+const leftPanelRef = ref()
+const rightPanelRef = ref()
+const indicatorCardRef = ref()
 async function getData() {
   try {
     const id = route.query.id as string;
@@ -57,15 +65,40 @@ async function getData() {
   } finally {
   }
 }
-getData();
+
+useMethodPolling(() => {
+  // 基本信息
+  leftPanelRef.value.basicInfoRef.getData()
+  // 用电情况分析
+  leftPanelRef.value.electricityAnalysisRef.getData()
+  // 碳排放曲线
+  leftPanelRef.value.carbonCurveRef.getData()
+  // 运行功率曲线
+  rightPanelRef.value.powerCurveRef.getData()
+  // 近七日收益
+  rightPanelRef.value.incomeComparisonRef.getData()
+  // 新能源社会效益
+  rightPanelRef.value.socialBenefitRef.getData()
+  // 符合预测曲线
+  bottomPanelRef.value.getData()
+  // 中间模块
+  getData()
+  // 顶部指标
+  indicatorCardRef.value.getData()
+
+}, {
+  interval: 1000 * 60, // 每 5 秒轮询一次
+  immediate: false, // 启动时立即执行一次
+  autoStart: true, // 组件挂载后自动开始轮询
+});
 </script>
 <template>
   <div class="page">
-    <LeftPanel />
-    <RightPanel />
-    <IndicatorCard />
+    <LeftPanel ref="leftPanelRef" />
+    <RightPanel ref="rightPanelRef" />
+    <IndicatorCard ref="indicatorCardRef" />
     <CentralPanel :data="data" />
-    <BottomPanel />
+    <BottomPanel ref="bottomPanelRef" />
     <InfoCard :data="data" />
   </div>
 </template>

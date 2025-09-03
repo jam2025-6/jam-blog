@@ -1,11 +1,21 @@
 <script setup lang="ts">
+import { ref } from "vue";
 import { PowerCurve, IncomeComparison, SocialBenefit } from "./components";
+
+const powerCurveRef = ref()
+const incomeComparisonRef = ref()
+const socialBenefitRef = ref()
+defineExpose({
+  powerCurveRef,
+  incomeComparisonRef,
+  socialBenefitRef
+})
 </script>
 <template>
   <div class="right-panel">
-    <PowerCurve />
-    <IncomeComparison />
-    <SocialBenefit />
+    <PowerCurve ref="powerCurveRef" />
+    <IncomeComparison ref="incomeComparisonRef" />
+    <SocialBenefit ref="socialBenefitRef" />
   </div>
 </template>
 
