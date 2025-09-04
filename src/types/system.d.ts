@@ -49,8 +49,8 @@ export interface PvStatistics {
 }
 
 export interface RealTimeData {
-  loadRealTime: PowerCurve[]; // 实时负荷数据
-  powerGenerationRealTime: PowerCurve[]; // 实时发电数据
+  realTime: PowerCurve[]; // 实时负荷数据
+  // powerGenerationRealTime: PowerCurve[]; // 实时发电数据
 }
 
 export interface StationInfo {
@@ -197,4 +197,9 @@ export interface EnergyData {
   pvcMonthConsumSaveElec: number;
   /** 光伏累计节电收益 */
   pvcTotalConsumSaveElec: number | null;
+}
+
+export interface ForecastCurve {
+  curveType: string;
+  dateType: string
 }

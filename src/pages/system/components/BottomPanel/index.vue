@@ -14,148 +14,114 @@ const { t } = useI18n();
 const tabList = [
   {
     label: t("loadForecastCurves"),
-    value: "loadCurve",
+    value: "load_forecast",
   },
   {
     label: t("generationForecastCurve"),
-    value: "powerGenerationCurve",
+    value: "power_generation_forecast",
   },
   // {
   //   label: t("spotPriceForecast"),
   //   value: "spotPrice",
   // },
 ];
+const options = ref<any>({
+  series: []
+})
 const tabValue = ref("");
-const selectVal = ref('thisDay')
-const formData = ref<RealTimeData>({
-  loadRealTime: [],
-  powerGenerationRealTime: [],
-});
-const options = computed(() => {
-  if (!tabValue.value) {
-    return;
-  }
-  const times: any = {
-    loadCurve: formData.value.loadRealTime.map((el) => el.time),
-    powerGenerationCurve: formData.value.powerGenerationRealTime.map((el) => el.time),
-    spotPrice: [],
-  };
-  // 四组区分明显的数据
-  const data: Record<
-    string,
-    {
-      name: string;
-      data: number[];
-    }[]
-  > = {
-    loadCurve: [
-      {
-        name: t("loadActual"),
-        data: formData.value.loadRealTime.map((el) => el.value),
-      },
-      {
-        name: t("loadForecast"),
-        data: [],
-      },
-    ],
-    powerGenerationCurve: [
-      {
-        name: t("generationActual"),
-        data: formData.value.powerGenerationRealTime.map((el) => el.value),
-      },
-      {
-        name: t("generationForecast"),
-        data: [],
-      },
-    ],
-    spotPrice: [
-      {
-        name: t("spotActual"),
-        data: [],
-      },
-      {
-        name: t("spotForecast"),
-        data: [],
-      },
-    ],
-  };
-  return {
-    xAxis: {
-      type: "category",
-      data: times[tabValue.value],
-      axisLabel: {
-        show: true,
-        color: "rgba(182, 212, 254, 0.8)",
-      },
-      axisLine: {
-        show: true,
-        lineStyle: {
-          color: "rgba(151, 184, 229, 0.8)",
+const selectVal = ref('today')
+watch(() => [tabValue.value, selectVal.value], () => {
+  getData()
+})
+async function getData() {
+  try {
+    const id = route.query.id as string;
+    if (!id) {
+      return;
+    }
+    let res = await getLoadForecastCurve(id, {
+      curveType: tabValue.value,
+      dateType: selectVal.value,
+    });
+    if (res.code === 200) {
+
+      options.value = {
+        xAxis: {
+          type: "category",
+          data: res.data.realTime.map((el) => el.time),
+          axisLabel: {
+            show: true,
+            color: "rgba(182, 212, 254, 0.8)",
+          },
+          axisLine: {
+            show: true,
+            lineStyle: {
+              color: "rgba(151, 184, 229, 0.8)",
+            },
+          },
         },
-      },
-    },
-    yAxis: {
-      type: "value",
-      name: "kW",
-      nameTextStyle: {
-        color: "rgba(182, 212, 254, 0.8)",
-        fontSize: 12,
-        align: "right",
-      },
-      axisLabel: {
-        show: true,
-        color: "rgba(182, 212, 254, 0.8)",
-      },
-      axisLine: {
-        show: false,
-      },
-      splitLine: {
-        show: true,
-        lineStyle: {
-          color: "rgba(182, 212, 254, 0.20)",
+        yAxis: {
+          type: "value",
+          name: "kW",
+          nameTextStyle: {
+            color: "rgba(182, 212, 254, 0.8)",
+            fontSize: 12,
+            align: "right",
+          },
+          axisLabel: {
+            show: true,
+            color: "rgba(182, 212, 254, 0.8)",
+          },
+          axisLine: {
+            show: false,
+          },
+          splitLine: {
+            show: true,
+            lineStyle: {
+              color: "rgba(182, 212, 254, 0.20)",
+            },
+          },
         },
-      },
-    },
-    grid: {
-      left: "2%",
-      right: "1%",
-      bottom: "0%",
-      top: "20%",
-      containLabel: true,
-    },
-    color: ["#3D88E3", "#FC9F71"],
-    legend: {
-      show: true,
-      top: "0%",
-      left: "7%",
-      icon: "circle",
-      itemWidth: 12,
-      itemHeight: 12,
-      textStyle: {
-        color: "rgba(182, 212, 254, 1)",
-        fontSize: 12,
-        fontFamily: "HarmonyOS Sans SC",
-        fontWeight: 400,
-        fontStyle: "normal",
-        letterSpacing: 0.6,
-      },
-    },
-    tooltip: {
-      show: true,
-      backgroundColor: "transparent",
-      // alwaysShowContent: true,
-      trigger: "axis",
-      padding: 0,
-      borderWidth: 0,
-      axisPointer: {
-        lineStyle: {
-          color: "rgba(167, 221, 244, 0.60)",
+        grid: {
+          left: "2%",
+          right: "1%",
+          bottom: "0%",
+          top: "20%",
+          containLabel: true,
         },
-      },
-      formatter: (value: any) => {
-        let items = value
-          .map(
-            (v: any) => `
+        color: ["#3D88E3", "#FC9F71"],
+        legend: {
+          show: true,
+          top: "0%",
+          left: "7%",
+          icon: "circle",
+          itemWidth: 12,
+          itemHeight: 12,
+          textStyle: {
+            color: "rgba(182, 212, 254, 1)",
+            fontSize: 12,
+            fontFamily: "HarmonyOS Sans SC",
+            fontWeight: 400,
+            fontStyle: "normal",
+            letterSpacing: 0.6,
+          },
+        },
+        tooltip: {
+          show: true,
+          backgroundColor: "transparent",
+          // alwaysShowContent: true,
+          trigger: "axis",
+          padding: 0,
+          borderWidth: 0,
+          axisPointer: {
+            lineStyle: {
+              color: "rgba(167, 221, 244, 0.60)",
+            },
+          },
+          formatter: (value: any) => {
+            let items = value
+              .map(
+                (v: any) => `
       <div class="item">
         ${v.marker}
         <span class="item-name">${v.seriesName}</span>
@@ -163,9 +129,9 @@ const options = computed(() => {
         <span class="item-unit">kW</span>
       </div>
     `
-          )
-          .join(""); // 拼接成一个字符串
-        let dom = `
+              )
+              .join(""); // 拼接成一个字符串
+            let dom = `
       <div class="chart-main tooltip">
         <div class="name">${value[0].name}</div>
         <div class="main">
@@ -173,84 +139,74 @@ const options = computed(() => {
         </div>
       </div>
       `;
-        return dom;
-      },
-    },
-    series: [
-      {
-        name: data[tabValue.value][0].name,
-        data: data[tabValue.value][0].data,
-        type: "line",
-        smooth: true,
-        symbol: "circle",
-        symbolSize: 0,
-        areaStyle: {
-          normal: {
-            color: new echarts.graphic.LinearGradient(
-              0,
-              0,
-              0,
-              1,
-              [
-                {
-                  offset: 0,
-                  color: "rgba(61, 136, 227, 0.3)",
-                },
-                {
-                  offset: 1,
-                  color: "rgba(61, 136, 227, 0.04)",
-                },
-              ],
-              false
-            ),
-            shadowColor: "#3D88E3",
-            shadowBlur: 20,
+            return dom;
           },
         },
-      },
-      {
-        name: data[tabValue.value][1].name,
-        data: data[tabValue.value][1].data,
-        type: "line",
-        smooth: true,
-        symbol: "circle",
-        symbolSize: 0,
-        areaStyle: {
-          normal: {
-            color: new echarts.graphic.LinearGradient(
-              0,
-              0,
-              0,
-              1,
-              [
-                {
-                  offset: 0,
-                  color: "rgba(252, 159, 113, 0.3)",
-                },
-                {
-                  offset: 1,
-                  color: "rgba(252, 159, 113, 0.04)",
-                },
-              ],
-              false
-            ),
-            shadowColor: "#FC9F71",
-            shadowBlur: 20,
+        series: [
+          {
+            name: tabValue.value === 'load_forecast' ? t("loadActual") : tabValue.value === 'power_generation_forecast' ? t("generationActual") : t("spotActual"),
+            data: res.data.realTime.map((el) => el.value),
+            type: "line",
+            smooth: true,
+            symbol: "circle",
+            symbolSize: 0,
+            areaStyle: {
+              normal: {
+                color: new echarts.graphic.LinearGradient(
+                  0,
+                  0,
+                  0,
+                  1,
+                  [
+                    {
+                      offset: 0,
+                      color: "rgba(61, 136, 227, 0.3)",
+                    },
+                    {
+                      offset: 1,
+                      color: "rgba(61, 136, 227, 0.04)",
+                    },
+                  ],
+                  false
+                ),
+                shadowColor: "#3D88E3",
+                shadowBlur: 20,
+              },
+            },
           },
-        },
-      },
-    ],
-  };
-});
-async function getData() {
-  try {
-    const id = route.query.id as string;
-    if (!id) {
-      return;
-    }
-    let res = await getLoadForecastCurve(id);
-    if (res.code === 200) {
-      formData.value = res.data;
+          {
+            name: tabValue.value === 'load_forecast' ? t("loadForecast") : tabValue.value === 'power_generation_forecast' ? t("generationForecast") : t("spotForecast"),
+            data: [],
+            type: "line",
+            smooth: true,
+            symbol: "circle",
+            symbolSize: 0,
+            areaStyle: {
+              normal: {
+                color: new echarts.graphic.LinearGradient(
+                  0,
+                  0,
+                  0,
+                  1,
+                  [
+                    {
+                      offset: 0,
+                      color: "rgba(252, 159, 113, 0.3)",
+                    },
+                    {
+                      offset: 1,
+                      color: "rgba(252, 159, 113, 0.04)",
+                    },
+                  ],
+                  false
+                ),
+                shadowColor: "#FC9F71",
+                shadowBlur: 20,
+              },
+            },
+          },
+        ],
+      }
     }
   } catch (e) {
   } finally {
@@ -268,8 +224,8 @@ defineExpose({
       <el-select :style="{
         width: isChinese ? '80px' : '140px'
       }" style="position: absolute;right: 245px;top: 4px;z-index: 2024;" size="small" v-model="selectVal">
-        <el-option :label="$t('lastSevenDays')" value="sevenDay"></el-option>
-        <el-option :label="$t('currentDay')" value="thisDay"></el-option>
+        <el-option :label="$t('lastSevenDays')" value="last_seven_days"></el-option>
+        <el-option :label="$t('currentDay')" value="today"></el-option>
       </el-select>
       <Tabs :list="tabList" v-model="tabValue" />
       <gdCharts v-if="tabValue" :option="options" />
