@@ -6,6 +6,7 @@ import { storeToRefs } from "pinia";
 import { useRoute, useRouter } from "vue-router";
 import { getSearchById } from "@/api/system";
 import { Microgrid, Station } from "@/types/home";
+import { convertEnergy } from '@/utils/tools'
 const { isChinese } = storeToRefs(useLocaleStore());
 const route = useRoute();
 const router = useRouter();
@@ -134,11 +135,13 @@ defineExpose({
           <div class="info-item-word">
             <div class="info-item-word-title">{{ $t("energyStorageCapacity") }}</div>
             <div class="info-item-word-value">
+              <!-- 装机功率(MW) -->
               <div class="info-item-word-value-num">{{ formData.installedPowerSum }}</div>
               <div class="info-item-word-value-unit">kV</div>
               <div class="info-item-word-value-sub">/</div>
-              <div class="info-item-word-value-num">{{ formData.installedCapacitySum }}</div>
-              <div class="info-item-word-value-unit">kWh</div>
+              <!-- 装机容量(MWh) -->
+              <div class="info-item-word-value-num">{{ convertEnergy(formData.installedCapacitySum).value }}</div>
+              <div class="info-item-word-value-unit">{{ convertEnergy(formData.installedCapacitySum).unit }}</div>
             </div>
           </div>
         </div>

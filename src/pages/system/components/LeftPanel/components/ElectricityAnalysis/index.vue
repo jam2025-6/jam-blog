@@ -6,6 +6,7 @@ import { storeToRefs } from "pinia";
 import { useRoute } from "vue-router";
 import { getCalcElectricity } from "@/api/system";
 import { EnergyStats } from '@/types/system'
+import { convertEnergy } from '@/utils/tools'
 const { isChinese } = storeToRefs(useLocaleStore());
 const route = useRoute();
 const formData = ref<EnergyStats>({
@@ -53,73 +54,7 @@ async function getData() {
     loading.value = false;
   }
 }
-/**
- * 将 MW·h 转换为合适的电量单位，返回对象 { value, unit }
- * @param {number} mwh - 电量 (单位: MW·h)
- * @returns {{value: number, unit: string}} - 数值和单位
- */
-// function convertEnergy(mwh: number) {
-//   const kWh = mwh * 1000;
-//   let value, unit;
-//   if (kWh >= 1e8) {
-//     value = +(kWh / 1e8).toFixed(2);
-//     unit = "亿kW·h";
-//   } else if (kWh >= 1e4) {
-//     value = +(kWh / 1e4).toFixed(2);
-//     unit = "万kW·h";
-//   } else {
-//     value = +kWh.toFixed(2);
-//     unit = "kW·h";
-//   }
 
-//   return { value, unit };
-// }
-type EnergyUnit = "wh" | "kwh" | "mwh" | "gwh";
-
-function convertEnergy(
-  value: number,
-  unit: string = "kwh",
-  precision: number = 2
-) {
-  // 把传入的单位转小写
-  const normalizedUnit = unit.toLowerCase() as EnergyUnit;
-
-  // 单位映射（统一到 kWh）
-  const unitMap: Record<EnergyUnit, number> = {
-    wh: 1 / 1000,    // 1 Wh = 0.001 kWh
-    kwh: 1,          // 基准
-    mwh: 1000,       // 1 MWh = 1000 kWh
-    gwh: 1_000_000   // 1 GWh = 1,000,000 kWh
-  };
-
-  if (!(normalizedUnit in unitMap)) {
-    throw new Error(`Unsupported unit: ${unit}`);
-  }
-
-  const kWh = value * unitMap[normalizedUnit];
-
-  // 取绝对值进行判断
-  const absKWh = Math.abs(kWh);
-
-  let displayValue: number;
-  let displayUnit: string;
-
-  if (absKWh >= 1e8) {
-    displayValue = absKWh / 1e8;
-    displayUnit = "亿kWh";
-  } else if (absKWh >= 1e4) {
-    displayValue = absKWh / 1e4;
-    displayUnit = "万kWh";
-  } else {
-    displayValue = absKWh;
-    displayUnit = "kWh";
-  }
-
-  // 保留符号 & 小数位
-  displayValue = Number((kWh < 0 ? -displayValue : displayValue).toFixed(precision));
-
-  return { value: displayValue, unit: displayUnit };
-}
 
 
 getData();
@@ -138,8 +73,8 @@ defineExpose({
           <div class="info">
             <div class="name">{{ $t("annualPowerConsumption") }}</div>
             <div class="value">
-              <div class="num">{{ convertEnergy(formData.yearElecConsum, formData.yearElecConsumUnit).value }}</div>
-              <div class="unit">{{ convertEnergy(formData.yearElecConsum, formData.yearElecConsumUnit).unit }}</div>
+              <div class="num">{{ convertEnergy(formData.yearElecConsum).value }}</div>
+              <div class="unit">{{ convertEnergy(formData.yearElecConsum).unit }}</div>
             </div>
           </div>
         </div>
@@ -150,8 +85,8 @@ defineExpose({
           <div class="info">
             <div class="name">{{ $t("monthlyPowerConsumption") }}</div>
             <div class="value">
-              <div class="num">{{ convertEnergy(formData.monthElecConsum, formData.monthElecConsumUnit).value }}</div>
-              <div class="unit">{{ convertEnergy(formData.monthElecConsum, formData.monthElecConsumUnit).unit }}</div>
+              <div class="num">{{ convertEnergy(formData.monthElecConsum).value }}</div>
+              <div class="unit">{{ convertEnergy(formData.monthElecConsum).unit }}</div>
             </div>
           </div>
         </div>
@@ -161,8 +96,8 @@ defineExpose({
           <div class="info">
             <div class="name">{{ $t("dailyPowerConsumption") }}</div>
             <div class="value">
-              <div class="num">{{ convertEnergy(formData.dayElecConsum, formData.dayElecConsumUnit).value }}</div>
-              <div class="unit">{{ convertEnergy(formData.dayElecConsum, formData.dayElecConsumUnit).unit }}</div>
+              <div class="num">{{ convertEnergy(formData.dayElecConsum).value }}</div>
+              <div class="unit">{{ convertEnergy(formData.dayElecConsum).unit }}</div>
             </div>
           </div>
         </div>
@@ -172,8 +107,8 @@ defineExpose({
           <div class="info">
             <div class="name">{{ $t("currentMonthDemand") }}</div>
             <div class="value">
-              <div class="num">{{ convertEnergy(formData.lastMonthDemand, formData.lastMonthDemandUnit).value }}</div>
-              <div class="unit">{{ convertEnergy(formData.lastMonthDemand, formData.lastMonthDemandUnit).unit }}</div>
+              <div class="num">{{ convertEnergy(formData.lastMonthDemand).value }}</div>
+              <div class="unit">{{ convertEnergy(formData.lastMonthDemand).unit }}</div>
             </div>
           </div>
         </div>
@@ -189,10 +124,8 @@ defineExpose({
               <div class="point"></div>
               <div class="name">{{ $t("gridMonthlySupply") }}</div>
               <div class="value">
-                <div class="num">{{ convertEnergy(formData.monthPowerGridSupply,
-                  formData.monthPowerGridSupplyUnit).value }}</div>
-                <div class="unit">{{ convertEnergy(formData.monthPowerGridSupply,
-                  formData.monthPowerGridSupplyUnit).unit }}</div>
+                <div class="num">{{ convertEnergy(formData.monthPowerGridSupply).value }}</div>
+                <div class="unit">{{ convertEnergy(formData.monthPowerGridSupply).unit }}</div>
               </div>
               <div class="percent">({{ formData.monthPowerGridSupplyPercent || 0 }}%)</div>
             </div>
@@ -200,10 +133,8 @@ defineExpose({
               <div class="point"></div>
               <div class="name">{{ $t("renewableEnergyAnnualUtilization") }}</div>
               <div class="value">
-                <div class="num">{{ convertEnergy(formData.monthNewEnergyConsum,
-                  formData.monthNewEnergyConsumUnit).value }}</div>
-                <div class="unit">{{ convertEnergy(formData.monthNewEnergyConsum,
-                  formData.monthNewEnergyConsumUnit).unit }}</div>
+                <div class="num">{{ convertEnergy(formData.monthNewEnergyConsum).value }}</div>
+                <div class="unit">{{ convertEnergy(formData.monthNewEnergyConsum).unit }}</div>
               </div>
               <div class="percent">({{ formData.monthNewEnergyConsumPercent || 0 }}%)</div>
             </div>
@@ -220,9 +151,9 @@ defineExpose({
               <div class="point"></div>
               <div class="name">{{ $t("gridMonthlySupply") }}</div>
               <div class="value">
-                <div class="num">{{ convertEnergy(formData.yearPowerGridSupply, formData.yearPowerGridSupplyUnit).value
+                <div class="num">{{ convertEnergy(formData.yearPowerGridSupply).value
                 }}</div>
-                <div class="unit">{{ convertEnergy(formData.yearPowerGridSupply, formData.yearPowerGridSupplyUnit).unit
+                <div class="unit">{{ convertEnergy(formData.yearPowerGridSupply).unit
                 }}</div>
               </div>
               <div class="percent">({{ formData.yearPowerGridSupplyPercent || 0 }}%)</div>
@@ -231,9 +162,9 @@ defineExpose({
               <div class="point"></div>
               <div class="name">{{ $t("renewableEnergyAnnualUtilization") }}</div>
               <div class="value">
-                <div class="num">{{ convertEnergy(formData.yearNewEnergyConsum, formData.yearNewEnergyConsumUnit).value
+                <div class="num">{{ convertEnergy(formData.yearNewEnergyConsum).value
                 }}</div>
-                <div class="unit">{{ convertEnergy(formData.yearNewEnergyConsum, formData.yearNewEnergyConsumUnit).unit
+                <div class="unit">{{ convertEnergy(formData.yearNewEnergyConsum).unit
                 }}</div>
               </div>
               <div class="percent">({{ formData.yearNewEnergyConsumPercent || 0 }}%)</div>

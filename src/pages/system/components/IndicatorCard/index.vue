@@ -6,6 +6,7 @@ import { getCoreHeader } from '@/api/system'
 import { useRoute } from "vue-router";
 import { EnergyAndEarningsData } from '@/types/system'
 import { QuestionFilled } from '@element-plus/icons-vue'
+import { convertEnergy } from '@/utils/tools'
 const route = useRoute();
 const { isChinese } = storeToRefs(useLocaleStore());
 const formData = ref<EnergyAndEarningsData>({
@@ -18,7 +19,9 @@ const formData = ref<EnergyAndEarningsData>({
   totalEarnings: 0,
   totalEarningsUnit: "元",
   carbonReduction: 0,
-  carbonReductionUnit: "t"
+  carbonReductionUnit: "t",
+  carbonEmissionUnitEnergyConsum: 0,
+  carbonEmissionUnitEnergyConsumUnit: "吨/吨标准煤"
 })
 async function getData() {
   try {
@@ -46,8 +49,8 @@ defineExpose({
     <div class="item">
       <div class="item-title">{{ $t("cumulativeEnergySaved") }}</div>
       <div class="item-indicator">
-        <div class="item-indicator-num">{{ formData.newEnergyTotalCapacity }}</div>
-        <div class="item-indicator-unit">{{ formData.newEnergyTotalCapacityUnit }}</div>
+        <div class="item-indicator-num">{{ convertEnergy(formData.newEnergyTotalCapacity).value }}</div>
+        <div class="item-indicator-unit">{{ convertEnergy(formData.newEnergyTotalCapacity).unit }}</div>
       </div>
     </div>
     <div class="item">
@@ -82,8 +85,8 @@ defineExpose({
 
       </div>
       <div class="item-indicator">
-        <div class="item-indicator-num">0.2</div>
-        <div class="item-indicator-unit">t/t标准碳</div>
+        <div class="item-indicator-num">{{ formData.carbonEmissionUnitEnergyConsum || 0 }}</div>
+        <div class="item-indicator-unit">{{ formData.carbonEmissionUnitEnergyConsumUnit || '吨/吨标准煤' }}</div>
       </div>
     </div>
     <div class="item">

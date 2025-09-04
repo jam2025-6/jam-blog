@@ -120,6 +120,8 @@ export interface EnergyAndEarningsData {
   carbonReduction: number;
   /** 碳减排量的单位 */
   carbonReductionUnit: string;
+  carbonEmissionUnitEnergyConsum: number;
+  carbonEmissionUnitEnergyConsumUnit: string;
 }
 
 export interface EnergyData {

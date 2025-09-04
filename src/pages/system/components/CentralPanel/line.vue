@@ -137,14 +137,9 @@ onMounted(() => {
   <div class="svg-flow-container">
     <svg width="1430" height="449" viewBox="0 0 1430 449">
       <!-- 背景路径 -->
-      <path
-        :d="pathData"
-        fill="none"
-        :stroke="props.bgForward ? 'url(#gradStroke)' : 'url(#gradStrokeBack )'"
-        stroke-width="8"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-      />
+      <path :d="pathData" fill="none"
+        :stroke="props.status ? (props.bgForward ? 'url(#gradStroke)' : 'url(#gradStrokeBack )') : 'url(#staticStroke)'"
+        stroke-width="8" stroke-linecap="round" stroke-linejoin="round" />
 
       <!-- 流动路径 -->
       <!-- <path
@@ -159,10 +154,10 @@ onMounted(() => {
       /> -->
 
       <!-- 箭头 -->
-      <g :transform="arrowTransform">
+      <g :transform="arrowTransform" v-if="props.status">
         <path d="M0,-8 L10,0 L0,8 M2,-8 L12,0 L2,8" fill="none" stroke="rgba(11, 187, 231, 1)" stroke-width="3" />
       </g>
-      <g :transform="arrowTransform2">
+      <g :transform="arrowTransform2" v-if="props.status">
         <path d="M0,-8 L10,0 L0,8 M2,-8 L12,0 L2,8" fill="none" stroke="rgba(44, 230, 255, 1)" stroke-width="3" />
       </g>
 
@@ -174,6 +169,10 @@ onMounted(() => {
         <linearGradient id="gradStrokeBack" x1="0%" y1="0%" x2="100%" y2="0%">
           <stop offset="0%" stop-color="#00E1FF" />
           <stop offset="100%" stop-color="#2A7EB1" />
+        </linearGradient>
+        <linearGradient id="staticStroke" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" stop-color="#689bce" stop-opacity="0.75" />
+          <stop offset="100%" stop-color="#689bce" stop-opacity="0.75" />
         </linearGradient>
         <linearGradient id="gradStrokeInActive" x1="0%" y1="0%" x2="100%" y2="0%">
           <stop stop-color="#00E1FF" />

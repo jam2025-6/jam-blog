@@ -6,6 +6,9 @@ import { useI18n } from "vue-i18n";
 import { getLoadForecastCurve } from "@/api/system";
 import { RealTimeData } from "@/types/system";
 import { useRoute } from "vue-router";
+import { useLocaleStore } from "@/stores/modules/locale";
+import { storeToRefs } from "pinia";
+const { isChinese } = storeToRefs(useLocaleStore());
 const route = useRoute();
 const { t } = useI18n();
 const tabList = [
@@ -262,10 +265,11 @@ defineExpose({
   <div class="bottom-panel">
     <PanelTitle :title="$t('loadForecastCurve')" size="large" />
     <div class="container">
-      <el-select style="width: 80px;position: absolute;right: 245px;top: 4px;z-index: 2024;" size="small"
-        v-model="selectVal">
-        <el-option label="近七日" value="sevenDay"></el-option>
-        <el-option label="当日" value="thisDay"></el-option>
+      <el-select :style="{
+        width: isChinese ? '80px' : '140px'
+      }" style="position: absolute;right: 245px;top: 4px;z-index: 2024;" size="small" v-model="selectVal">
+        <el-option :label="$t('lastSevenDays')" value="sevenDay"></el-option>
+        <el-option :label="$t('currentDay')" value="thisDay"></el-option>
       </el-select>
       <Tabs :list="tabList" v-model="tabValue" />
       <gdCharts v-if="tabValue" :option="options" />

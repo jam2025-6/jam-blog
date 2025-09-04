@@ -8,8 +8,8 @@ import Modal from "./modal.vue";
 import { Dialog } from "@/components";
 import { useRoute, useRouter } from 'vue-router';
 import { getSwitchCentralized } from '@/api/system'
-import { StationInfo } from '@/types/system'
-import { EnergyData } from '@/types/system'
+import { StationInfo, EnergyData } from '@/types/system'
+import { convertEnergy } from '@/utils/tools'
 const route = useRoute()
 const router = useRouter()
 const { t } = useI18n();
@@ -97,9 +97,9 @@ const point6 = [
 ];
 const modal1 = computed(() => [
   {
-    name: "实时功率",
-    value: +props.data.energyStorageChargingPower,
-    unit: props.data.energyStorageChargingPowerUnit,
+    name: t('realTimePower'),
+    value: convertEnergy(+props.data.energyStorageChargingPower).value,
+    unit: convertEnergy(+props.data.energyStorageChargingPower).unit,
   },
   {
     name: t("essSOC"),
@@ -109,7 +109,7 @@ const modal1 = computed(() => [
 ]);
 const modal2 = computed(() => [
   {
-    name: "实时功率",
+    name: t('realTimePower'),
     value: 123,
     unit: "kW",
   },
@@ -121,45 +121,45 @@ const modal2 = computed(() => [
 ]);
 const modal3 = computed(() => [
   {
-    name: "实时功率",
-    value: props.data.pvcDayPower,
-    unit: props.data.pvcDayPowerUnit,
+    name: t('realTimePower'),
+    value: convertEnergy(props.data.pvcDayPower).value,
+    unit: convertEnergy(props.data.pvcDayPower).unit,
   },
   {
     name: t("dailyUtilization"),
-    value: props.data.pvcDayConsumCapacity,
-    unit: props.data.pvcDayConsumCapacityUnit,
+    value: convertEnergy(props.data.pvcDayConsumCapacity).value,
+    unit: convertEnergy(props.data.pvcDayConsumCapacity).unit,
   },
 ]);
 const modal4 = computed(() => [
   {
-    name: "实时功率",
-    value: props.data.loadDayPower,
-    unit: props.data.loadDayPowerUnit,
+    name: t('realTimePower'),
+    value: convertEnergy(props.data.loadDayPower).value,
+    unit: convertEnergy(props.data.loadDayPower).unit,
   },
   {
     name: t("dailyConsumption"),
-    value: props.data.loadDayConsumCapacity,
-    unit: props.data.loadDayConsumCapacityUnit,
+    value: convertEnergy(props.data.loadDayConsumCapacity).value,
+    unit: convertEnergy(props.data.loadDayConsumCapacity).unit,
   },
 ]);
 const modal5 = computed(() => [
   {
-    name: "实时功率",
-    value: props.data.chargePileDayPower,
-    unit: props.data.chargePileDayPowerUnit,
+    name: t('realTimePower'),
+    value: convertEnergy(props.data.chargePileDayPower).value,
+    unit: convertEnergy(props.data.chargePileDayPower).unit,
   },
   {
     name: t("dailyCharging"),
-    value: props.data.chargePileDayConsumCapacity,
-    unit: props.data.chargePileDayConsumCapacityUnit,
+    value: convertEnergy(props.data.chargePileDayConsumCapacity).value,
+    unit: convertEnergy(props.data.chargePileDayConsumCapacity).unit,
   },
 ]);
 const modal6 = computed(() => [
   {
-    name: "实时功率",
-    value: props.data.municipalPowerGridPower,
-    unit: props.data.municipalPowerGridPowerUnit,
+    name: t('realTimePower'),
+    value: convertEnergy(props.data.municipalPowerGridPower).value,
+    unit: convertEnergy(props.data.municipalPowerGridPower).unit,
   },
   // {
   //   name: t("gridFeedIn"),
@@ -168,8 +168,8 @@ const modal6 = computed(() => [
   // },
   {
     name: t("gridDraw"),
-    value: props.data.municipalPowerGridCapacity,
-    unit: props.data.municipalPowerGridCapacityUnit,
+    value: convertEnergy(props.data.municipalPowerGridCapacity).value,
+    unit: convertEnergy(props.data.municipalPowerGridCapacity).unit,
   },
 ]);
 const showDialog = ref(false)
@@ -203,23 +203,33 @@ function clickStationItem(val: StationInfo) {
 }
 </script>
 <template>
-  <Dialog @update:visible="showDialog = false" title="选择跳转的站点" v-model:visible="showDialog">
+  <Dialog @update:visible="showDialog = false" :title="$t('selectRedirectSite')" v-model:visible="showDialog">
     <div class="station-item" @click="clickStationItem(item)" v-for="item, index in stationList" :key=item.stationCode>
       <div class="index">{{ index + 1 }}</div>
       <div class="name">{{
         item.stationName }}</div>
-      <div class="enter">进入</div>
+      <div class="enter">{{ $t('enter') }}</div>
     </div>
   </Dialog>
   <div class="center-panel" :class="{
     en: !isChinese,
   }">
-    <Line :status="true" :points="point1" />
-    <Line :status="true" :points="point2" />
-    <Line :status="true" :points="point3" />
-    <Line :status="true" :bgForward="false" :points="point4" />
-    <Line :status="true" :bgForward="false" :points="point5" />
-    <Line :status="true" :bgForward="false" :points="point6" />
+
+    <!-- 储能 >2往外流 <-2网内流 -->
+    <Line :status="(+props.data.energyStorageChargingPower > 2) || (+props.data.energyStorageChargingPower < -2)"
+      :forward="(+props.data.energyStorageChargingPower > 2)" :points="point2" />
+    <!-- 充电桩 大于0往外流  -->
+    <Line :status="+props.data.chargePileDayPower !== 0" :forward="false" :points="point3" />
+    <!-- 市电 >0往外流 -->
+    <Line :status="+props.data.municipalPowerGridPower !== 0" :forward="+props.data.municipalPowerGridPower > 0"
+      :points="point1" />
+    <!-- 负荷 大于0往外流 -->
+    <Line :status="+props.data.loadDayPower !== 0" :forward="false" :bgForward="false" :points="point6" />
+    <!-- 光伏 大于0往内流 -->
+    <Line :status="+props.data.pvcDayPower !== 0" :bgForward="false" :points="point5" />
+    <!-- 风电 目前没有-->
+    <Line :status="false" :bgForward="false" :points="point4" />
+
     <Modal :title="$t('energyStorage')" :list="modal1" :position="{ right: '807px', top: '149px' }">
       <template #right>
         <div class="status">

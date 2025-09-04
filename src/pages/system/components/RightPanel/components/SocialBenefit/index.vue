@@ -7,6 +7,7 @@ import { round } from "lodash";
 import { useRoute } from "vue-router";
 import { getSocialBenefitsNewEnergy } from "@/api/system";
 import { PvStatistics } from "@/types/system";
+import { convertEnergy } from '@/utils/tools'
 const { isChinese } = storeToRefs(useLocaleStore());
 const route = useRoute();
 const formData = ref<PvStatistics>({
@@ -111,8 +112,8 @@ defineExpose({
           <div class="cell-item-main">
             <div class="name">{{ $t("annualRenewableEnergyGridFeedIn") }}</div>
             <div class="value">
-              <div class="value-num">{{ formData.pvYearOnGridElec }}</div>
-              <div class="value-unit">kW·h</div>
+              <div class="value-num">{{ convertEnergy(formData.pvYearOnGridElec).value }}</div>
+              <div class="value-unit">{{ convertEnergy(formData.pvYearOnGridElec).unit }}</div>
             </div>
           </div>
         </div>

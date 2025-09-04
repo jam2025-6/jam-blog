@@ -30,6 +30,7 @@
   "effectiveHours": "新能源年有效小时数",
   "energyStorage": "储能",
   "energyStorageCapacity": "储能容量",
+  "enter": "进入",
   "equivalentGreenCertificates": "等效绿证数",
   "equivalentTreesPlanted": "等效植树数",
   "essSOC": "储能SOC",
@@ -67,6 +68,7 @@
   "photovoltaic": "光伏",
   "powerUsageAnalysis": "用电情况分析",
   "pvCapacity": "光伏容量",
+  "realTimePower": "实时功率",
   "recent7DaysRevenueComparison": "近7日收益",
   "renewableEnergy": "新能源",
   "renewableEnergyAnnualUtilization": "新能源年消纳",
@@ -77,6 +79,7 @@
   "revenue": "收益",
   "searchMicrogridPrompt": "输入微电网名称，enter搜索",
   "search_prompt": "输入电站名，enter 搜索",
+  "selectRedirectSite": "选择跳转的站点",
   "spotActual": "现货实况",
   "spotForecast": "现货预测",
   "spotPriceForecast": "现货价格预测",
@@ -97,5 +100,7 @@
   "windPower": "风电",
   "windPowerCapacity": "风电容量",
   "year": "年",
-  "yuan": "元"
+  "yuan": "元",
+  "lastSevenDays": "近七日",
+  "currentDay": "当日"
 }

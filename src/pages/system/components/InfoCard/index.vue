@@ -2,6 +2,7 @@
 import { useLocaleStore } from "@/stores/modules/locale";
 import { storeToRefs } from "pinia";
 import { EnergyData } from '@/types/system'
+import { convertEnergy } from '@/utils/tools'
 const { isChinese } = storeToRefs(useLocaleStore());
 interface Props {
   data?: EnergyData;
@@ -95,8 +96,8 @@ function formatTwoDecimals(num: number) {
         <div class="flex">
           <div class="flex-point"></div>
           <div class="flex-name">{{ $t("monthlyDemandReduction") }}</div>
-          <div class="flex-num">{{ formatTwoDecimals(props.data.demandManageMonthReduce) }}</div>
-          <div class="flex-unit">{{ props.data.demandManageMonthReduceUnit }}</div>
+          <div class="flex-num">{{ convertEnergy(props.data.demandManageMonthReduce).value }}</div>
+          <div class="flex-unit">{{ convertEnergy(props.data.demandManageMonthReduce).unit }}</div>
         </div>
         <div class="flex orange">
           <div class="flex-point"></div>
@@ -118,8 +119,8 @@ function formatTwoDecimals(num: number) {
         <div class="flex">
           <div class="flex-point"></div>
           <div class="flex-name">{{ $t("monthlyUtilizedEnergy") }}</div>
-          <div class="flex-num">{{ formatTwoDecimals(props.data.pvcMonthConsumCapacity) }}</div>
-          <div class="flex-unit">{{ props.data.pvcMonthConsumCapacityUnit }}</div>
+          <div class="flex-num">{{ convertEnergy(props.data.pvcMonthConsumCapacity).value }}</div>
+          <div class="flex-unit">{{ convertEnergy(props.data.pvcMonthConsumCapacity).unit }}</div>
         </div>
         <div class="flex orange">
           <div class="flex-point"></div>
