@@ -183,7 +183,10 @@ const modal6 = computed(() => [
 ]);
 const showDialog = ref(false)
 const stationList = ref<StationInfo[]>([])
-async function clickGraphic() {
+async function clickGraphic(bool: boolean) {
+  if (!bool) {
+    return
+  }
   getStations()
   showDialog.value = true
 }
@@ -325,26 +328,26 @@ function clickStationItem(val: StationInfo) {
     <Modal :title="$t('chargingPile')" :list="modal5" :position="{ left: '603px', top: '367px' }" />
     <Modal :title="$t('gridPower')" :list="modal6"
       :position="{ right: isChinese ? '796px' : '777px', top: isChinese ? '348px' : '288px' }" />
-    <div class="energy-storage scale-item" @click="clickGraphic">
+    <div class="energy-storage scale-item" @click="clickGraphic(true)">
       <img src="@/assets/images/station/energyStorage-active.png" alt="" />
     </div>
-    <div class="wind-power scale-item" @click="clickGraphic">
+    <div class="wind-power scale-item" @click="clickGraphic(props.data.windExist)">
       <img :src="props.data.windExist ? windPowerActiveImg : windPowerInActiveImg" alt="" />
       <!-- <div class="name">风电</div> -->
     </div>
-    <div class="photovoltaic scale-item" @click="clickGraphic">
+    <div class="photovoltaic scale-item" @click="clickGraphic(props.data.pvcExist)">
       <img :src="props.data.pvcExist ? pvcExistActiveImg : pvcExistInactiveImg" alt="" />
       <!-- <div class="name">光伏</div> -->
     </div>
-    <div class="load scale-item" @click="clickGraphic">
+    <div class="load scale-item" @click="clickGraphic(true)">
       <img src="@/assets/images/station/load-active.png" alt="" />
       <!-- <div class="name">负荷</div> -->
     </div>
-    <div class="charging-pile scale-item" @click="clickGraphic">
+    <div class="charging-pile scale-item" @click="clickGraphic(props.data.chargePileExist)">
       <img :src="props.data.chargePileExist ? chargingPileActiveImg : chargingPileInActiveImg" alt="" />
       <!-- <div class="name">充电桩</div> -->
     </div>
-    <div class="electric-supply scale-item" @click="clickGraphic">
+    <div class="electric-supply scale-item" @click="clickGraphic(true)">
       <img src="@/assets/images/station/electricSupply-active.png" alt="" />
       <!-- <div class="name">市电</div> -->
     </div>
