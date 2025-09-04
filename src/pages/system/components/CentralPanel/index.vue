@@ -10,6 +10,12 @@ import { useRoute, useRouter } from 'vue-router';
 import { getSwitchCentralized } from '@/api/system'
 import { StationInfo, EnergyData } from '@/types/system'
 import { convertEnergy } from '@/utils/tools'
+import pvcExistActiveImg from '@/assets/images/station/photovoltaic-active.png'
+import pvcExistInactiveImg from '@/assets/images/station/photovoltaic-inactive.png'
+import windPowerActiveImg from '@/assets/images/station/windPower-active.png'
+import windPowerInActiveImg from '@/assets/images/station/windPower-inactive.png'
+import chargingPileActiveImg from '@/assets/images/station/chargingPile-active.png'
+import chargingPileInActiveImg from '@/assets/images/station/chargingPile-inactive.png'
 const route = useRoute()
 const router = useRouter()
 const { t } = useI18n();
@@ -56,7 +62,10 @@ const props = withDefaults(defineProps<Props>(), {
       pvcMonthConsumCapacity: 0,
       pvcMonthConsumCapacityUnit: "kWh",
       pvcMonthConsumSaveElec: 0,
-      pvcTotalConsumSaveElec: null
+      pvcTotalConsumSaveElec: null,
+      pvcExist: false,
+      chargePileExist: false,
+      windExist: false,
     }
   }, // 默认值
 });
@@ -103,20 +112,20 @@ const modal1 = computed(() => [
   },
   {
     name: t("essSOC"),
-    value: +props.data.energyStorageSOCText,
+    value: +props.data.energyStorageSOC,
     unit: "%",
   },
 ]);
 const modal2 = computed(() => [
   {
     name: t('realTimePower'),
-    value: 123,
-    unit: "kW",
+    value: convertEnergy(123).value,
+    unit: convertEnergy(123).unit,
   },
   {
     name: t("dailyGeneration"),
-    value: 12.4,
-    unit: "kW·h",
+    value: convertEnergy(props.data.pvcDayPower).value,
+    unit: convertEnergy(props.data.pvcDayPower).unit,
   },
 ]);
 const modal3 = computed(() => [
@@ -320,11 +329,11 @@ function clickStationItem(val: StationInfo) {
       <img src="@/assets/images/station/energyStorage-active.png" alt="" />
     </div>
     <div class="wind-power scale-item" @click="clickGraphic">
-      <img src="@/assets/images/station/windPower-active.png" alt="" />
+      <img :src="props.data.windExist ? windPowerActiveImg : windPowerInActiveImg" alt="" />
       <!-- <div class="name">风电</div> -->
     </div>
     <div class="photovoltaic scale-item" @click="clickGraphic">
-      <img src="@/assets/images/station/photovoltaic-active.png" alt="" />
+      <img :src="props.data.pvcExist ? pvcExistActiveImg : pvcExistInactiveImg" alt="" />
       <!-- <div class="name">光伏</div> -->
     </div>
     <div class="load scale-item" @click="clickGraphic">
@@ -332,7 +341,7 @@ function clickStationItem(val: StationInfo) {
       <!-- <div class="name">负荷</div> -->
     </div>
     <div class="charging-pile scale-item" @click="clickGraphic">
-      <img src="@/assets/images/station/chargingPile-active.png" alt="" />
+      <img :src="props.data.chargePileExist ? chargingPileActiveImg : chargingPileInActiveImg" alt="" />
       <!-- <div class="name">充电桩</div> -->
     </div>
     <div class="electric-supply scale-item" @click="clickGraphic">
@@ -341,8 +350,10 @@ function clickStationItem(val: StationInfo) {
     </div>
     <div class="advertising-board">
       <img src="@/assets/images/station/advertisingBoard.png" alt="" />
-      <div class="value">
+      <div class="value" :style="{ left: props.data.newEnergyProportion.length === 3 ? '30px' : props.data.newEnergyProportion.length === 4 ? '21px' : '38px' }
+        ">
         <div class="name">{{ $t("renewableEnergyPercentage") }}</div>
+        <!-- <div class="num">0%</div> -->
         <div class="num">{{ props.data.newEnergyProportion }}</div>
       </div>
     </div>

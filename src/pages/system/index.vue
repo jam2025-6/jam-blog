@@ -45,7 +45,10 @@ const data = ref<EnergyData>({
   pvcMonthConsumCapacity: 0,
   pvcMonthConsumCapacityUnit: "kWh",
   pvcMonthConsumSaveElec: 0,
-  pvcTotalConsumSaveElec: null
+  pvcTotalConsumSaveElec: null,
+  pvcExist: false,
+  chargePileExist: false,
+  windExist: false,
 })
 const bottomPanelRef = ref()
 const leftPanelRef = ref()
@@ -91,6 +94,7 @@ useMethodPolling(() => {
   immediate: false, // 启动时立即执行一次
   autoStart: true, // 组件挂载后自动开始轮询
 });
+getData()
 </script>
 <template>
   <div class="page">

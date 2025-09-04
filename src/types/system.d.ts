@@ -197,6 +197,9 @@ export interface EnergyData {
   pvcMonthConsumSaveElec: number;
   /** 光伏累计节电收益 */
   pvcTotalConsumSaveElec: number | null;
+  pvcExist: boolean,
+  chargePileExist: boolean,
+  windExist: boolean,
 }
 
 export interface ForecastCurve {
