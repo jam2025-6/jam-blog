@@ -282,17 +282,18 @@ defineExpose({
 
     .section {
       display: flex;
-      align-items: center;
-      flex-wrap: wrap;
+      // align-items: center;
+      // flex-wrap: wrap;
       gap: 0 13px;
       min-height: 78px;
 
       &-item {
+        flex: 1;
         margin-bottom: 8px;
 
         &-main {
           width: 92px;
-          height: 51px;
+          min-height: 51px;
           background-image: url("@/assets/icons/social.svg");
           display: flex;
           align-items: baseline;

@@ -50,6 +50,7 @@
   "gridDraw": "下网电量",
   "gridFeedIn": "上网电量",
   "gridMonthlySupply": "电网月供电",
+  "gridyearlySupply": "电网年供电",
   "gridPower": "市电",
   "investmentPaybackPeriod": "单位能耗碳排放",
   "load": "负荷",
@@ -102,5 +103,10 @@
   "year": "年",
   "yuan": "元",
   "lastSevenDays": "近七日",
-  "currentDay": "当日"
+  "currentDay": "当日",
+  "yearlyComparison": "年对比",
+  "renewableEnergyMonthlyUtilization": "新能源月消纳",
+  "energyTargetRequirement1": "年综合能源消费量20～100万吨标准煤的园区≤0.2吨/吨标准煤",
+  "energyTargetRequirement2": "年综合能源消费量≥100万吨标准煤的园区≤0.3吨/吨标准煤",
+  "targetRequirements": "目标要求："
 }

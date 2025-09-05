@@ -63,7 +63,9 @@ defineExpose({
 })
 </script>
 <template>
-  <div class="electricity-analysis">
+  <div class="electricity-analysis" :class="{
+    en: !isChinese
+  }">
     <PanelTitle :title="$t('powerUsageAnalysis')" />
     <div v-loading="loading" class="container">
       <div class="cell">
@@ -122,7 +124,7 @@ defineExpose({
           <div class="rate-item-main">
             <div class="item">
               <div class="point"></div>
-              <div class="name">{{ $t("gridMonthlySupply") }}</div>
+              <div class="name">{{ $t('gridMonthlySupply') }}</div>
               <div class="value">
                 <div class="num">{{ convertEnergy(formData.monthPowerGridSupply).value }}</div>
                 <div class="unit">{{ convertEnergy(formData.monthPowerGridSupply).unit }}</div>
@@ -131,7 +133,7 @@ defineExpose({
             </div>
             <div class="item orange">
               <div class="point"></div>
-              <div class="name">{{ $t("renewableEnergyAnnualUtilization") }}</div>
+              <div class="name">{{ $t('renewableEnergyMonthlyUtilization') }}</div>
               <div class="value">
                 <div class="num">{{ convertEnergy(formData.monthNewEnergyConsum).value }}</div>
                 <div class="unit">{{ convertEnergy(formData.monthNewEnergyConsum).unit }}</div>
@@ -144,12 +146,12 @@ defineExpose({
         <div class="rate-item">
           <div class="rate-item-pic">
             <SemiCircleProgress :bluePercent="Number(formData.yearPowerGridSupplyPercent)"
-              :orangePercent="Number(formData.yearNewEnergyConsumPercent)" text="年对比" />
+              :orangePercent="Number(formData.yearNewEnergyConsumPercent)" :text="$t('yearlyComparison')" />
           </div>
           <div class="rate-item-main">
             <div class="item">
               <div class="point"></div>
-              <div class="name">{{ $t("gridMonthlySupply") }}</div>
+              <div class="name">{{ $t("gridyearlySupply") }}</div>
               <div class="value">
                 <div class="num">{{ convertEnergy(formData.yearPowerGridSupply).value
                 }}</div>
@@ -180,6 +182,24 @@ defineExpose({
 .electricity-analysis {
   height: 348px;
   width: 100%;
+
+  &.en {
+    .rate-item-main {
+      .name {
+        letter-spacing: 0px !important;
+        width: 110px;
+      }
+
+      .value {
+        flex-wrap: nowrap;
+
+        .num,
+        .unit {
+          white-space: nowrap;
+        }
+      }
+    }
+  }
 
   .container {
     padding: 19px 0 19px 39px;

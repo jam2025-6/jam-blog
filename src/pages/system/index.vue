@@ -102,6 +102,7 @@ getData()
     <RightPanel ref="rightPanelRef" />
     <IndicatorCard ref="indicatorCardRef" />
     <CentralPanel :data="data" />
+    <!-- <CentralPanel /> -->
     <BottomPanel ref="bottomPanelRef" />
     <InfoCard :data="data" />
   </div>

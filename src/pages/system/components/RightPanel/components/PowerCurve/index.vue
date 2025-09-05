@@ -33,6 +33,7 @@ const options = computed(() => {
       nameTextStyle: {
         color: "rgba(182, 212, 254, 0.8)",
         fontSize: 12,
+        // left: 0,
         align: "right",
       },
       axisLabel: {
@@ -107,15 +108,15 @@ const options = computed(() => {
       right: "0%",
       top: "0%",
       icon: "circle",
-      itemWidth: 12,
-      itemHeight: 12,
+      itemWidth: 10,
+      itemHeight: 10,
       textStyle: {
         color: "rgba(182, 212, 254, 1)",
         fontSize: 12,
         fontFamily: "HarmonyOS Sans SC",
         fontWeight: 400,
         fontStyle: "normal",
-        letterSpacing: 0.6,
+        letterSpacing: 0,
       },
     },
     tooltip: {

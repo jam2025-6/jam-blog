@@ -64,7 +64,7 @@ const props = withDefaults(defineProps<Props>(), {
       pvcMonthConsumSaveElec: 0,
       pvcTotalConsumSaveElec: null,
       pvcExist: false,
-      chargePileExist: false,
+      chargePileExist: true,
       windExist: false,
     }
   }, // 默认值
@@ -82,7 +82,7 @@ const point2 = [
 ];
 const point3 = [
   { x: 655, y: 425 },
-  { x: 568, y: 374 },
+  { x: 568, y: 375 },
   { x: 712, y: 293 },
   { x: 712, y: 240 },
 ];
@@ -227,22 +227,24 @@ function clickStationItem(val: StationInfo) {
     en: !isChinese,
   }">
 
-    <!-- 储能 >2往外流 <-2网内流 -->
-    <Line :status="(+props.data.energyStorageChargingPower > 2) || (+props.data.energyStorageChargingPower < -2)"
-      :forward="(+props.data.energyStorageChargingPower > 2)" :points="point2" />
     <!-- 充电桩 大于0往外流  -->
-    <Line :status="+props.data.chargePileDayPower !== 0" :forward="false" :points="point3" />
+    <Line :status="+props.data.chargePileDayPower !== 0 && props.data.chargePileExist" :forward="false"
+      :points="point3" />
     <!-- 市电 >0往外流 -->
     <Line :status="+props.data.municipalPowerGridPower !== 0" :forward="+props.data.municipalPowerGridPower > 0"
       :points="point1" />
+    <!-- 储能 >2往外流 <-2网内流 -->
+    <Line :status="(+props.data.energyStorageChargingPower > 2) || (+props.data.energyStorageChargingPower < -2)"
+      :forward="(+props.data.energyStorageChargingPower > 2)" :points="point2" />
+    <!-- 风电 目前没有-->
+    <Line :status="props.data.windExist" :bgForward="false" :points="point4" />
+    <!-- 光伏 大于0往内流 -->
+    <Line :status="+props.data.pvcDayPower !== 0 && props.data.pvcExist" :bgForward="false" :points="point5" />
     <!-- 负荷 大于0往外流 -->
     <Line :status="+props.data.loadDayPower !== 0" :forward="false" :bgForward="false" :points="point6" />
-    <!-- 光伏 大于0往内流 -->
-    <Line :status="+props.data.pvcDayPower !== 0" :bgForward="false" :points="point5" />
-    <!-- 风电 目前没有-->
-    <Line :status="false" :bgForward="false" :points="point4" />
 
-    <Modal :title="$t('energyStorage')" :list="modal1" :position="{ right: '807px', top: '149px' }">
+    <Modal :title="$t('energyStorage')" :list="modal1"
+      :position="{ right: isChinese ? '807px' : '797px', top: isChinese ? '149px' : '169px' }">
       <template #right>
         <div class="status">
 

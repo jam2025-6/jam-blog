@@ -73,12 +73,12 @@ defineExpose({
         <el-tooltip popper-class="custon-tooltip">
           <template #content>
             <div class="tooltip-text">
-              <div>目标要求：</div>
-              <div style="text-indent: 2em;">年综合能源消费量20～100万吨标准煤的园区≤0.2吨/吨标准煤；</div>
-              <div style="text-indent: 2em;">年综合能源消费量≥100万吨标准煤的园区≤0.3吨/吨标准煤。</div>
+              <div>{{ $t('targetRequirements') }}</div>
+              <div style="text-indent: 2em;">{{ $t('energyTargetRequirement1') }}；</div>
+              <div style="text-indent: 2em;">{{ $t('energyTargetRequirement2') }}。</div>
             </div>
           </template>
-          <el-icon style="cursor: pointer;" size="14" color="#CBDAF5">
+          <el-icon style="cursor: pointer;  flex-shrink: 0;" size="14" color="#CBDAF5">
             <QuestionFilled />
           </el-icon>
         </el-tooltip>
@@ -122,7 +122,7 @@ defineExpose({
     .item {
       &-title {
         font-size: 14px;
-        letter-spacing: 1px;
+        letter-spacing: 0px;
       }
     }
   }

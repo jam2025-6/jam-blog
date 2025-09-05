@@ -56,7 +56,9 @@ defineExpose({
 })
 </script>
 <template>
-  <div class="basic-info">
+  <div class="basic-info" :class="{
+    'en': !isChinese,
+  }">
     <PanelTitle :title="$t('basicInfo')" />
     <div v-loading="loading" class="container">
       <div class="pic">
@@ -174,6 +176,14 @@ defineExpose({
 .basic-info {
   height: 315px;
   width: 100%;
+
+  &.en {
+    .info {
+      .info-item-word-title {
+        // letter-spacing: 0px;
+      }
+    }
+  }
 
   .container {
     height: calc(100% - 42px);

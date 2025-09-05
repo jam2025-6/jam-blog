@@ -54,23 +54,21 @@ const tick = useGlobalTicker();
 
 // 动画进度：0-1
 const progress = computed(() => {
-  return (tick.value * 0.0002) % 1; // 速度可调：0.001 越大越快
+  return (tick.value * 0.0002) % 1; // 速度可调
 });
 
 const dashOffset = computed(() => pathLength.value * (1 - progress.value));
 
-/** 箭头位置计算（查表而不是 getPointAtLength） */
+/** 箭头位置计算 */
 function getArrowTransform(offset = 0) {
   if (!props.status || samplePoints.value.length === 0) return "";
 
   const totalLen = pathLength.value;
   let targetLen = progress.value * totalLen + offset;
 
-  // wrap around
   if (targetLen < 0) targetLen += totalLen;
   if (targetLen > totalLen) targetLen -= totalLen;
 
-  // 找到采样点
   let i = 0;
   while (i < samplePoints.value.length - 1 && samplePoints.value[i + 1].len < targetLen) {
     i++;
@@ -128,7 +126,7 @@ function buildSamplePoints(points: { x: number; y: number }[], step = 2) {
 onMounted(() => {
   if (props.points.length > 1) {
     const pts = props.forward ? props.points : [...props.points].reverse();
-    samplePoints.value = buildSamplePoints(pts, 2); // step 越大采样越少，性能更好
+    samplePoints.value = buildSamplePoints(pts, 2);
   }
 });
 </script>
@@ -141,25 +139,6 @@ onMounted(() => {
         :stroke="props.status ? (props.bgForward ? 'url(#gradStroke)' : 'url(#gradStrokeBack )') : 'url(#staticStroke)'"
         stroke-width="8" stroke-linecap="round" stroke-linejoin="round" />
 
-      <!-- 流动路径 -->
-      <!-- <path
-        :d="pathData"
-        fill="none"
-        stroke="url(#gradStrokeInActive)"
-        stroke-width="8"
-        :stroke-dasharray="pathLength"
-        :stroke-dashoffset="dashOffset"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-      /> -->
-
-      <!-- 箭头 -->
-      <g :transform="arrowTransform" v-if="props.status">
-        <path d="M0,-8 L10,0 L0,8 M2,-8 L12,0 L2,8" fill="none" stroke="rgba(11, 187, 231, 1)" stroke-width="3" />
-      </g>
-      <g :transform="arrowTransform2" v-if="props.status">
-        <path d="M0,-8 L10,0 L0,8 M2,-8 L12,0 L2,8" fill="none" stroke="rgba(44, 230, 255, 1)" stroke-width="3" />
-      </g>
 
       <defs>
         <linearGradient id="gradStroke" x1="0%" y1="0%" x2="100%" y2="0%">
@@ -171,14 +150,18 @@ onMounted(() => {
           <stop offset="100%" stop-color="#2A7EB1" />
         </linearGradient>
         <linearGradient id="staticStroke" x1="0%" y1="0%" x2="100%" y2="0%">
-          <stop offset="0%" stop-color="#689bce" stop-opacity="0.75" />
-          <stop offset="100%" stop-color="#689bce" stop-opacity="0.75" />
-        </linearGradient>
-        <linearGradient id="gradStrokeInActive" x1="0%" y1="0%" x2="100%" y2="0%">
-          <stop stop-color="#00E1FF" />
-          <stop offset="1" stop-color="#00E1FF" />
+          <stop offset="0%" stop-color="#689bce" stop-opacity="0.85" />
+          <stop offset="100%" stop-color="#689bce" stop-opacity="0.85" />
         </linearGradient>
       </defs>
+      <!-- 箭头 -->
+      <g :transform="arrowTransform" v-if="props.status" style="mix-blend-mode: screen;">
+        <path d="M0,-8 L10,0 L0,8 M2,-8 L12,0 L2,8" fill="none" stroke="rgba(11, 187, 231, 1)" stroke-width="3" />
+      </g>
+      <g :transform="arrowTransform2" v-if="props.status" style="mix-blend-mode: screen;">
+        <path d="M0,-8 L10,0 L0,8 M2,-8 L12,0 L2,8" fill="none" stroke="rgba(44, 230, 255, 1)" stroke-width="3" />
+      </g>
+
     </svg>
   </div>
 </template>

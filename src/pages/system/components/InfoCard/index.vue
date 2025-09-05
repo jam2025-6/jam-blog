@@ -46,7 +46,10 @@ const props = withDefaults(defineProps<Props>(), {
       pvcMonthConsumCapacity: 0,
       pvcMonthConsumCapacityUnit: "kWh",
       pvcMonthConsumSaveElec: 0,
-      pvcTotalConsumSaveElec: null
+      pvcTotalConsumSaveElec: null,
+      pvcExist: false,
+      chargePileExist: true,
+      windExist: false,
     }
   }, // 默认值
 });

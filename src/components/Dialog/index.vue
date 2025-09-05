@@ -6,7 +6,7 @@
     <!-- 弹框内容 -->
     <div class="dialog">
       <div class="dialog-title">
-        <div class="text">选择跳转的站点</div>
+        <div class="text">{{ props.title || '选择跳转的站点' }}</div>
         <button class="clase" style="color: #B1C4E6;" @click="onClose">✕</button>
       </div>
       <div style="padding: 16px 0 0 0;">
