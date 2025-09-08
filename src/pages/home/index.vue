@@ -4,28 +4,46 @@ import { useRouter } from "vue-router";
 import bus from "@/utils/bus";
 import { getMicrogridList } from "@/api/home";
 import { Microgrid, Station } from "@/types/home";
+// 定义 tooltip 的 X 坐标，用于控制 tooltip 的水平位置
 const tooltipX = ref(0);
+// 定义 tooltip 的 Y 坐标，用于控制 tooltip 的垂直位置
 const tooltipY = ref(0);
+// 定义加载状态，用于显示或隐藏加载提示
 const loading = ref(false);
+// 获取路由实例，用于页面导航
 const router = useRouter();
+// 定义容器的引用，用于获取容器元素
 const containerRef = ref<HTMLElement | null>(null);
+// 定义当前悬停的站点名称，用于显示 tooltip 内容
 const stationName = ref("");
+// 定义当前悬停的 ID，用于标识当前悬停的元素
 const hoverId = ref<string | undefined | null>(null);
+// 定义表格数据，存储微电网列表信息
 const tableData = ref<Microgrid[]>([]);
+// 定义请求参数，用于获取微电网列表
 const params = ref({
-  pageNum: 1,
-  pageSize: 20,
-  microgridName: "",
-  stationName: "",
+  pageNum: 1, // 当前页码
+  pageSize: 20, // 每页显示的数量
+  microgridName: "", // 微电网名称
+  stationName: "", // 站点名称
 });
+// 定义总数据量，用于分页显示
 const total = ref(0);
+// 定义展开的行 ID 列表，用于控制表格行的展开状态
 const expandedKeys = ref<string[]>([]);
 
+/**
+ * 点击表格行时触发的事件处理函数
+ * @param row - 当前点击的微电网数据行
+ */
 function clickRow(row: Microgrid) {
+  // 查找当前行在表格数据中的索引
   const index = tableData.value.findIndex((el) => el.id === row.id);
   if (index === -1) {
+    // 如果未找到，说明点击的是子节点，查找其父节点
     const obj = tableData.value.find(item => item.children && item.children.findIndex(el => el.id === row.id) > -1)
     if (obj) {
+      // 跳转到系统页面，并传递父节点 ID
       router.push({
         path: "/system",
         query: {
@@ -33,113 +51,151 @@ function clickRow(row: Microgrid) {
         },
       });
     }
-
   } else {
+    // 如果找到，说明点击的是父节点，跳转到系统页面并传递当前行 ID
     router.push({
       path: "/system",
       query: {
         id: row.id,
       },
     });
-  };
-
+  }
 }
 
+/**
+ * 鼠标移动时触发的事件处理函数，用于更新 tooltip 的位置
+ * @param event - 鼠标事件对象
+ */
 const handleMouseMove = (event: MouseEvent) => {
+  // 获取容器元素
   const container = containerRef.value;
   if (!container) return;
   if (!stationName.value) return;
+  // 获取容器的边界矩形
   const rect = container.getBoundingClientRect();
+  // 计算容器的缩放比例
   const scaleX = rect.width / container.offsetWidth;
   const scaleY = rect.height / container.offsetHeight;
 
+  // 计算 tooltip 的初始位置
   let x = (event.clientX - rect.left) / scaleX + 10;
   let y = (event.clientY - rect.top) / scaleY + 10;
 
+  // 获取 tooltip 元素
   const tooltipEl = document.querySelector(".tooltip") as HTMLElement;
   if (tooltipEl) {
+    // 获取 tooltip 的宽度和高度
     const tooltipWidth = tooltipEl.offsetWidth;
     const tooltipHeight = tooltipEl.offsetHeight;
 
-    // 容器右边界检测
+    // 容器右边界检测，防止 tooltip 超出容器右边界
     if (x + tooltipWidth > rect.width) {
       x = rect.width - tooltipWidth - 10;
     }
-    // 容器下边界检测
+    // 容器下边界检测，防止 tooltip 超出容器下边界
     if (y + tooltipHeight > rect.height) {
       y = rect.height - tooltipHeight - 10;
     }
 
-    // 防止左上角越界
+    // 防止左上角越界，确保 tooltip 不会超出容器左上角
     if (x < 0) x = 0;
     if (y < 0) y = 0;
   }
 
+  // 更新 tooltip 的位置
   tooltipX.value = x;
   tooltipY.value = y;
 };
 
+/**
+ * 鼠标进入表格单元格时触发的事件处理函数
+ * @param row - 当前悬停的微电网数据行
+ */
 function cellMouseEnter(row: Microgrid) {
+  // 查找当前行在表格数据中的索引
   const index = tableData.value.findIndex((el) => el.id === row.id);
   // 如果是父节点
   if (index > -1) {
+    // 设置当前悬停的站点名称和 ID
     stationName.value = row.microgridName;
     hoverId.value = row.id;
   } else {
     // 子节点
+    // 查找子节点对应的父节点
     const obj = tableData.value.find((item) => item.children && item.children.find((el) => el.id === row.id));
     if (obj) {
+      // 设置当前悬停的站点名称和父节点 ID
       stationName.value = obj.microgridName;
       hoverId.value = obj.id;
     }
   }
 }
+
+/**
+ * 鼠标离开表格单元格时触发的事件处理函数
+ * 用于清空当前悬停的站点名称和 ID
+ */
 function cellMouseLeave() {
   stationName.value = "";
   hoverId.value = null;
 }
 
-// 自定义行样式
+/**
+ * 自定义表格行的类名，用于控制行的样式
+ * @param param0 - 包含当前行数据和行索引的对象
+ * @returns 表格行的类名
+ */
 const tableRowClassName = ({ row }: { row: Microgrid; rowIndex: number }) => {
   if (!tableData.value || tableData.value.length === 0) {
     return "";
   }
 
+  // 查找当前行在表格数据中的索引
   const index = tableData.value.findIndex((el) => el.id === row.id);
 
   // 是子节点
   if (index === -1) {
+    // 查找子节点对应的父节点的索引
     const parentIndex = tableData.value.findIndex(
       (item) => item.children && item.children.some((el) => el.id === row.id)
     );
+    // 查找子节点对应的父节点
     const parentItem = tableData.value.find((item) => item.children && item.children.some((el) => el.id === row.id));
 
     if (parentIndex === -1 || !parentItem) return "";
 
+    // 判断父节点是否处于悬停状态
     const isParentHovered = parentItem.id === hoverId.value;
     // const isParentExpanded = expandedKeys.value?.includes(parentItem.id);
+    // 判断是否为最后一个子节点
     const isLastChild = parentItem.children?.[parentItem.children.length - 1]?.id === row.id;
 
     if (parentIndex % 2 !== 0) {
       if (isParentHovered) {
+        // 如果是最后一个子节点，添加 last-child 类名
         return isLastChild ? "table-row-stripe hover-item last-child" : "table-row-stripe hover-item";
       }
       return "table-row-stripe";
     } else {
       if (isParentHovered) {
+        // 如果是最后一个子节点，添加 last-child 类名
         return isLastChild ? "hover-item last-child" : "hover-item";
       }
       return "";
     }
   } else {
     // 是父节点
+    // 判断当前行是否处于悬停状态
     const isHovered = row.id === hoverId.value;
+    // 判断当前行是否有子节点
     const hasChildren = tableData.value[index]?.children && tableData.value[index].children.length > 0;
+    // 判断当前行是否处于展开状态
     const isExpanded = expandedKeys.value?.includes(row.id);
 
     if (index % 2 !== 0) {
       if (isHovered) {
         if (hasChildren) {
+          // 如果有子节点，添加 first-child 类名，根据是否展开添加 only-child 类名
           return "table-row-stripe hover-item first-child" + (!isExpanded ? " only-child" : "");
         } else {
           return "table-row-stripe hover-item only-child";
@@ -150,6 +206,7 @@ const tableRowClassName = ({ row }: { row: Microgrid; rowIndex: number }) => {
     } else {
       if (isHovered) {
         if (hasChildren) {
+          // 如果有子节点，添加 first-child 类名，根据是否展开添加 only-child 类名
           return "hover-item first-child" + (!isExpanded ? " only-child" : "");
         } else {
           return "hover-item only-child";
@@ -160,14 +217,21 @@ const tableRowClassName = ({ row }: { row: Microgrid; rowIndex: number }) => {
     }
   }
 };
-// 获取列表
+
+/**
+ * 获取微电网列表数据
+ */
 async function getList() {
   try {
+    // 开始加载，显示加载状态
     loading.value = true;
+    // 调用接口获取微电网列表数据
     let res = await getMicrogridList(params.value);
     if (res.code === 200) {
+      // 处理返回的数据
       tableData.value = res.data.list.map((item: Microgrid) => {
         if (item.children && item.children.length) {
+          // 处理子节点数据
           item.children = item.children.map((child: Station) => {
             child.pvInstalledPowerSum = child.pvInstalledPower;
             child.windCapacitySum = child.windCapacity;
@@ -180,42 +244,88 @@ async function getList() {
         }
         return item;
       });
+      if (params.value.stationName) {
+        // 如果有站点名称参数，展开所有行
+        expandedKeys.value = tableData.value.map((item) => item.id);
+      } else {
+        // expandedKeys.value = []
+      }
+      // 更新总数据量
       total.value = res.data.totalCount;
     }
   } catch (err) {
+    // 捕获异常并打印错误信息
     console.log(err);
   } finally {
+    // 加载结束，隐藏加载状态
     loading.value = false;
   }
 }
+
+/**
+ * 当前页码改变时触发的事件处理函数
+ * @param val - 新的页码
+ */
 const currentChangeHandle = (val: number) => {
+  // 更新当前页码
   params.value.pageNum = val;
+  // 重新获取列表数据
   getList();
 };
 
+/**
+ * 每页显示数量改变时触发的事件处理函数
+ * @param val - 新的每页显示数量
+ */
 const pageSizeChangeHandle = (val: number) => {
+  // 更新每页显示数量
   params.value.pageSize = val;
+  // 重置当前页码为第一页
+  params.value.pageNum = 1
+  // 重新获取列表数据
   getList();
 };
+
+/**
+ * 表格行展开状态改变时触发的事件处理函数
+ * @param row - 当前行的微电网数据
+ * @param expanded - 是否展开
+ */
 const handleExpandChange = (row: Microgrid, expanded: boolean) => {
   if (expanded) {
+    // 如果展开，将行 ID 添加到展开列表中
     expandedKeys.value.push(row.id);
   } else {
+    // 如果折叠，从展开列表中移除行 ID
     expandedKeys.value = expandedKeys.value.filter((id) => id !== row.id);
   }
 };
 
+/**
+ * 组件挂载时触发的生命周期钩子
+ * 用于初始化数据和监听全局搜索事件
+ */
 onMounted(() => {
+  // 初始化获取微电网列表数据
   getList();
-  bus.on("globalSearch", (user) => {
+  // 监听全局搜索事件
+  bus.on("globalSearch", async (user) => {
+    // 更新搜索参数
     params.value.microgridName = user.microgridName;
     params.value.stationName = user.stationName;
     params.value.pageNum = 1;
     params.value.pageSize = 20;
-    getList();
+    // 重新获取列表数据
+    await getList();
   });
 });
+
+/**
+ * 组件卸载时触发的生命周期钩子
+ * 用于移除全局搜索事件监听
+ */
 onUnmounted(() => {
+  // 移除全局搜索事件监听
   bus.off("globalSearch");
 });
 </script>
@@ -224,10 +334,12 @@ onUnmounted(() => {
     <div ref="containerRef" class="table" @mousemove="handleMouseMove">
       <el-table @cell-mouse-enter="cellMouseEnter" @cell-mouse-leave="cellMouseLeave" :data="tableData"
         :row-class-name="tableRowClassName" style="width: 100%; height: 100%" @row-click="clickRow" row-key="id"
-        @expand-change="handleExpandChange">
+        @expand-change="handleExpandChange" :default-expand-all="!!params.stationName">
         <el-table-column min-width="200" sortable prop="stationName" :label="$t('name')">
           <template #default="{ row }">
-            {{ row.microgridName || row.stationName }}
+            <div class="name-text">
+              {{ row.microgridName || row.stationName }}
+            </div>
           </template>
         </el-table-column>
         <el-table-column prop="pvInstalledPowerSum" align="center" sortable :label="$t('pvCapacity')" />
@@ -274,6 +386,12 @@ onUnmounted(() => {
     padding: 12px 36px 22px 36px;
     backdrop-filter: blur(12px);
 
+    // .name-text {
+    //   overflow: hidden;
+    //   text-overflow: ellipsis;
+    //   white-space: nowrap;
+    // }
+
     &::before {
       content: "";
       position: absolute;
@@ -301,6 +419,7 @@ onUnmounted(() => {
         .is-center {
           .cell {
             justify-content: center;
+
           }
         }
 
@@ -408,7 +527,7 @@ onUnmounted(() => {
                 color: #e0f0ff;
                 font-family: "HarmonyOS Sans SC";
                 font-size: 18px;
-                height: 30px;
+                min-height: 30px;
                 font-style: normal;
                 font-weight: 400;
                 line-height: normal;

@@ -8,9 +8,10 @@ import svgLoader from "vite-svg-loader";
 // https://vite.dev/config/
 export default defineConfig(({ mode }): Promise<UserConfig> => {
   const env = loadEnv(mode, process.cwd(), "");
-  const { VITE_APP_TITLE } = env;
+  const { VITE_APP_TITLE, VITE_URL } = env;
   return new Promise((resolve) => {
     resolve({
+      base: VITE_URL,  // ⬅️ 这里设置基础路径
       plugins: [
         vue(),
         svgLoader(),

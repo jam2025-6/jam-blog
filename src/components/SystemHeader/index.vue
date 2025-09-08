@@ -2,10 +2,15 @@
 import { computed } from 'vue'
 import { useLocaleStore } from "@/stores/modules/locale";
 import { storeToRefs } from "pinia";
+import { useRouter } from 'vue-router';
 const { isChinese } = storeToRefs(useLocaleStore());
+const router = useRouter()
 const logoUrl = computed(() => {
   return sessionStorage.getItem("logoUrl") || 'https://ess-ds.com/statics/2025/05/12/20250512181338A498_a22542a93c9c41b3bd853296fcda624e.png'
 });
+function goBack() {
+  router.back()
+}
 </script>
 <template>
   <div class="system-header" :class="{
@@ -13,6 +18,9 @@ const logoUrl = computed(() => {
   }">
     <img class="logo" :src="logoUrl" alt="" />
     <div class="title">{{ $t("gaoteMicrogridManagementSystem") }}</div>
+    <div class="btn-list">
+      <div class="text-btn" @click="goBack">返回</div>
+    </div>
   </div>
 </template>
 
@@ -54,6 +62,39 @@ const logoUrl = computed(() => {
     position: absolute;
     margin-right: 43px;
   }
+
+  .btn-list {
+    position: absolute;
+    right: 36px;
+    margin-top: 18px;
+    // margin-right: 43px;
+
+    .text-btn {
+      leading-trim: both;
+      text-edge: cap;
+      cursor: pointer;
+      /* 二级标题投影 */
+      text-shadow: 0 2px 5px rgba(0, 0, 0, 0.40), 0 0 6px rgba(229, 240, 249, 0.36), 0 0 10px rgba(48, 139, 229, 0.60);
+      font-family: "Alimama FangYuanTi VF";
+      font-size: 12px;
+      font-style: normal;
+      font-weight: 700;
+      line-height: normal;
+      letter-spacing: 1.8px;
+      background: linear-gradient(211deg, #F7FBFC 18.65%, #CBE1F5 94.38%);
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+
+      &:hover {
+        background: rgba(48, 139, 229, 1);
+        background-clip: text;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+    }
+  }
+
 
   .title {
     leading-trim: both;

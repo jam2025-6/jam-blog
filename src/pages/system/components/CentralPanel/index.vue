@@ -17,9 +17,15 @@ import windPowerInActiveImg from '@/assets/images/station/windPower-inactive.png
 import chargingPileActiveImg from '@/assets/images/station/chargingPile-active.png'
 import chargingPileInActiveImg from '@/assets/images/station/chargingPile-inactive.png'
 import { round } from 'lodash';
+
+// 获取当前路由信息
 const route = useRoute()
+// 获取国际化翻译函数
 const { t } = useI18n();
+// 获取语言设置 store 中的中文状态引用
 const { isChinese } = storeToRefs(useLocaleStore());
+
+// 定义组件的 props 类型
 interface Props {
   data?: EnergyData;
 }
@@ -69,41 +75,50 @@ const props = withDefaults(defineProps<Props>(), {
     }
   }, // 默认值
 });
+
+// 定义线路1的路径点，用于绘制线路
 const point1 = [
   { x: 442, y: 448 },
   { x: 698, y: 300 },
   { x: 698, y: 250 },
 ];
+// 定义线路2的路径点，用于绘制线路
 const point2 = [
   { x: 480, y: 250 },
   { x: 635, y: 336 },
   { x: 705, y: 297 },
   { x: 705, y: 245 },
 ];
+// 定义线路3的路径点，用于绘制线路
 const point3 = [
   { x: 655, y: 425 },
   { x: 568, y: 375 },
   { x: 712, y: 293 },
   { x: 712, y: 240 },
 ];
+// 定义线路4的路径点，用于绘制线路
 const point4 = [
   { x: 730, y: 100 },
   { x: 890, y: 190 },
   { x: 719, y: 289 },
   { x: 719, y: 220 },
 ];
+// 定义线路5的路径点，用于绘制线路
 const point5 = [
   { x: 980, y: 140 },
   { x: 890, y: 190 },
   { x: 726, y: 285 },
   { x: 726, y: 220 },
 ];
+// 定义线路6的路径点，用于绘制线路
 const point6 = [
   { x: 945, y: 250 },
   { x: 865, y: 205 },
   { x: 732, y: 281 },
   { x: 732, y: 220 },
 ];
+
+// 计算储能模块的展示数据
 const modal1 = computed(() => [
   {
     name: t('realTimePower'),
@@ -116,6 +131,7 @@ const modal1 = computed(() => [
     unit: "%",
   },
 ]);
+// 计算风电模块的展示数据
 const modal2 = computed(() => [
   {
     name: t('realTimePower'),
@@ -128,6 +144,7 @@ const modal2 = computed(() => [
     unit: convertEnergy(props.data.pvcDayPower).unit,
   },
 ]);
+// 计算光伏模块的展示数据
 const modal3 = computed(() => [
   {
     name: t('realTimePower'),
@@ -140,6 +157,7 @@ const modal3 = computed(() => [
     unit: convertEnergy(props.data.pvcDayConsumCapacity).unit,
   },
 ]);
+// 计算负荷模块的展示数据
 const modal4 = computed(() => [
   {
     name: t('realTimePower'),
@@ -152,6 +170,7 @@ const modal4 = computed(() => [
     unit: convertEnergy(props.data.loadDayConsumCapacity).unit,
   },
 ]);
+// 计算充电桩模块的展示数据
 const modal5 = computed(() => [
   {
     name: t('realTimePower'),
@@ -164,6 +183,7 @@ const modal5 = computed(() => [
     unit: convertEnergy(props.data.chargePileDayConsumCapacity).unit,
   },
 ]);
+// 计算市电模块的展示数据
 const modal6 = computed(() => [
   {
     name: t('realTimePower'),
@@ -181,24 +201,39 @@ const modal6 = computed(() => [
     unit: convertEnergy(props.data.municipalPowerGridCapacity).unit,
   },
 ]);
+
+// 定义对话框显示状态的响应式变量
 const showDialog = ref(false)
+// 定义站点列表的响应式变量
 const stationList = ref<StationInfo[]>([])
+
+// 点击图形元素的处理函数
 async function clickGraphic(bool: boolean) {
   if (!bool) {
     return
   }
+  // 获取站点列表
   getStations()
+  // 显示对话框
   showDialog.value = true
 }
+
+// 获取站点列表的异步函数
 async function getStations() {
+  // 从路由参数中获取 id
   const id = route.query.id as string;
   if (!id) {
     return;
   }
+  // 调用接口获取集中化开关信息
   let res = await getSwitchCentralized(id)
+  // 更新站点列表
   stationList.value = res.data
 }
+
+// 点击站点项的处理函数
 function clickStationItem(val: StationInfo) {
+  // 对站点信息进行编码
   const encoded = btoa(
     encodeURIComponent(
       JSON.stringify({
@@ -209,8 +244,11 @@ function clickStationItem(val: StationInfo) {
       })
     )
   );
+  // 根据环境变量设置基础 URL
   const baseUrl = import.meta.env.VITE_APP_ENV === "development" ? 'https://test.ess-ds.com' : ''
+  // 隐藏对话框
   showDialog.value = false
+  // 打开新窗口跳转到站点信息页面
   window.open(`${baseUrl}/nlgl-web/stationInfo?q=${encoded}`)
 }
 </script>
