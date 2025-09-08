@@ -4,7 +4,6 @@ import { ref, computed, watch } from "vue";
 import * as echarts from "echarts";
 import { useI18n } from "vue-i18n";
 import { getLoadForecastCurve } from "@/api/system";
-import { RealTimeData } from "@/types/system";
 import { useRoute } from "vue-router";
 import { useLocaleStore } from "@/stores/modules/locale";
 import { storeToRefs } from "pinia";

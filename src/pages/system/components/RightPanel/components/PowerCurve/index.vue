@@ -5,7 +5,7 @@ import * as echarts from "echarts";
 import { useI18n } from "vue-i18n";
 import { useRoute } from "vue-router";
 import { getPowerCurve } from "@/api/system";
-import { EnergyCurves, PowerCurve } from "@/types/system";
+import { EnergyCurves } from "@/types/system";
 import dayjs from "dayjs";
 const { t } = useI18n();
 const options = computed(() => {

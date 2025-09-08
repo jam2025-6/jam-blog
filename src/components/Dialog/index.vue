@@ -19,7 +19,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from "vue";
+import { computed } from "vue";
 interface Props {
   title?: string,
   visible?: boolean

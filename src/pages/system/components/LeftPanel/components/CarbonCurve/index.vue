@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, watch, onMounted, computed } from "vue";
+import { ref, computed } from "vue";
 import { PanelTitle, gdCharts } from "@/components";
 import * as echarts from "echarts";
 import { useI18n } from "vue-i18n";

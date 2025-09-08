@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted, computed, onUnmounted } from "vue";
 import dayjs from "dayjs";
-import SelectSvg from "@/assets/icons/select.svg";
 import SearchSvg from "@/assets/icons/search.svg";
 import { useLocaleStore } from "@/stores/modules/locale";
 import { storeToRefs } from "pinia";

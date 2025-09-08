@@ -1,8 +1,5 @@
 <script setup lang="ts">
-import {
-  ref, onMounted,
-  onUnmounted
-} from 'vue'
+import { ref } from 'vue'
 import { getCoreCenter } from '@/api/system'
 import { LeftPanel, RightPanel, CentralPanel, BottomPanel, IndicatorCard, InfoCard } from "./components";
 import { useRoute } from "vue-router";

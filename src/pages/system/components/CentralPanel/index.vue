@@ -6,7 +6,7 @@ import { storeToRefs } from "pinia";
 import Line from "./line.vue";
 import Modal from "./modal.vue";
 import { Dialog } from "@/components";
-import { useRoute, useRouter } from 'vue-router';
+import { useRoute } from 'vue-router';
 import { getSwitchCentralized } from '@/api/system'
 import { StationInfo, EnergyData } from '@/types/system'
 import { convertEnergy } from '@/utils/tools'
@@ -18,7 +18,6 @@ import chargingPileActiveImg from '@/assets/images/station/chargingPile-active.p
 import chargingPileInActiveImg from '@/assets/images/station/chargingPile-inactive.png'
 import { round } from 'lodash';
 const route = useRoute()
-const router = useRouter()
 const { t } = useI18n();
 const { isChinese } = storeToRefs(useLocaleStore());
 interface Props {

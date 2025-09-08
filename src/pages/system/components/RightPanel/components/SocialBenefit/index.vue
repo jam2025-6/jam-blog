@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, watch, onMounted, computed } from "vue";
+import { ref, computed } from "vue";
 import { PanelTitle } from "@/components";
 import { useLocaleStore } from "@/stores/modules/locale";
 import { storeToRefs } from "pinia";

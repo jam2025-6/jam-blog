@@ -57,7 +57,7 @@ const progress = computed(() => {
   return (tick.value * 0.0002) % 1; // 速度可调
 });
 
-const dashOffset = computed(() => pathLength.value * (1 - progress.value));
+// const dashOffset = computed(() => pathLength.value * (1 - progress.value));
 
 /** 箭头位置计算 */
 function getArrowTransform(offset = 0) {

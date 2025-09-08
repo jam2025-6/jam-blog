@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from "vue";
-import type { TableColumnCtx } from "element-plus";
 import { useRouter } from "vue-router";
 import bus from "@/utils/bus";
 import { getMicrogridList } from "@/api/home";
@@ -22,7 +21,7 @@ const params = ref({
 const total = ref(0);
 const expandedKeys = ref<string[]>([]);
 
-function clickRow(row: Microgrid, column: TableColumnCtx<Microgrid>, event: Event) {
+function clickRow(row: Microgrid) {
   const index = tableData.value.findIndex((el) => el.id === row.id);
   if (index === -1) {
     const obj = tableData.value.find(item => item.children && item.children.findIndex(el => el.id === row.id) > -1)
@@ -80,7 +79,7 @@ const handleMouseMove = (event: MouseEvent) => {
   tooltipY.value = y;
 };
 
-function cellMouseEnter(row: Microgrid, column: TableColumnCtx<Microgrid>, cell: HTMLTableCellElement, event: Event) {
+function cellMouseEnter(row: Microgrid) {
   const index = tableData.value.findIndex((el) => el.id === row.id);
   // 如果是父节点
   if (index > -1) {
@@ -101,7 +100,7 @@ function cellMouseLeave() {
 }
 
 // 自定义行样式
-const tableRowClassName = ({ row, rowIndex }: { row: Microgrid; rowIndex: number }) => {
+const tableRowClassName = ({ row }: { row: Microgrid; rowIndex: number }) => {
   if (!tableData.value || tableData.value.length === 0) {
     return "";
   }

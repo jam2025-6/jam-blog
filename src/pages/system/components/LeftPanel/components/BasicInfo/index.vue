@@ -1,15 +1,14 @@
 <script setup lang="ts">
-import { ref, watch, onMounted, computed } from "vue";
+import { ref, computed } from "vue";
 import { PanelTitle } from "@/components";
 import { useLocaleStore } from "@/stores/modules/locale";
 import { storeToRefs } from "pinia";
-import { useRoute, useRouter } from "vue-router";
+import { useRoute } from "vue-router";
 import { getSearchById } from "@/api/system";
-import { Microgrid, Station } from "@/types/home";
+import { Microgrid } from "@/types/home";
 import { convertEnergy } from '@/utils/tools'
 const { isChinese } = storeToRefs(useLocaleStore());
 const route = useRoute();
-const router = useRouter();
 const formData = ref<Microgrid>({
   id: "",
   microgridCode: "",

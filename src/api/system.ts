@@ -1,5 +1,5 @@
 import { request } from "@/utils/request";
-import { ApiResponse, PageResponse } from "@/types/api";
+import { ApiResponse } from "@/types/api";
 import { Microgrid } from "@/types/home";
 import { AmountRecord, EnergyCurves, PvStatistics, RealTimeData, StationInfo, EnergyData, EnergyStats, EnergyAndEarningsData, ForecastCurve } from "@/types/system";
 //基本信息
