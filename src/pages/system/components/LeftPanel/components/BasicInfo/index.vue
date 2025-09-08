@@ -128,7 +128,7 @@ defineExpose({
             <div class="info-item-word-title">{{ $t("windPowerCapacity") }}</div>
             <div class="info-item-word-value">
               <div class="info-item-word-value-num">{{ formData.windCapacitySum }}</div>
-              <div class="info-item-word-value-unit">kV</div>
+              <div class="info-item-word-value-unit">kW</div>
             </div>
           </div>
         </div>
@@ -139,7 +139,7 @@ defineExpose({
             <div class="info-item-word-value">
               <!-- 装机功率(MW) -->
               <div class="info-item-word-value-num">{{ formData.installedPowerSum }}</div>
-              <div class="info-item-word-value-unit">kV</div>
+              <div class="info-item-word-value-unit">kW</div>
               <div class="info-item-word-value-sub">/</div>
               <!-- 装机容量(MWh) -->
               <div class="info-item-word-value-num">{{ convertEnergy(formData.installedCapacitySum).value }}</div>

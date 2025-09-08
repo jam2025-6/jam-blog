@@ -3,6 +3,7 @@ import { ref, watch, onMounted } from "vue";
 import { PanelTitle, SemiCircleProgress } from "@/components";
 import { useLocaleStore } from "@/stores/modules/locale";
 import { storeToRefs } from "pinia";
+import { round } from "lodash";
 import { useRoute } from "vue-router";
 import { getCalcElectricity } from "@/api/system";
 import { EnergyStats } from '@/types/system'
@@ -118,8 +119,8 @@ defineExpose({
       <div class="rate">
         <div class="rate-item">
           <div class="rate-item-pic">
-            <SemiCircleProgress :bluePercent="Number(formData.monthPowerGridSupplyPercent)"
-              :orangePercent="Number(formData.monthNewEnergyConsumPercent)" :text="$t('monthlyComparison')" />
+            <SemiCircleProgress :bluePercent="Number(formData.monthPowerGridSupplyPercent) * 100"
+              :orangePercent="Number(formData.monthNewEnergyConsumPercent) * 100" :text="$t('monthlyComparison')" />
           </div>
           <div class="rate-item-main">
             <div class="item">
@@ -129,7 +130,8 @@ defineExpose({
                 <div class="num">{{ convertEnergy(formData.monthPowerGridSupply).value }}</div>
                 <div class="unit">{{ convertEnergy(formData.monthPowerGridSupply).unit }}</div>
               </div>
-              <div class="percent">({{ formData.monthPowerGridSupplyPercent || 0 }}%)</div>
+              <div class="percent">({{ round((Number(formData.monthPowerGridSupplyPercent) *
+                100), 2) || 0 }}%)</div>
             </div>
             <div class="item orange">
               <div class="point"></div>
@@ -138,15 +140,16 @@ defineExpose({
                 <div class="num">{{ convertEnergy(formData.monthNewEnergyConsum).value }}</div>
                 <div class="unit">{{ convertEnergy(formData.monthNewEnergyConsum).unit }}</div>
               </div>
-              <div class="percent">({{ formData.monthNewEnergyConsumPercent || 0 }}%)</div>
+              <div class="percent">({{ round((Number(formData.monthNewEnergyConsumPercent) *
+                100), 2) || 0 }}%)</div>
             </div>
           </div>
           <!-- <SemiCircleProgress :progress="85" title="月对比" :size="100" progress-color="#2196F3" /> -->
         </div>
         <div class="rate-item">
           <div class="rate-item-pic">
-            <SemiCircleProgress :bluePercent="Number(formData.yearPowerGridSupplyPercent)"
-              :orangePercent="Number(formData.yearNewEnergyConsumPercent)" :text="$t('yearlyComparison')" />
+            <SemiCircleProgress :bluePercent="Number(formData.yearPowerGridSupplyPercent) * 100"
+              :orangePercent="Number(formData.yearNewEnergyConsumPercent) * 100" :text="$t('yearlyComparison')" />
           </div>
           <div class="rate-item-main">
             <div class="item">
@@ -158,7 +161,7 @@ defineExpose({
                 <div class="unit">{{ convertEnergy(formData.yearPowerGridSupply).unit
                 }}</div>
               </div>
-              <div class="percent">({{ formData.yearPowerGridSupplyPercent || 0 }}%)</div>
+              <div class="percent">({{ round((Number(formData.yearPowerGridSupplyPercent) * 100), 2) || 0 }}%)</div>
             </div>
             <div class="item orange">
               <div class="point"></div>
@@ -169,7 +172,7 @@ defineExpose({
                 <div class="unit">{{ convertEnergy(formData.yearNewEnergyConsum).unit
                 }}</div>
               </div>
-              <div class="percent">({{ formData.yearNewEnergyConsumPercent || 0 }}%)</div>
+              <div class="percent">({{ round((Number(formData.yearNewEnergyConsumPercent) * 100), 2) || 0 }}%)</div>
             </div>
           </div>
         </div>

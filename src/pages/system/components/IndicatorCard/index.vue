@@ -7,6 +7,7 @@ import { useRoute } from "vue-router";
 import { EnergyAndEarningsData } from '@/types/system'
 import { QuestionFilled } from '@element-plus/icons-vue'
 import { convertEnergy } from '@/utils/tools'
+import { round } from "lodash";
 const route = useRoute();
 const { isChinese } = storeToRefs(useLocaleStore());
 const formData = ref<EnergyAndEarningsData>({
@@ -56,7 +57,7 @@ defineExpose({
     <div class="item">
       <div class="item-title">{{ $t("renewableEnergyUtilizationRate") }}</div>
       <div class="item-indicator">
-        <div class="item-indicator-num">{{ formData.newEnergyTotalCapacityPercent }}</div>
+        <div class="item-indicator-num">{{ round(Number(formData.newEnergyTotalCapacityPercent) * 100, 2) }}</div>
         <div class="item-indicator-unit">%</div>
       </div>
     </div>

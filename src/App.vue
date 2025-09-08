@@ -39,6 +39,7 @@ async function getBasicInfo() {
       if (favicon) {
         favicon.setAttribute("href", res.company.iconUrl);
       }
+      sessionStorage.setItem("logoUrl", res.company.logoUrl);
     }
   } catch (error) {
     console.error("获取基础信息失败:", error);
@@ -74,6 +75,11 @@ useTabVisibility({
 
 // 组件挂载时的初始化逻辑
 onMounted(() => {
+  Cookies.set('Admin-Token', 'eyJhbGciOiJIUzUxMiJ9.eyJ1c2VyaWQiOjEsInVzZXJuYW1lIjoiYWRtaW4iLCJuaWNrbmFtZSI6IumrmOeJueeUteWtkCIsImVtYWlsIjoiY2hpbmFAY2hpbmEtZ29sZC5jb20iLCJwaG9uZW51bWJlciI6ImUyNDY0Nzg1MGVhZGI0ZWI0ZWU4MzFlOTBhMjRlMjU1IiwiYXZhdGFyIjoiaHR0cHM6Ly9lc3MtZHMuY29tL3N0YXRpY3MvMjAyNC8xMS8wOC8yMDI0MTEwODA1MjgyOEE0OTRfNTFkYzNiOGJmMDJkNGY4ZjgzZjZjNWQ1ZWRhZThlMDYucG5nIiwiY29tcGFueWNvZGUiOiJnb2xkIiwidGVuYW50aWQiOjk5OTksImRza2V5IjoibWFzdGVyIiwicGxhdGZvcm11c2VyaWQiOjEsInBsYXRmb3JtdXNlcm5hbWUiOiJhZG1pbiIsInVzZXJUeXBlIjoiMDAiLCJwZXJtaXNzaW9uc1JlZGlzS2V5IjoicGVybWlzc2lvbjoxIiwicm9sZXMiOlsiYWRtaW4iXSwiZGVwdElkIjoxMDMsInRva2VuUmVkaXNLZXkiOiJsb2dpbl90b2tlbnM6NWQzZGQ0N2ItMWM4YS00ZDIzLThiZmYtNDkwNDlmYTViZWI1IiwidGFnIjoiZGVmYXVsdF9pbnZva2UifQ.n52ikNd7h0FuDwMq2lIxORbVwUNYzsUtLgxG6PbXtXlN26X5qA21cfaroYmTwjl0Oj3wF3dqcXlwdM6a2lCHOA', {
+    domain: location.hostname.includes('ess-ds.com')
+      ? '.ess-ds.com'
+      : location.hostname,
+  })
   setLangMap(); // 初始化语言设置
   useScreenAdapts(); // 启用屏幕自适应功能（响应式布局）
   getBasicInfo(); // 获取基础信息

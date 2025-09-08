@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from "vue";
+import { ref, onMounted, computed, onUnmounted } from "vue";
 import dayjs from "dayjs";
 import SelectSvg from "@/assets/icons/select.svg";
 import SearchSvg from "@/assets/icons/search.svg";
@@ -41,6 +41,9 @@ let timer: ReturnType<typeof setInterval>;
 function search() {
   bus.emit("globalSearch", formData.value);
 }
+const logoUrl = computed(() => {
+  return sessionStorage.getItem("logoUrl") || 'https://ess-ds.com/statics/2025/05/12/20250512181338A498_a22542a93c9c41b3bd853296fcda624e.png'
+});
 onMounted(() => {
   updateTime(); // 立即执行一次
   timer = setInterval(updateTime, 1000); // 每秒更新
@@ -51,13 +54,10 @@ onUnmounted(() => {
 });
 </script>
 <template>
-  <div
-    class="plat-header"
-    :class="{
-      en: !isChinese,
-    }"
-  >
-    <img class="logo" src="@/assets/images/global/logo.png" alt="" />
+  <div class="plat-header" :class="{
+    en: !isChinese,
+  }">
+    <img class="logo" :src="logoUrl" alt="" />
     <header class="plat-title">
       {{ $t("gaoteMicrogridManagementPlatform") }} <img src="@/assets/images/headers/title-back.png" alt="" />
     </header>
@@ -79,25 +79,11 @@ onUnmounted(() => {
         <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
       </el-select> -->
       <!-- <span class="search-label">微电网</span> -->
-      <el-input
-        style="width: 208px; height: 38px"
-        v-model="formData.microgridName"
-        size="large"
-        clearable
-        :placeholder="$t('searchMicrogridPrompt')"
-        :prefix-icon="SearchSvg"
-        @change="search"
-      />
+      <el-input style="width: 208px; height: 38px" v-model="formData.microgridName" size="large" clearable
+        :placeholder="$t('searchMicrogridPrompt')" :prefix-icon="SearchSvg" @change="search" />
       <!-- <span class="search-label">站点名称</span> -->
-      <el-input
-        style="width: 188px; height: 38px"
-        v-model="formData.stationName"
-        size="large"
-        clearable
-        :placeholder="$t('search_prompt')"
-        :prefix-icon="SearchSvg"
-        @change="search"
-      />
+      <el-input style="width: 188px; height: 38px" v-model="formData.stationName" size="large" clearable
+        :placeholder="$t('search_prompt')" :prefix-icon="SearchSvg" @change="search" />
     </div>
     <div class="time">
       <div class="time-text">{{ dayjs(currentDate + currentTime).format($t("format.time")) }}</div>
@@ -113,18 +99,22 @@ onUnmounted(() => {
 .plat-header {
   height: 96px;
   background-image: url("@/assets/images/headers/plat-header.png");
-  background-repeat: no-repeat; /* 禁止重复 */
-  background-attachment: fixed; /* 可选：固定背景不随滚动移动 */
+  background-repeat: no-repeat;
+  /* 禁止重复 */
+  background-attachment: fixed;
+  /* 可选：固定背景不随滚动移动 */
   display: flex;
   //   align-items: center;
   //   justify-content: space-between;
   position: relative;
+
   &.en {
     .plat-title {
       font-size: 22px;
       letter-spacing: 1.5px;
     }
   }
+
   &::before {
     content: "";
     display: inline-block;
@@ -135,14 +125,16 @@ onUnmounted(() => {
     width: 97px;
     height: 29px;
   }
+
   .logo {
     margin-left: 36px;
-    width: 138px;
-    height: 60px;
+    // width: 138px;
+    height: 48px;
     margin-top: 18px;
 
     margin-right: 43px;
   }
+
   .plat-title {
     leading-trim: both;
     text-edge: cap;
@@ -161,13 +153,15 @@ onUnmounted(() => {
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     display: flex;
-    > img {
+
+    >img {
       margin-top: 0px;
       margin-left: 12px;
       width: 29px;
       height: 25px;
     }
   }
+
   .search {
     flex: 1;
     margin-top: 54px;
@@ -180,11 +174,13 @@ onUnmounted(() => {
     //   color: #fff;
     // }
   }
+
   .time {
     /* 标题发光 */
     display: flex;
     margin-right: 56px;
     margin-top: 54px;
+
     &-text {
       font-size: 24px;
       font-style: normal;
@@ -199,6 +195,7 @@ onUnmounted(() => {
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
+
     .week {
       font-size: 12px;
       font-style: normal;

@@ -83,7 +83,7 @@ useMethodPolling(() => {
   // 新能源社会效益
   rightPanelRef.value.socialBenefitRef.getData()
   // 符合预测曲线
-  bottomPanelRef.value.getData()
+  bottomPanelRef.value.changeFun()
   // 中间模块
   getData()
   // 顶部指标

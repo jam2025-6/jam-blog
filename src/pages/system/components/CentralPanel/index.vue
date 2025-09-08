@@ -16,6 +16,7 @@ import windPowerActiveImg from '@/assets/images/station/windPower-active.png'
 import windPowerInActiveImg from '@/assets/images/station/windPower-inactive.png'
 import chargingPileActiveImg from '@/assets/images/station/chargingPile-active.png'
 import chargingPileInActiveImg from '@/assets/images/station/chargingPile-inactive.png'
+import { round } from 'lodash';
 const route = useRoute()
 const router = useRouter()
 const { t } = useI18n();
@@ -107,8 +108,8 @@ const point6 = [
 const modal1 = computed(() => [
   {
     name: t('realTimePower'),
-    value: convertEnergy(+props.data.energyStorageChargingPower).value,
-    unit: convertEnergy(+props.data.energyStorageChargingPower).unit,
+    value: round(+props.data.energyStorageChargingPower, 2),
+    unit: 'kW',
   },
   {
     name: t("essSOC"),
@@ -119,8 +120,8 @@ const modal1 = computed(() => [
 const modal2 = computed(() => [
   {
     name: t('realTimePower'),
-    value: convertEnergy(123).value,
-    unit: convertEnergy(123).unit,
+    value: round(0, 2),
+    unit: 'kW',
   },
   {
     name: t("dailyGeneration"),
@@ -131,8 +132,8 @@ const modal2 = computed(() => [
 const modal3 = computed(() => [
   {
     name: t('realTimePower'),
-    value: convertEnergy(props.data.pvcDayPower).value,
-    unit: convertEnergy(props.data.pvcDayPower).unit,
+    value: round(+props.data.pvcDayPower, 2),
+    unit: 'kW',
   },
   {
     name: t("dailyUtilization"),
@@ -143,8 +144,8 @@ const modal3 = computed(() => [
 const modal4 = computed(() => [
   {
     name: t('realTimePower'),
-    value: convertEnergy(props.data.loadDayPower).value,
-    unit: convertEnergy(props.data.loadDayPower).unit,
+    value: round(+props.data.loadDayPower, 2),
+    unit: 'kW',
   },
   {
     name: t("dailyConsumption"),
@@ -155,8 +156,8 @@ const modal4 = computed(() => [
 const modal5 = computed(() => [
   {
     name: t('realTimePower'),
-    value: convertEnergy(props.data.chargePileDayPower).value,
-    unit: convertEnergy(props.data.chargePileDayPower).unit,
+    value: round(+props.data.chargePileDayPower, 2),
+    unit: 'kW',
   },
   {
     name: t("dailyCharging"),
@@ -167,8 +168,8 @@ const modal5 = computed(() => [
 const modal6 = computed(() => [
   {
     name: t('realTimePower'),
-    value: convertEnergy(props.data.municipalPowerGridPower).value,
-    unit: convertEnergy(props.data.municipalPowerGridPower).unit,
+    value: round(+props.data.municipalPowerGridPower, 2),
+    unit: 'kW',
   },
   // {
   //   name: t("gridFeedIn"),
@@ -323,11 +324,13 @@ function clickStationItem(val: StationInfo) {
         </div>
       </template>
     </Modal>
-    <Modal :title="$t('windPower')" :list="modal2" :position="{ right: '617px', top: '0' }" />
-    <Modal :title="$t('photovoltaic')" :list="modal3"
+    <Modal :title="$t('windPower')" v-if="props.data.windExist" :list="modal2"
+      :position="{ right: '617px', top: '0' }" />
+    <Modal :title="$t('photovoltaic')" v-if="props.data.pvcExist" :list="modal3"
       :position="{ left: isChinese ? '784px' : '764px', top: '70px' }" />
     <Modal :title="$t('load')" :list="modal4" :position="{ left: '786px', top: '245px' }" />
-    <Modal :title="$t('chargingPile')" :list="modal5" :position="{ left: '603px', top: '367px' }" />
+    <Modal :title="$t('chargingPile')" v-if="props.data.chargePileExist" :list="modal5"
+      :position="{ left: '603px', top: '367px' }" />
     <Modal :title="$t('gridPower')" :list="modal6"
       :position="{ right: isChinese ? '796px' : '777px', top: isChinese ? '348px' : '288px' }" />
     <div class="energy-storage scale-item" @click="clickGraphic(true)">
