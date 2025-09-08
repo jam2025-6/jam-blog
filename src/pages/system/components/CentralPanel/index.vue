@@ -56,7 +56,7 @@ const props = withDefaults(defineProps<Props>(), {
       energyStorageSOCText: "0%",
       energyStorageStatus: -1,
       energyStorageStatusText: "未知",
-      newEnergyProportion: "0%",
+
       peakValleyArbitrageMonthSaveElec: 0,
       peakValleyArbitrageMonthSaveElecUnit: "元",
       peakValleyArbitrageTotalSaveElec: 0,
@@ -72,10 +72,29 @@ const props = withDefaults(defineProps<Props>(), {
       pvcExist: false,
       chargePileExist: true,
       windExist: false,
+      newEnergyProportion: "0%",
     }
   }, // 默认值
 });
+// 根据字符串长度获取左侧偏移量
+const getLeftPosition = (length: number) => {
+  switch (length) {
+    case 3: return '30px';
+    case 4: return '24px';
+    case 5:
+    case 6: return '20px';
+    default: return '38px';
+  }
+};
 
+// 根据字符串长度获取字体大小
+const getFontSize = (length: number) => {
+  switch (length) {
+    case 5: return '22px';
+    case 6: return '18px';
+    default: return '28px';
+  }
+};
 // 定义线路1的路径点，用于绘制线路
 const point1 = [
   { x: 442, y: 448 },
@@ -268,12 +287,12 @@ function clickStationItem(val: StationInfo) {
     <!-- 充电桩 大于0往外流  -->
     <Line :status="+props.data.chargePileDayPower !== 0 && props.data.chargePileExist" :forward="false"
       :points="point3" />
-    <!-- 市电 >0往外流 -->
-    <Line :status="+props.data.municipalPowerGridPower !== 0" :forward="+props.data.municipalPowerGridPower > 0"
-      :points="point1" />
     <!-- 储能 >2往外流 <-2网内流 -->
     <Line :status="(+props.data.energyStorageChargingPower > 2) || (+props.data.energyStorageChargingPower < -2)"
       :forward="(+props.data.energyStorageChargingPower > 2)" :points="point2" />
+    <!-- 市电 >0往外流 -->
+    <Line :status="+props.data.municipalPowerGridPower !== 0" :forward="+props.data.municipalPowerGridPower > 0"
+      :points="point1" />
     <!-- 风电 目前没有-->
     <Line :status="props.data.windExist" :bgForward="false" :points="point4" />
     <!-- 光伏 大于0往内流 -->
@@ -369,7 +388,7 @@ function clickStationItem(val: StationInfo) {
     <Modal :title="$t('chargingPile')" v-if="props.data.chargePileExist" :list="modal5"
       :position="{ left: '603px', top: '367px' }" />
     <Modal :title="$t('gridPower')" :list="modal6"
-      :position="{ right: isChinese ? '796px' : '777px', top: isChinese ? '348px' : '288px' }" />
+      :position="{ right: isChinese ? '781px' : '777px', top: isChinese ? '348px' : '288px' }" />
     <div class="energy-storage scale-item" @click="clickGraphic(true)">
       <img src="@/assets/images/station/energyStorage-active.png" alt="" />
     </div>
@@ -395,12 +414,13 @@ function clickStationItem(val: StationInfo) {
     </div>
     <div class="advertising-board">
       <img src="@/assets/images/station/advertisingBoard.png" alt="" />
-      <div class="value" :style="{ left: props.data.newEnergyProportion.length === 3 ? '30px' : props.data.newEnergyProportion.length === 4 ? '21px' : '38px' }
-        ">
+      <div class="value" :style="{ left: getLeftPosition(props.data.newEnergyProportion.length) }">
         <div class="name">{{ $t("renewableEnergyPercentage") }}</div>
         <!-- <div class="num">0%</div> -->
-        <div class="num">{{ props.data.newEnergyProportion }}</div>
+        <div class="num" :style="{ fontSize: getFontSize(props.data.newEnergyProportion.length) }">{{
+          props.data.newEnergyProportion }}</div>
       </div>
+
     </div>
   </div>
 </template>

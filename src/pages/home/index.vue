@@ -332,9 +332,9 @@ onUnmounted(() => {
 <template>
   <div class="page">
     <div ref="containerRef" class="table" @mousemove="handleMouseMove">
-      <el-table @cell-mouse-enter="cellMouseEnter" @cell-mouse-leave="cellMouseLeave" :data="tableData"
-        :row-class-name="tableRowClassName" style="width: 100%; height: 100%" @row-click="clickRow" row-key="id"
-        @expand-change="handleExpandChange" :default-expand-all="!!params.stationName">
+      <el-table v-loading="loading" @cell-mouse-enter="cellMouseEnter" @cell-mouse-leave="cellMouseLeave"
+        :data="tableData" :row-class-name="tableRowClassName" style="width: 100%; height: 100%" @row-click="clickRow"
+        row-key="id" @expand-change="handleExpandChange" :default-expand-all="!!params.stationName">
         <el-table-column min-width="200" sortable prop="stationName" :label="$t('name')">
           <template #default="{ row }">
             <div class="name-text">
