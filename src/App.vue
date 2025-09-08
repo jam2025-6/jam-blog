@@ -12,6 +12,7 @@ import { useLocaleStore } from "@/stores/modules/locale";
 import { useTabVisibility } from "@/hooks/useTabVisibility";
 import { getInfo } from "@/api/saas";
 import { LangType } from "@/types/api";
+import { replaceStaticUrl } from '@/utils/url'
 
 // 初始化语言状态管理存储，用于全局语言切换
 const localeStore = useLocaleStore();
@@ -33,6 +34,8 @@ const locale = computed(() => localeStore.elementPlusLocale);
 async function getBasicInfo() {
   try {
     let res = await getInfo();
+    // 
+    replaceStaticUrl(res)
     document.title = res.company?.companyName || import.meta.env.VITE_APP_TITLE;
     if (res.company.iconUrl) {
       let favicon = document.querySelector('link[rel="shortcut icon"]') || document.querySelector('link[rel="icon"]');
