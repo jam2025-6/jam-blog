@@ -3,6 +3,7 @@ import { useLocaleStore } from "@/stores/modules/locale";
 import { storeToRefs } from "pinia";
 import { EnergyData } from '@/types/system'
 import { convertEnergy, formatMoney } from '@/utils/tools'
+import { round } from "lodash";
 const { isChinese } = storeToRefs(useLocaleStore());
 interface Props {
   data?: EnergyData;
@@ -99,7 +100,7 @@ const props = withDefaults(defineProps<Props>(), {
         <div class="flex">
           <div class="flex-point"></div>
           <div class="flex-name">{{ $t("monthlyDemandReduction") }}</div>
-          <div class="flex-num">{{ props.data.demandManageMonthReduce }}</div>
+          <div class="flex-num">{{ round(props.data.demandManageMonthReduce, 2) }}</div>
           <div class="flex-unit">kW</div>
         </div>
         <div class="flex orange">

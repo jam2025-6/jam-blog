@@ -110,7 +110,7 @@ defineExpose({
           <div class="info">
             <div class="name">{{ $t("currentMonthDemand") }}</div>
             <div class="value">
-              <div class="num">{{ formData.lastMonthDemand }}</div>
+              <div class="num">{{ round(formData.lastMonthDemand, 2) }}</div>
               <div class="unit">kW</div>
             </div>
           </div>
