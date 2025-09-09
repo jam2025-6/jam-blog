@@ -301,12 +301,7 @@ function clickStationItem(val: StationInfo) {
   <div class="center-panel" :class="{
     en: !isChinese,
   }">
-    <Line :points="basePoint1" bgForward />
-    <Line :points="basePoint2" bgForward />
-    <Line :points="basePoint3" bgForward />
-    <Line :points="basePoint4" bgForward />
-    <Line :points="basePoint5" bgForward />
-    <Line :points="basePoint6" bgForward />
+
     <!-- 充电桩 大于0往外流  -->
     <Line :status="+props.data.chargePileDayPower !== 0 && props.data.chargePileExist" :forward="false"
       :points="point3" />
@@ -322,7 +317,12 @@ function clickStationItem(val: StationInfo) {
     <Line :status="+props.data.pvcDayPower !== 0 && props.data.pvcExist" :points="point5" />
     <!-- 负荷 大于0往外流 -->
     <Line :status="+props.data.loadDayPower !== 0" :forward="false" :points="point6" />
-
+    <Line :points="basePoint1" bgForward />
+    <Line :points="basePoint2" bgForward />
+    <Line :points="basePoint3" bgForward />
+    <Line :points="basePoint4" bgForward />
+    <Line :points="basePoint5" bgForward />
+    <Line :points="basePoint6" bgForward />
     <Modal :title="$t('energyStorage')" :list="modal1"
       :position="{ right: isChinese ? '807px' : '797px', top: isChinese ? '149px' : '169px' }">
       <template #right>
