@@ -6,7 +6,7 @@ import { getCoreHeader } from '@/api/system'
 import { useRoute } from "vue-router";
 import { EnergyAndEarningsData } from '@/types/system'
 import { QuestionFilled } from '@element-plus/icons-vue'
-import { convertEnergy } from '@/utils/tools'
+import { convertEnergy, formatMoney } from '@/utils/tools'
 import { round } from "lodash";
 const route = useRoute();
 const { isChinese } = storeToRefs(useLocaleStore());
@@ -64,8 +64,8 @@ defineExpose({
     <div class="item">
       <div class="item-title">{{ $t("cumulativeSystemRevenue") }}</div>
       <div class="item-indicator">
-        <div class="item-indicator-num">{{ formData.totalEarnings }}</div>
-        <div class="item-indicator-unit">{{ formData.totalEarningsUnit }}</div>
+        <div class="item-indicator-num">{{ formatMoney(formData.totalEarnings).num }}</div>
+        <div class="item-indicator-unit">{{ formatMoney(formData.totalEarnings).unit }}</div>
       </div>
     </div>
     <div class="item">

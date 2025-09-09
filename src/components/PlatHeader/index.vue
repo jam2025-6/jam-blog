@@ -43,6 +43,12 @@ function search() {
 const logoUrl = computed(() => {
   return sessionStorage.getItem("logoUrl") || 'https://ess-ds.com/statics/2025/05/12/20250512181338A498_a22542a93c9c41b3bd853296fcda624e.png'
 });
+
+// 返回saas首页
+function handleBack() {
+  location.href = location.origin
+}
+
 onMounted(() => {
   updateTime(); // 立即执行一次
   timer = setInterval(updateTime, 1000); // 每秒更新
@@ -57,7 +63,7 @@ onUnmounted(() => {
     en: !isChinese,
   }">
     <img class="logo" :src="logoUrl" alt="" />
-    <header class="plat-title">
+    <header @click="handleBack" class="plat-title">
       {{ $t("gaoteMicrogridManagementPlatform") }} <img src="@/assets/images/headers/title-back.png" alt="" />
     </header>
     <div class="search">
