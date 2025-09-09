@@ -53,24 +53,24 @@ const props = withDefaults(defineProps<Props>(), {
     }
   }, // 默认值
 });
-function formatTwoDecimals(num: number) {
-  // 检查输入是否为有效数字
-  if (typeof num !== 'number' || isNaN(num)) {
-    return num; // 或者 throw new Error('输入必须为有效数字');
-  }
+// function formatTwoDecimals(num: number) {
+//   // 检查输入是否为有效数字
+//   if (typeof num !== 'number' || isNaN(num)) {
+//     return num; // 或者 throw new Error('输入必须为有效数字');
+//   }
 
-  // 将数字转换为字符串来判断小数位数
-  const numStr = num.toString();
-  const decimalIndex = numStr.indexOf('.');
+//   // 将数字转换为字符串来判断小数位数
+//   const numStr = num.toString();
+//   const decimalIndex = numStr.indexOf('.');
 
-  // 如果没有小数点或小数点后位数不超过2位，直接返回原数字
-  if (decimalIndex === -1 || numStr.length - decimalIndex - 1 <= 2) {
-    return num;
-  }
+//   // 如果没有小数点或小数点后位数不超过2位，直接返回原数字
+//   if (decimalIndex === -1 || numStr.length - decimalIndex - 1 <= 2) {
+//     return num;
+//   }
 
-  // 超过两位小数时进行四舍五入
-  return Number(num.toFixed(2));
-}
+//   // 超过两位小数时进行四舍五入
+//   return Number(num.toFixed(2));
+// }
 </script>
 <template>
   <div class="info-card" :class="{
