@@ -81,13 +81,13 @@ const props = withDefaults(defineProps<Props>(), {
       <div class="item-section">
         <div class="flex">
           <div class="flex-point"></div>
-          <div class="flex-name">{{ $t('cumulativeElectricitySaving') }}</div>
+          <div class="flex-name">{{ $t('monthlyElectricitySaving') }}</div>
           <div class="flex-num">{{ formatMoney(+props.data.peakValleyArbitrageMonthSaveElec).num }}</div>
           <div class="flex-unit">{{ formatMoney(+props.data.peakValleyArbitrageMonthSaveElec).unit }}</div>
         </div>
         <div class="flex orange">
           <div class="flex-point"></div>
-          <div class="flex-name">{{ $t('monthlyElectricitySaving') }}</div>
+          <div class="flex-name">{{ $t('cumulativeElectricitySaving') }}</div>
           <div class="flex-num">{{ formatMoney(+props.data.peakValleyArbitrageTotalSaveElec).num }}</div>
           <div class="flex-unit">{{ formatMoney(+props.data.peakValleyArbitrageTotalSaveElec).unit }}</div>
         </div>
