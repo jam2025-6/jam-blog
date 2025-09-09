@@ -98,45 +98,63 @@ const getFontSize = (length: number) => {
 // 定义线路1的路径点，用于绘制线路
 const point1 = [
   { x: 442, y: 448 },
+  { x: 568, y: 375 },
+];
+const basePoint1 = [
+  { x: 568, y: 375 },
   { x: 698, y: 300 },
   { x: 698, y: 250 },
-];
+]
 // 定义线路2的路径点，用于绘制线路
 const point2 = [
   { x: 480, y: 250 },
   { x: 635, y: 336 },
+];
+const basePoint2 = [
+  { x: 635, y: 336 },
   { x: 705, y: 297 },
   { x: 705, y: 245 },
-];
+]
 // 定义线路3的路径点，用于绘制线路
 const point3 = [
   { x: 655, y: 425 },
   { x: 568, y: 375 },
+];
+const basePoint3 = [
+  { x: 568, y: 375 },
   { x: 712, y: 293 },
   { x: 712, y: 240 },
-];
+]
 // 定义线路4的路径点，用于绘制线路
 const point4 = [
   { x: 730, y: 100 },
   { x: 890, y: 190 },
+];
+const basePoint4 = [
+  { x: 890, y: 190 },
   { x: 719, y: 289 },
   { x: 719, y: 220 },
-];
+]
 // 定义线路5的路径点，用于绘制线路
 const point5 = [
   { x: 980, y: 140 },
   { x: 890, y: 190 },
+];
+const basePoint5 = [
+  { x: 890, y: 190 },
   { x: 726, y: 285 },
   { x: 726, y: 220 },
-];
+]
 // 定义线路6的路径点，用于绘制线路
 const point6 = [
   { x: 945, y: 250 },
   { x: 865, y: 205 },
+];
+const basePoint6 = [
+  { x: 865, y: 205 },
   { x: 732, y: 281 },
   { x: 732, y: 220 },
-];
-
+]
 // 计算储能模块的展示数据
 const modal1 = computed(() => [
   {
@@ -283,22 +301,27 @@ function clickStationItem(val: StationInfo) {
   <div class="center-panel" :class="{
     en: !isChinese,
   }">
-
+    <Line :points="basePoint1" bgForward />
+    <Line :points="basePoint2" bgForward />
+    <Line :points="basePoint3" bgForward />
+    <Line :points="basePoint4" bgForward />
+    <Line :points="basePoint5" bgForward />
+    <Line :points="basePoint6" bgForward />
     <!-- 充电桩 大于0往外流  -->
     <Line :status="+props.data.chargePileDayPower !== 0 && props.data.chargePileExist" :forward="false"
       :points="point3" />
     <!-- 储能 >2往外流 <-2网内流 -->
     <Line :status="(+props.data.energyStorageChargingPower > 2) || (+props.data.energyStorageChargingPower < -2)"
       :forward="(+props.data.energyStorageChargingPower > 2)" :points="point2" />
-    <!-- 市电 >0往外流 -->
-    <Line :status="+props.data.municipalPowerGridPower !== 0" :forward="+props.data.municipalPowerGridPower > 0"
-      :points="point1" />
+    <!-- 市电 >0是在买电 >0电网在向负荷供电（你在“买电”），即用电/充电电流流入家庭或负荷;<0负荷向电网送电（你在“卖电”），即发电/回馈电网-->
+    <Line :status="+props.data.municipalPowerGridPower !== 0" :forward="Number(props.data.municipalPowerGridPower)
+      > 0" :points="point1" />
     <!-- 风电 目前没有-->
-    <Line :status="props.data.windExist" :bgForward="false" :points="point4" />
+    <Line :status="props.data.windExist" :points="point4" />
     <!-- 光伏 大于0往内流 -->
-    <Line :status="+props.data.pvcDayPower !== 0 && props.data.pvcExist" :bgForward="false" :points="point5" />
+    <Line :status="+props.data.pvcDayPower !== 0 && props.data.pvcExist" :points="point5" />
     <!-- 负荷 大于0往外流 -->
-    <Line :status="+props.data.loadDayPower !== 0" :forward="false" :bgForward="false" :points="point6" />
+    <Line :status="+props.data.loadDayPower !== 0" :forward="false" :points="point6" />
 
     <Modal :title="$t('energyStorage')" :list="modal1"
       :position="{ right: isChinese ? '807px' : '797px', top: isChinese ? '149px' : '169px' }">

@@ -81,13 +81,13 @@ const props = withDefaults(defineProps<Props>(), {
       <div class="item-section">
         <div class="flex">
           <div class="flex-point"></div>
-          <div class="flex-name">{{ $t("monthlyElectricitySavings") }}</div>
+          <div class="flex-name">{{ $t('cumulativeElectricitySaving') }}</div>
           <div class="flex-num">{{ formatMoney(+props.data.peakValleyArbitrageMonthSaveElec).num }}</div>
           <div class="flex-unit">{{ formatMoney(+props.data.peakValleyArbitrageMonthSaveElec).unit }}</div>
         </div>
         <div class="flex orange">
           <div class="flex-point"></div>
-          <div class="flex-name">{{ $t("cumulativeElectricitySavings") }}</div>
+          <div class="flex-name">{{ $t('monthlyElectricitySaving') }}</div>
           <div class="flex-num">{{ formatMoney(+props.data.peakValleyArbitrageTotalSaveElec).num }}</div>
           <div class="flex-unit">{{ formatMoney(+props.data.peakValleyArbitrageTotalSaveElec).unit }}</div>
         </div>
@@ -99,8 +99,8 @@ const props = withDefaults(defineProps<Props>(), {
         <div class="flex">
           <div class="flex-point"></div>
           <div class="flex-name">{{ $t("monthlyDemandReduction") }}</div>
-          <div class="flex-num">{{ convertEnergy(props.data.demandManageMonthReduce).value }}</div>
-          <div class="flex-unit">{{ convertEnergy(props.data.demandManageMonthReduce).unit }}</div>
+          <div class="flex-num">{{ props.data.demandManageMonthReduce }}</div>
+          <div class="flex-unit">kW</div>
         </div>
         <div class="flex orange">
           <div class="flex-point"></div>
@@ -127,7 +127,7 @@ const props = withDefaults(defineProps<Props>(), {
         </div>
         <div class="flex orange">
           <div class="flex-point"></div>
-          <div class="flex-name">{{ $t("cumulativeElectricitySavings") }}</div>
+          <div class="flex-name">{{ $t('cumulativeElectricitySaving') }}</div>
           <div class="flex-num">{{ formatMoney(+props.data.pvcMonthConsumSaveElec).num }}</div>
           <div class="flex-unit">{{ formatMoney(+props.data.pvcMonthConsumSaveElec).unit }}</div>
         </div>

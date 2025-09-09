@@ -108,5 +108,7 @@
   "renewableEnergyMonthlyUtilization": "Renewable Energy Utilization",
   "energyTargetRequirement1": "Parks with annual energy consumption of 200k-1M tons standard coal ≤ 0.2 t/ton SCE",
   "energyTargetRequirement2": "Parks with annual energy consumption ≥ 1M tons standard coal ≤ 0.3 t/ton SCE",
-  "targetRequirements": "Target Requirements:"
+  "targetRequirements": "Target Requirements:",
+  "monthlyElectricitySaving": "Monthly Electricity Savings",
+  "cumulativeElectricitySaving": "Cumulative Electricity Savings"
 }

@@ -342,12 +342,14 @@ onUnmounted(() => {
             </div>
           </template>
         </el-table-column>
-        <el-table-column prop="pvInstalledPowerSum" align="center" sortable :label="$t('pvCapacity')" />
-        <el-table-column prop="windCapacitySum" align="center" sortable :label="$t('windPowerCapacity')" />
-        <el-table-column prop="installedCapacitySum" align="center" sortable :label="$t('energyStorageCapacity')" />
-        <el-table-column prop="pileInstalledPowerSum" align="center" sortable :label="$t('acChargingPileCapacity')" />
+        <el-table-column prop="pvInstalledPowerSum" align="center" sortable :label="$t('pvCapacity') + '(kW)'" />
+        <el-table-column prop="windCapacitySum" align="center" sortable :label="$t('windPowerCapacity') + '(kW)'" />
+        <el-table-column prop="installedCapacitySum" align="center" sortable
+          :label="$t('energyStorageCapacity') + '(kWh)'" />
+        <el-table-column prop="pileInstalledPowerSum" align="center" sortable
+          :label="$t('acChargingPileCapacity') + '(kW)'" />
         <el-table-column prop="directCurrentPileInstalledPowerSum" align="center" sortable
-          :label="$t('dcChargingPileCapacity')" />
+          :label="$t('dcChargingPileCapacity') + '(kW)'" />
       </el-table>
       <div v-show="!!stationName" class="tooltip" :style="{
         left: tooltipX + 'px',

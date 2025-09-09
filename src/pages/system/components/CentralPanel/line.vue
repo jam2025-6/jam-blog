@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed, onMounted, onUnmounted } from "vue";
+import { ref, computed, onMounted, onUnmounted, watch } from "vue";
 
 /** =============== 全局 RAF 驱动 =============== */
 const globalTime = ref(0);
@@ -43,7 +43,7 @@ const props = withDefaults(defineProps<Props>(), {
   points: () => [],
   status: true,
   forward: true,
-  bgForward: true,
+  bgForward: false,
 });
 
 const pathLength = ref(0);
@@ -61,7 +61,7 @@ const progress = computed(() => {
 
 /** 箭头位置计算 */
 function getArrowTransform(offset = 0) {
-  if (!props.status || samplePoints.value.length === 0) return "";
+  if (!props.status || props.bgForward || samplePoints.value.length === 0) return "";
 
   const totalLen = pathLength.value;
   let targetLen = progress.value * totalLen + offset;
@@ -122,12 +122,14 @@ function buildSamplePoints(points: { x: number; y: number }[], step = 2) {
   pathLength.value = total;
   return arr;
 }
-
-onMounted(() => {
+watch(() => props.forward, () => {
   if (props.points.length > 1) {
     const pts = props.forward ? props.points : [...props.points].reverse();
     samplePoints.value = buildSamplePoints(pts, 2);
   }
+}, { immediate: true })
+onMounted(() => {
+
 });
 </script>
 
@@ -136,18 +138,18 @@ onMounted(() => {
     <svg width="1430" height="449" viewBox="0 0 1430 449">
       <!-- 背景路径 -->
       <path :d="pathData" fill="none"
-        :stroke="props.status ? (props.bgForward ? 'url(#gradStroke)' : 'url(#gradStrokeBack )') : 'url(#staticStroke)'"
+        :stroke="props.bgForward ? 'url(#gradStrokeBack )' : props.status ? 'url(#gradStrokeBack )' : 'url(#staticStroke)'"
         stroke-width="8" stroke-linecap="round" stroke-linejoin="round" />
 
 
       <defs>
         <linearGradient id="gradStroke" x1="0%" y1="0%" x2="100%" y2="0%">
-          <stop offset="0%" stop-color="#2A7EB1" />
+          <stop offset="0%" stop-color="#00E1FF" />
           <stop offset="100%" stop-color="#00E1FF" />
         </linearGradient>
         <linearGradient id="gradStrokeBack" x1="0%" y1="0%" x2="100%" y2="0%">
           <stop offset="0%" stop-color="#00E1FF" />
-          <stop offset="100%" stop-color="#2A7EB1" />
+          <stop offset="100%" stop-color="#00E1FF" />
         </linearGradient>
         <linearGradient id="staticStroke" x1="0%" y1="0%" x2="100%" y2="0%">
           <stop offset="0%" stop-color="#689bce" stop-opacity="0.85" />
@@ -155,10 +157,10 @@ onMounted(() => {
         </linearGradient>
       </defs>
       <!-- 箭头 -->
-      <g :transform="arrowTransform" v-if="props.status" style="mix-blend-mode: screen;">
+      <g :transform="arrowTransform" v-if="props.status && !props.bgForward" style="mix-blend-mode: screen;">
         <path d="M0,-8 L10,0 L0,8 M2,-8 L12,0 L2,8" fill="none" stroke="rgba(11, 187, 231, 1)" stroke-width="3" />
       </g>
-      <g :transform="arrowTransform2" v-if="props.status" style="mix-blend-mode: screen;">
+      <g :transform="arrowTransform2" v-if="props.status && !props.bgForward" style="mix-blend-mode: screen;">
         <path d="M0,-8 L10,0 L0,8 M2,-8 L12,0 L2,8" fill="none" stroke="rgba(44, 230, 255, 1)" stroke-width="3" />
       </g>
 
