@@ -522,7 +522,7 @@ function clickStationItem(val: StationInfo) {
     font-family: "HarmonyOS Sans SC";
     font-size: 12px;
     font-style: normal;
-    font-weight: 900;
+    font-weight: 500;
     line-height: normal;
     letter-spacing: 1.2px;
   }
