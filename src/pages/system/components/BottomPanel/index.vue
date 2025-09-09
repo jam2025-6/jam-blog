@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { PanelTitle, gdCharts, Tabs } from "@/components";
-import { ref, computed, watch } from "vue";
+import { ref, computed, watch, onMounted } from "vue";
 import * as echarts from "echarts";
 import { useI18n } from "vue-i18n";
 import { getLoadForecastCurve } from "@/api/system";
@@ -32,7 +32,7 @@ const title = computed(() => {
 const options = ref<any>({
   series: []
 })
-const tabValue = ref("");
+const tabValue = ref("load_forecast");
 const selectVal = ref('today')
 watch(() => [tabValue.value, selectVal.value], () => {
 
@@ -483,10 +483,13 @@ async function getData() {
   } finally {
   }
 }
-getData();
+
 defineExpose({
   getData,
   changeFun
+})
+onMounted(() => {
+  getData();
 })
 </script>
 <template>
