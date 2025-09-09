@@ -1,7 +1,8 @@
 import axios, { type Method } from "axios";
 import { getToken } from "@/utils/auth";
 import i18n from "@/i18n/index";
-import { ElMessage } from "element-plus";
+import { ElMessage, ElMessageBox } from "element-plus";
+const { t } = i18n.global
 interface RequestOptions {
   url: string;
   method?: Method;
@@ -37,6 +38,16 @@ service.interceptors.response.use(
     const code = response.data.code;
     if (code === 200) {
       return Promise.resolve(response);
+    } else if (code === 401) {
+      ElMessageBox.confirm(t('message.sessionExpired'), t('message.systemNotification'), {
+        confirmButtonText: t('message.confirm'),
+        cancelButtonText: t('message.cancel'),
+        type: 'warning'
+      }).then(() => {
+        location.href = '/'
+      }).catch(() => { })
+      // 保证返回一个 Promise<never>，让 TS 类型匹配
+      return Promise.reject(new Error('Unauthorized'));
     } else {
       return Promise.reject(new Error(response.data.message || "Error"));
     }

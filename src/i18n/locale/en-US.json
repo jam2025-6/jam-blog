@@ -110,5 +110,11 @@
   "energyTargetRequirement2": "Parks with annual energy consumption ≥ 1M tons standard coal ≤ 0.3 t/ton SCE",
   "targetRequirements": "Target Requirements:",
   "monthlyElectricitySaving": "Monthly Electricity Savings",
-  "cumulativeElectricitySaving": "Cumulative Electricity Savings"
+  "cumulativeElectricitySaving": "Cumulative Electricity Savings",
+  "message": {
+    "sessionExpired": "Login status expired, please log in again",
+    "systemNotification": "System Notification",
+    "confirm": "Confirm",
+    "cancel": "Cancel"
+  }
 }

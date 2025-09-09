@@ -110,5 +110,11 @@
   "energyTargetRequirement2": "年综合能源消费量≥100万吨标准煤的园区≤0.3吨/吨标准煤",
   "targetRequirements": "目标要求：",
   "monthlyElectricitySaving": "当月节约电费",
-  "cumulativeElectricitySaving": "累计节约电费"
+  "cumulativeElectricitySaving": "累计节约电费",
+  "message": {
+    "sessionExpired": "登录状态已过期，请重新登录",
+    "systemNotification": "系统通知",
+    "confirm": "确定",
+    "cancel": "取消"
+  }
 }
