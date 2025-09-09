@@ -80,7 +80,7 @@ const props = withDefaults(defineProps<Props>(), {
 const getLeftPosition = (length: number) => {
   switch (length) {
     case 3: return '30px';
-    case 4: return '24px';
+    case 4: return '21px';
     case 5:
     case 6: return '20px';
     default: return '38px';
