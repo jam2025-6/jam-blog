@@ -1,8 +1,8 @@
 import axios, { type Method } from "axios";
 import { getToken } from "@/utils/auth";
-import i18n from "@/i18n/index";
+import i18n from "@/i18n";
 import { ElMessage, ElMessageBox } from "element-plus";
-const { t } = i18n.global
+import { translate } from './i18n-helper';
 interface RequestOptions {
   url: string;
   method?: Method;
@@ -31,7 +31,19 @@ service.interceptors.request.use((config) => {
   }
   return config;
 });
-
+function handle401() {
+  ElMessageBox.confirm(
+    translate('message.sessionExpired'),
+    translate('message.systemNotification'),
+    {
+      confirmButtonText: translate('message.confirm'),
+      cancelButtonText: translate('message.cancel'),
+      type: 'warning'
+    }
+  ).then(() => {
+    location.href = '/';
+  }).catch(() => { });
+}
 // 响应拦截器
 service.interceptors.response.use(
   (response) => {
@@ -39,13 +51,7 @@ service.interceptors.response.use(
     if (code === 200) {
       return Promise.resolve(response);
     } else if (code === 401) {
-      ElMessageBox.confirm(t('message.sessionExpired'), t('message.systemNotification'), {
-        confirmButtonText: t('message.confirm'),
-        cancelButtonText: t('message.cancel'),
-        type: 'warning'
-      }).then(() => {
-        location.href = '/'
-      }).catch(() => { })
+      handle401()
       // 保证返回一个 Promise<never>，让 TS 类型匹配
       return Promise.reject(new Error('Unauthorized'));
     } else {
