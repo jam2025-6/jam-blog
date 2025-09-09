@@ -45,8 +45,8 @@ export default defineConfig(({ mode }): Promise<UserConfig> => {
         },
         proxy: {
           "/dev-api": {
-            // target: "https://test.ess-ds.com/prod-api/dataaccess",
-            target: "http://192.168.28.153:8811",
+            target: "https://test.ess-ds.com/prod-api/dataaccess",
+            // target: "http://192.168.28.33:8811",
             changeOrigin: true,
             rewrite: (p) => p.replace(/^\/dev-api/, ""),
           },

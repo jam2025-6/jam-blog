@@ -78,7 +78,7 @@ defineExpose({
           </div>
         </div> -->
         <div class="cell-item">
-          <svg-icon name="yxxss" style="font-size:64px; margin-right: 16px; flex-shrink: 0"></svg-icon>
+          <svg-icon name="yxxss" style="font-size:64px; margin-right: 8px; flex-shrink: 0"></svg-icon>
           <div class="cell-item-main">
             <div class="name">{{ $t("effectiveHours") }}</div>
             <div class="value">
@@ -108,7 +108,7 @@ defineExpose({
           </div>
         </div> -->
         <div class="cell-item">
-          <svg-icon name="swdl" style="font-size: 64px; margin-right: 16px; flex-shrink: 0"></svg-icon>
+          <svg-icon name="swdl" style="font-size: 64px; margin-right: 8px; flex-shrink: 0"></svg-icon>
           <div class="cell-item-main">
             <div class="name">{{ $t("annualRenewableEnergyGridFeedIn") }}</div>
             <div class="value">
@@ -122,7 +122,7 @@ defineExpose({
         <div class="section-item">
           <div class="section-item-main">
             <div class="num" :style="{
-              fontSize: 22 - maxLength + 'px',
+              fontSize: 21 - maxLength + 'px',
             }">{{ round(+formData.reduceCarbonEmissions, 2) }}</div>
             <div class="unit">/tce</div>
           </div>
@@ -135,7 +135,7 @@ defineExpose({
         <div class="section-item">
           <div class="section-item-main">
             <div class="num" :style="{
-              fontSize: 22 - maxLength + 'px',
+              fontSize: 21 - maxLength + 'px',
             }">{{ round(+formData.saveStandardCoal, 2) }}</div>
             <div class="unit">/tce</div>
           </div>
@@ -148,7 +148,7 @@ defineExpose({
         <div class="section-item">
           <div class="section-item-main">
             <div class="num" :style="{
-              fontSize: 22 - maxLength + 'px',
+              fontSize: 21 - maxLength + 'px',
             }">{{ round(+formData.treesPlantedNumber, 2) }}</div>
             <div class="unit">{{ $t("treeUnit") }}</div>
           </div>
@@ -161,7 +161,7 @@ defineExpose({
         <div class="section-item">
           <div class="section-item-main">
             <div class="num" :style="{
-              fontSize: 22 - maxLength + 'px',
+              fontSize: 21 - maxLength + 'px',
             }">{{ round(+formData.greenCertificatesNumber, 2) }}</div>
             <div class="unit">{{ $t("certificateUnit") }}</div>
           </div>
@@ -192,7 +192,7 @@ defineExpose({
       align-items: flex-start;
       flex-wrap: wrap;
       width: 100%;
-      gap: 16px 12px;
+      gap: 16px 8px;
       height: 143px;
       padding-top: 50px;
 
@@ -202,6 +202,7 @@ defineExpose({
         min-height: 48px;
         display: flex;
         align-items: flex-start;
+        flex: 1;
 
         &-main {
           padding: 8px 0;
@@ -233,6 +234,7 @@ defineExpose({
           margin-top: 4px;
           display: flex;
           align-items: baseline;
+          flex-wrap: nowrap;
           background: linear-gradient(51deg, #e5b02b 6.53%, #ead08f 88.38%);
           background-clip: text;
           -webkit-background-clip: text;

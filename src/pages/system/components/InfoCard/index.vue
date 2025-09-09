@@ -2,7 +2,7 @@
 import { useLocaleStore } from "@/stores/modules/locale";
 import { storeToRefs } from "pinia";
 import { EnergyData } from '@/types/system'
-import { convertEnergy } from '@/utils/tools'
+import { convertEnergy, formatMoney } from '@/utils/tools'
 const { isChinese } = storeToRefs(useLocaleStore());
 interface Props {
   data?: EnergyData;
@@ -82,14 +82,14 @@ function formatTwoDecimals(num: number) {
         <div class="flex">
           <div class="flex-point"></div>
           <div class="flex-name">{{ $t("monthlyElectricitySavings") }}</div>
-          <div class="flex-num">{{ formatTwoDecimals(props.data.peakValleyArbitrageMonthSaveElec) }}</div>
-          <div class="flex-unit">{{ props.data.peakValleyArbitrageMonthSaveElecUnit }}</div>
+          <div class="flex-num">{{ formatMoney(+props.data.peakValleyArbitrageMonthSaveElec).num }}</div>
+          <div class="flex-unit">{{ formatMoney(+props.data.peakValleyArbitrageMonthSaveElec).unit }}</div>
         </div>
         <div class="flex orange">
           <div class="flex-point"></div>
           <div class="flex-name">{{ $t("cumulativeElectricitySavings") }}</div>
-          <div class="flex-num">{{ formatTwoDecimals(props.data.peakValleyArbitrageTotalSaveElec) }}</div>
-          <div class="flex-unit">{{ props.data.peakValleyArbitrageTotalSaveElecUnit }}</div>
+          <div class="flex-num">{{ formatMoney(+props.data.peakValleyArbitrageTotalSaveElec).num }}</div>
+          <div class="flex-unit">{{ formatMoney(+props.data.peakValleyArbitrageTotalSaveElec).unit }}</div>
         </div>
       </div>
     </div>
@@ -105,14 +105,14 @@ function formatTwoDecimals(num: number) {
         <div class="flex orange">
           <div class="flex-point"></div>
           <div class="flex-name">{{ $t("monthlyElectricitySavings") }}</div>
-          <div class="flex-num">{{ formatTwoDecimals(props.data.demandManageMonthSaveElec) }}</div>
-          <div class="flex-unit">{{ $t("yuan") }}</div>
+          <div class="flex-num">{{ formatMoney(+props.data.demandManageMonthSaveElec).num }}</div>
+          <div class="flex-unit">{{ formatMoney(+props.data.demandManageMonthSaveElec).unit }}</div>
         </div>
         <div class="flex orange">
           <div class="flex-point"></div>
           <div class="flex-name">{{ $t("cumulativeElectricitySavings") }}</div>
-          <div class="flex-num">{{ formatTwoDecimals(props.data.demandManageTotalSaveElec) }}</div>
-          <div class="flex-unit">{{ $t("yuan") }}</div>
+          <div class="flex-num">{{ formatMoney(+props.data.demandManageTotalSaveElec).num }}</div>
+          <div class="flex-unit">{{ formatMoney(+props.data.demandManageTotalSaveElec).unit }}</div>
         </div>
       </div>
     </div>
@@ -128,8 +128,8 @@ function formatTwoDecimals(num: number) {
         <div class="flex orange">
           <div class="flex-point"></div>
           <div class="flex-name">{{ $t("cumulativeElectricitySavings") }}</div>
-          <div class="flex-num">{{ formatTwoDecimals(props.data.pvcMonthConsumSaveElec) }}</div>
-          <div class="flex-unit">{{ $t("yuan") }}</div>
+          <div class="flex-num">{{ formatMoney(+props.data.pvcMonthConsumSaveElec).num }}</div>
+          <div class="flex-unit">{{ formatMoney(+props.data.pvcMonthConsumSaveElec).unit }}</div>
         </div>
       </div>
     </div>

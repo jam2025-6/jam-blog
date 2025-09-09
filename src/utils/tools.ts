@@ -1,3 +1,4 @@
+import { round } from "lodash";
 type EnergyUnit = "wh" | "kwh" | "mwh" | "gwh";
 
 export function convertEnergy(
@@ -43,4 +44,35 @@ export function convertEnergy(
     displayValue = Number((kWh < 0 ? -displayValue : displayValue).toFixed(precision));
 
     return { value: displayValue, unit: displayUnit };
+}
+
+/**
+ * 金额单位转换（元 -> 万元/亿元/万亿元）
+ * @param {number} value 金额（单位：元）
+ * @param {number} digits 保留小数位数，默认 2
+ * @returns {{num: string, unit: string}} 结果对象
+ */
+export function formatMoney(value: number, digits: number = 2) {
+    if (value == null || isNaN(value)) {
+        return { num: '-', unit: '' }
+    }
+
+    let num: number
+    let unit: string
+
+    if (value >= 1e12) {
+        num = round((value / 1e12), digits)
+        unit = '万亿元'
+    } else if (value >= 1e8) {
+        num = round((value / 1e8), digits)
+        unit = '亿元'
+    } else if (value >= 1e4) {
+        num = round((value / 1e4), digits)
+        unit = '万元'
+    } else {
+        num = round((value), digits)
+        unit = '元'
+    }
+
+    return { num, unit }
 }
