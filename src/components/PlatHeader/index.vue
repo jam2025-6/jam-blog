@@ -141,6 +141,7 @@ onUnmounted(() => {
   }
 
   .plat-title {
+    cursor: pointer;
     leading-trim: both;
     text-edge: cap;
     margin-top: 27px;
