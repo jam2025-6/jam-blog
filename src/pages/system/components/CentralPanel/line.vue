@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed, onMounted, onUnmounted, watch } from "vue";
+import { ref, computed, onUnmounted, watch } from "vue";
 
 /** =============== 全局 RAF 驱动 =============== */
 const globalTime = ref(0);
@@ -53,21 +53,15 @@ const samplePoints = ref<{ x: number; y: number; len: number }[]>([]);
 const tick = useGlobalTicker();
 
 // 动画进度：0-1
-const progress = computed(() => {
-  return (tick.value * 0.0002) % 1; // 速度可调
-});
-
-// const dashOffset = computed(() => pathLength.value * (1 - progress.value));
+const progress = computed(() => (tick.value * 0.0002) % 1);
 
 /** 箭头位置计算 */
 function getArrowTransform(offset = 0) {
   if (!props.status || props.bgForward || samplePoints.value.length === 0) return "";
 
   const totalLen = pathLength.value;
-  let targetLen = progress.value * totalLen + offset;
-
+  let targetLen = (progress.value * totalLen + offset) % totalLen;
   if (targetLen < 0) targetLen += totalLen;
-  if (targetLen > totalLen) targetLen -= totalLen;
 
   let i = 0;
   while (i < samplePoints.value.length - 1 && samplePoints.value[i + 1].len < targetLen) {
@@ -75,9 +69,11 @@ function getArrowTransform(offset = 0) {
   }
 
   const p1 = samplePoints.value[i];
-  const p2 = samplePoints.value[i + 1] || p1;
+  const p2 = samplePoints.value[i + 1] || samplePoints.value[0]; // 循环到首点
 
-  const ratio = (targetLen - p1.len) / (p2.len - p1.len || 1);
+  const segLen = p2.len - p1.len || totalLen; // 避免除0
+  const ratio = (targetLen - p1.len) / segLen;
+
   const x = p1.x + (p2.x - p1.x) * ratio;
   const y = p1.y + (p2.y - p1.y) * ratio;
 
@@ -99,7 +95,7 @@ const pathData = computed(() => {
   return d;
 });
 
-/** 手动采样路径点表 */
+/** 手动采样路径点表，闭合首尾保证箭头循环平滑 */
 function buildSamplePoints(points: { x: number; y: number }[], step = 2) {
   const arr: { x: number; y: number; len: number }[] = [];
   let total = 0;
@@ -122,16 +118,19 @@ function buildSamplePoints(points: { x: number; y: number }[], step = 2) {
   pathLength.value = total;
   return arr;
 }
-watch(() => props.forward, () => {
-  if (props.points.length > 1) {
-    const pts = props.forward ? props.points : [...props.points].reverse();
-    samplePoints.value = buildSamplePoints(pts, 2);
-  }
-}, { immediate: true })
-onMounted(() => {
 
-});
+watch(
+  () => [props.forward, props.points],
+  () => {
+    if (props.points.length > 1) {
+      const pts = props.forward ? props.points : [...props.points].reverse();
+      samplePoints.value = buildSamplePoints(pts, 2);
+    }
+  },
+  { immediate: true }
+);
 </script>
+
 
 <template>
   <div class="svg-flow-container">
