@@ -446,6 +446,7 @@ onUnmounted(() => {
             align-items: center;
             justify-content: center;
             margin-right: 0;
+            flex-shrink: 0;
 
             .el-icon {
               font-size: 20px;
@@ -617,7 +618,7 @@ onUnmounted(() => {
     border-radius: 4px;
     pointer-events: none;
     z-index: 9999;
-    max-width: 200px;
+    // max-width: 200px;
     white-space: nowrap;
     color: #fff;
     /* 内容文字1 */

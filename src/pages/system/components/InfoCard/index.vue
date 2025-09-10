@@ -78,6 +78,23 @@ const props = withDefaults(defineProps<Props>(), {
     en: !isChinese,
   }">
     <div class="item">
+      <div class="item-title">{{ $t("renewableEnergyUtilization") }}</div>
+      <div class="item-section">
+        <div class="flex">
+          <div class="flex-point"></div>
+          <div class="flex-name">{{ $t("monthlyUtilizedEnergy") }}</div>
+          <div class="flex-num">{{ convertEnergy(props.data.pvcMonthConsumCapacity).value }}</div>
+          <div class="flex-unit">{{ convertEnergy(props.data.pvcMonthConsumCapacity).unit }}</div>
+        </div>
+        <div class="flex orange">
+          <div class="flex-point"></div>
+          <div class="flex-name">{{ $t('cumulativeElectricitySaving') }}</div>
+          <div class="flex-num">{{ formatMoney(+props.data.pvcMonthConsumSaveElec).num }}</div>
+          <div class="flex-unit">{{ formatMoney(+props.data.pvcMonthConsumSaveElec).unit }}</div>
+        </div>
+      </div>
+    </div>
+    <div class="item">
       <div class="item-title">{{ $t("peakValleyArbitrage") }}</div>
       <div class="item-section">
         <div class="flex">
@@ -117,23 +134,7 @@ const props = withDefaults(defineProps<Props>(), {
         </div>
       </div>
     </div>
-    <div class="item">
-      <div class="item-title">{{ $t("renewableEnergyUtilization") }}</div>
-      <div class="item-section">
-        <div class="flex">
-          <div class="flex-point"></div>
-          <div class="flex-name">{{ $t("monthlyUtilizedEnergy") }}</div>
-          <div class="flex-num">{{ convertEnergy(props.data.pvcMonthConsumCapacity).value }}</div>
-          <div class="flex-unit">{{ convertEnergy(props.data.pvcMonthConsumCapacity).unit }}</div>
-        </div>
-        <div class="flex orange">
-          <div class="flex-point"></div>
-          <div class="flex-name">{{ $t('cumulativeElectricitySaving') }}</div>
-          <div class="flex-num">{{ formatMoney(+props.data.pvcMonthConsumSaveElec).num }}</div>
-          <div class="flex-unit">{{ formatMoney(+props.data.pvcMonthConsumSaveElec).unit }}</div>
-        </div>
-      </div>
-    </div>
+
   </div>
 </template>
 
