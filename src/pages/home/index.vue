@@ -31,7 +31,8 @@ const params = ref({
 const total = ref(0);
 // 定义展开的行 ID 列表，用于控制表格行的展开状态
 const expandedKeys = ref<string[]>([]);
-
+const microgridNameKeyword = ref('')
+const stationNameKeyWord = ref('')
 /**
  * 点击表格行时触发的事件处理函数
  * @param row - 当前点击的微电网数据行
@@ -223,6 +224,8 @@ const tableRowClassName = ({ row }: { row: Microgrid; rowIndex: number }) => {
  */
 async function getList() {
   try {
+    stationNameKeyWord.value = params.value.stationName
+    microgridNameKeyword.value = params.value.microgridName
     // 开始加载，显示加载状态
     loading.value = true;
     // 调用接口获取微电网列表数据
@@ -244,12 +247,12 @@ async function getList() {
         }
         return item;
       });
-      if (params.value.stationName) {
-        // 如果有站点名称参数，展开所有行
-        expandedKeys.value = tableData.value.map((item) => item.id);
-      } else {
-        // expandedKeys.value = []
-      }
+      // if (params.value.stationName) {
+      //   // 如果有站点名称参数，展开所有行
+      //   expandedKeys.value = tableData.value.map((item) => item.id);
+      // } else {
+      //   // expandedKeys.value = []
+      // }
       // 更新总数据量
       total.value = res.data.totalCount;
     }
@@ -301,6 +304,13 @@ const handleExpandChange = (row: Microgrid, expanded: boolean) => {
   }
 };
 
+// 高亮函数
+function highlight(text: string, keyword: string) {
+  if (!keyword) return text
+  const reg = new RegExp(`(${keyword})`, 'gi') // 忽略大小写
+  return text.replace(reg, `<span class="highlight">$1</span>`)
+}
+
 /**
  * 组件挂载时触发的生命周期钩子
  * 用于初始化数据和监听全局搜索事件
@@ -310,6 +320,7 @@ onMounted(() => {
   getList();
   // 监听全局搜索事件
   bus.on("globalSearch", async (user) => {
+
     // 更新搜索参数
     params.value.microgridName = user.microgridName;
     params.value.stationName = user.stationName;
@@ -334,11 +345,12 @@ onUnmounted(() => {
     <div ref="containerRef" class="table" @mousemove="handleMouseMove">
       <el-table v-loading="loading" @cell-mouse-enter="cellMouseEnter" @cell-mouse-leave="cellMouseLeave"
         :data="tableData" :row-class-name="tableRowClassName" style="width: 100%; height: 100%" @row-click="clickRow"
-        row-key="id" @expand-change="handleExpandChange" :default-expand-all="!!params.stationName">
+        row-key="id" @expand-change="handleExpandChange">
         <el-table-column min-width="200" sortable prop="stationName" :label="$t('name')">
           <template #default="{ row }">
-            <div class="name-text">
-              {{ row.microgridName || row.stationName }}
+            <div class="name-text" v-if="row.microgridName" v-html="highlight(row.microgridName, microgridNameKeyword)">
+            </div>
+            <div v-else-if="row.stationName" class="name-text" v-html="highlight(row.stationName, stationNameKeyWord)">
             </div>
           </template>
         </el-table-column>
