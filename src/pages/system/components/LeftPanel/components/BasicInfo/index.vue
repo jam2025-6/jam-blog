@@ -23,6 +23,7 @@ const formData = ref<Microgrid>({
   directCurrentPileInstalledPowerSum: 0,
   stationCount: 0,
   children: [],
+  microgridAbbreviation: ''
 });
 const maxLength = computed(() => {
   const max = Math.max(
