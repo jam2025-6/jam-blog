@@ -72,15 +72,15 @@ useMethodPolling(() => {
   // 用电情况分析
   leftPanelRef.value.electricityAnalysisRef.getData()
   // 碳排放曲线
-  leftPanelRef.value.carbonCurveRef.getData()
+  // leftPanelRef.value.carbonCurveRef.getData()
   // 运行功率曲线
-  rightPanelRef.value.powerCurveRef.getData()
+  // rightPanelRef.value.powerCurveRef.getData()
   // 近七日收益
-  rightPanelRef.value.incomeComparisonRef.getData()
+  // rightPanelRef.value.incomeComparisonRef.getData()
   // 新能源社会效益
   rightPanelRef.value.socialBenefitRef.getData()
   // 符合预测曲线
-  bottomPanelRef.value.changeFun()
+  // bottomPanelRef.value.changeFun()
   // 中间模块
   getData()
   // 顶部指标
@@ -88,6 +88,21 @@ useMethodPolling(() => {
 
 }, {
   interval: 1000 * 60, // 每 5 秒轮询一次
+  immediate: false, // 启动时立即执行一次
+  autoStart: true, // 组件挂载后自动开始轮询
+});
+useMethodPolling(() => {
+  // 碳排放曲线
+  leftPanelRef.value.carbonCurveRef.getData()
+  // 运行功率曲线
+  rightPanelRef.value.powerCurveRef.getData()
+  // 近七日收益
+  rightPanelRef.value.incomeComparisonRef.getData()
+  // 符合预测曲线
+  bottomPanelRef.value.changeFun()
+
+}, {
+  interval: 1000 * 60 * 5, // 每 5 秒轮询一次
   immediate: false, // 启动时立即执行一次
   autoStart: true, // 组件挂载后自动开始轮询
 });

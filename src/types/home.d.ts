@@ -38,5 +38,6 @@ export interface Microgrid {
   pileInstalledPowerSum: number;
   directCurrentPileInstalledPowerSum: number;
   stationCount: number;
+  microgridAbbreviation: string;
   children: Station[];
 }

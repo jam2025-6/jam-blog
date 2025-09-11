@@ -58,6 +58,7 @@ function clickRow(row: Microgrid) {
       path: "/system",
       query: {
         id: row.id,
+        title: row.microgridAbbreviation
       },
     });
   }

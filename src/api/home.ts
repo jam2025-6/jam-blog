@@ -10,3 +10,12 @@ export function getMicrogridList(params: listParams): Promise<ApiResponse<PageRe
     params,
   });
 }
+
+
+//列表查询
+export function getMicrogridBigScreenName(): Promise<ApiResponse<any>> {
+  return request({
+    method: "GET",
+    url: "/microgrid/getMicrogridBigScreenName",
+  });
+}

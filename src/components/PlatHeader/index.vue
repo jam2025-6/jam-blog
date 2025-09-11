@@ -3,6 +3,7 @@ import { ref, onMounted, computed, onUnmounted } from "vue";
 import dayjs from "dayjs";
 import SearchSvg from "@/assets/icons/search.svg";
 import { useLocaleStore } from "@/stores/modules/locale";
+import { getMicrogridBigScreenName } from '@/api/home'
 import { storeToRefs } from "pinia";
 import bus from "@/utils/bus";
 const { isChinese } = storeToRefs(useLocaleStore());
@@ -37,6 +38,7 @@ function updateTime() {
   currentWeekday.value = `星期${weekDays[now.getDay()]}`;
 }
 let timer: ReturnType<typeof setInterval>;
+const title = ref('')
 function search() {
   bus.emit("globalSearch", formData.value);
 }
@@ -48,8 +50,16 @@ const logoUrl = computed(() => {
 function handleBack() {
   location.href = location.origin
 }
-
+function getTitle() {
+  getMicrogridBigScreenName().then(res => {
+    console.log('%c [ res ]-55', 'font-size:13px; background:pink; color:#bf2c9f;', res)
+    if (res.data) {
+      title.value = res.data.config
+    }
+  })
+}
 onMounted(() => {
+  getTitle()
   updateTime(); // 立即执行一次
   timer = setInterval(updateTime, 1000); // 每秒更新
 });
@@ -63,8 +73,10 @@ onUnmounted(() => {
     en: !isChinese,
   }">
     <img class="logo" :src="logoUrl" alt="" />
-    <header @click="handleBack" class="plat-title">
-      {{ $t("gaoteMicrogridManagementPlatform") }} <img src="@/assets/images/headers/title-back.png" alt="" />
+    <header @click="handleBack" class="plat-title" :style="{
+      fontSize: 42 - title.length + 'px'
+    }">
+      {{ title }} <img src="@/assets/images/headers/title-back.png" alt="" />
     </header>
     <div class="search">
       <!-- <el-select
