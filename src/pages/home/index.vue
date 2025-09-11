@@ -400,6 +400,9 @@ onUnmounted(() => {
     box-shadow: 0 0 4px rgba(104, 187, 225, 0.5);
     padding: 12px 36px 22px 36px;
     backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    /* 兼容 Safari */
+
 
     // .name-text {
     //   overflow: hidden;

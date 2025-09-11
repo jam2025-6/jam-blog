@@ -54,6 +54,7 @@ function getTitle() {
   getMicrogridBigScreenName().then(res => {
     if (res.data) {
       title.value = res.data.config
+      document.title = res.data.config || import.meta.env.VITE_APP_TITLE
     }
   })
 }

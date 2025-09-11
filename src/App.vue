@@ -36,7 +36,7 @@ async function getBasicInfo() {
     let res = await getInfo();
     // 
     replaceStaticUrl(res)
-    document.title = res.company?.companyName || import.meta.env.VITE_APP_TITLE;
+    // document.title = res.company?.companyName || import.meta.env.VITE_APP_TITLE;
     if (res.company.iconUrl) {
       let favicon = document.querySelector('link[rel="shortcut icon"]') || document.querySelector('link[rel="icon"]');
       if (favicon) {
