@@ -73,7 +73,7 @@ onUnmounted(() => {
   }">
     <img class="logo" :src="logoUrl" alt="" />
     <header @click="handleBack" class="plat-title" :style="{
-      fontSize: 42 - title.length + 'px'
+      fontSize: Math.min(48 - title.length, 36) + 'px'
     }">
       {{ title || '微电网管理平台' }} <img src="@/assets/images/headers/title-back.png" alt="" />
     </header>

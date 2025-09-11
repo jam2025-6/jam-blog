@@ -92,6 +92,9 @@
 }
 
 .el-pagination {
+
+
+
   .el-pagination__total {
     color: #e7f2f2;
     /* 标题发光 */
@@ -107,6 +110,15 @@
   .el-pager li,
   .btn-next {
     background-color: rgba(48, 84, 133, 0.4) !important;
+    color: #e7f2f2;
+
+    &:hover {
+      opacity: 0.75;
+    }
+  }
+
+  .is-active {
+    color: #4d92d1 !important;
   }
 
   .el-pager li {
