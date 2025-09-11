@@ -52,7 +52,6 @@ function handleBack() {
 }
 function getTitle() {
   getMicrogridBigScreenName().then(res => {
-    console.log('%c [ res ]-55', 'font-size:13px; background:pink; color:#bf2c9f;', res)
     if (res.data) {
       title.value = res.data.config
     }
@@ -76,7 +75,7 @@ onUnmounted(() => {
     <header @click="handleBack" class="plat-title" :style="{
       fontSize: 42 - title.length + 'px'
     }">
-      {{ title }} <img src="@/assets/images/headers/title-back.png" alt="" />
+      {{ title || '微电网管理平台' }} <img src="@/assets/images/headers/title-back.png" alt="" />
     </header>
     <div class="search">
       <!-- <el-select
