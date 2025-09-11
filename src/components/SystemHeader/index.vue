@@ -12,7 +12,7 @@ const logoUrl = computed(() => {
   return sessionStorage.getItem("logoUrl") || 'https://ess-ds.com/statics/2025/05/12/20250512181338A498_a22542a93c9c41b3bd853296fcda624e.png'
 });
 const title = computed(() => {
-  return route.query.title || '' + t("gaoteMicrogridManagementSystem")
+  return (route.query.title || '') + t("gaoteMicrogridManagementSystem")
 })
 function goBack() {
   router.back()
