@@ -152,7 +152,7 @@ defineExpose({
           <div class="info-item-word">
             <div class="info-item-word-title">{{ $t("dcChargingPileCapacity") }}</div>
             <div class="info-item-word-value">
-              <div class="info-item-word-value-num">{{ formData.pileInstalledPowerSum }}</div>
+              <div class="info-item-word-value-num">{{ formData.directCurrentPileInstalledPowerSum }}</div>
               <div class="info-item-word-value-unit">kW</div>
             </div>
           </div>
@@ -162,7 +162,7 @@ defineExpose({
           <div class="info-item-word">
             <div class="info-item-word-title">{{ $t("acChargingPileCapacity") }}</div>
             <div class="info-item-word-value">
-              <div class="info-item-word-value-num">{{ formData.directCurrentPileInstalledPowerSum }}</div>
+              <div class="info-item-word-value-num">{{ formData.pileInstalledPowerSum }}</div>
               <div class="info-item-word-value-unit">kW</div>
             </div>
           </div>
