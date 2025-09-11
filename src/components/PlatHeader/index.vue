@@ -3,13 +3,22 @@ import { ref, onMounted, computed, onUnmounted } from "vue";
 import dayjs from "dayjs";
 import SearchSvg from "@/assets/icons/search.svg";
 import { useLocaleStore } from "@/stores/modules/locale";
-import { getMicrogridBigScreenName } from '@/api/home'
+
 import { storeToRefs } from "pinia";
 import bus from "@/utils/bus";
 const { isChinese } = storeToRefs(useLocaleStore());
 const formData = ref({
   stationName: "",
   microgridName: "",
+});
+// 定义props接口
+interface Props {
+  title?: string;
+}
+
+// 设置默认props值
+const props = withDefaults(defineProps<Props>(), {
+  title: "", // 默认值
 });
 // 响应式变量
 const currentDate = ref("");
@@ -38,7 +47,7 @@ function updateTime() {
   currentWeekday.value = `星期${weekDays[now.getDay()]}`;
 }
 let timer: ReturnType<typeof setInterval>;
-const title = ref('')
+
 function search() {
   bus.emit("globalSearch", formData.value);
 }
@@ -50,16 +59,9 @@ const logoUrl = computed(() => {
 function handleBack() {
   location.href = location.origin
 }
-function getTitle() {
-  getMicrogridBigScreenName().then(res => {
-    if (res.data) {
-      title.value = res.data.config
-      document.title = res.data.config || import.meta.env.VITE_APP_TITLE
-    }
-  })
-}
+
 onMounted(() => {
-  getTitle()
+
   updateTime(); // 立即执行一次
   timer = setInterval(updateTime, 1000); // 每秒更新
 });
@@ -74,7 +76,7 @@ onUnmounted(() => {
   }">
     <img class="logo" :src="logoUrl" alt="" />
     <header @click="handleBack" class="plat-title" :style="{
-      fontSize: Math.min(48 - title.length, 36) + 'px'
+      fontSize: Math.min(48 - props.title.length, 36) + 'px'
     }">
       {{ title || '微电网管理平台' }} <img src="@/assets/images/headers/title-back.png" alt="" />
     </header>
