@@ -145,6 +145,13 @@ function changeFun() {
         axisLabel: {
           show: true,
           color: "rgba(182, 212, 254, 0.8)",
+          formatter: function (value: string) {
+            if (selectVal.value === 'today') {
+              return dayjs(value).format('HH:mm')
+            } else {
+              return dayjs(value).format('YYYY-MM-DD HH:mm')
+            }
+          }
         },
         axisLine: {
           show: true,
@@ -164,6 +171,7 @@ function changeFun() {
         axisLabel: {
           show: true,
           color: "rgba(182, 212, 254, 0.8)",
+
         },
         axisLine: {
           show: false,
@@ -323,6 +331,13 @@ async function getData() {
           axisLabel: {
             show: true,
             color: "rgba(182, 212, 254, 0.8)",
+            formatter: function (value: string) {
+              if (selectVal.value === 'today') {
+                return dayjs(value).format('HH:mm')
+              } else {
+                return dayjs(value).format('YYYY-MM-DD HH:mm')
+              }
+            }
           },
           axisLine: {
             show: true,
