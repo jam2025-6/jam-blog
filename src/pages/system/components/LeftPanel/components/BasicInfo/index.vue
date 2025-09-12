@@ -395,6 +395,7 @@ defineExpose({
       &-item {
         white-space: nowrap;
         // width: 50%;
+        max-width: 50%;
         min-width: 190px;
         display: flex;
         align-items: center;
