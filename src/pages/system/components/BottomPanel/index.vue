@@ -92,51 +92,51 @@ function changeFun() {
       value: number
     }
 
-    function generate7DaysSpotPriceCurve(): SpotPricePoint[] {
-      const result: SpotPricePoint[] = []
-      const now = new Date()
+    // function generate7DaysSpotPriceCurve(): SpotPricePoint[] {
+    //   const result: SpotPricePoint[] = []
+    //   const now = new Date()
 
-      for (let d = 6; d >= 0; d--) { // 最近7天
-        const day = new Date()
-        day.setDate(now.getDate() - d)
-        day.setHours(0, 0, 0, 0)
+    //   for (let d = 6; d >= 0; d--) { // 最近7天
+    //     const day = new Date()
+    //     day.setDate(now.getDate() - d)
+    //     day.setHours(0, 0, 0, 0)
 
-        const end = new Date(day)
-        if (d === 0) {
-          // 今天：到当前时间
-          end.setTime(now.getTime())
-        } else {
-          // 过去的天：到23:59
-          end.setHours(23, 59, 59, 999)
-        }
+    //     const end = new Date(day)
+    //     if (d === 0) {
+    //       // 今天：到当前时间
+    //       end.setTime(now.getTime())
+    //     } else {
+    //       // 过去的天：到23:59
+    //       end.setHours(23, 59, 59, 999)
+    //     }
 
-        const cursor = new Date(day)
-        while (cursor <= end) {
-          const y = cursor.getFullYear()
-          const m = String(cursor.getMonth() + 1).padStart(2, "0")
-          const dd = String(cursor.getDate()).padStart(2, "0")
-          const hh = cursor.getHours()
-          const mm = cursor.getMinutes()
-          const timeStr = `${y}-${m}-${dd} ${String(hh).padStart(2, "0")}:${String(mm).padStart(2, "0")}`
+    //     const cursor = new Date(day)
+    //     while (cursor <= end) {
+    //       const y = cursor.getFullYear()
+    //       const m = String(cursor.getMonth() + 1).padStart(2, "0")
+    //       const dd = String(cursor.getDate()).padStart(2, "0")
+    //       const hh = cursor.getHours()
+    //       const mm = cursor.getMinutes()
+    //       const timeStr = `${y}-${m}-${dd} ${String(hh).padStart(2, "0")}:${String(mm).padStart(2, "0")}`
 
-          // 模拟现货价格
-          let basePrice = 50
-          if (hh >= 0 && hh < 6) basePrice = 30
-          else if ((hh >= 8 && hh < 11) || (hh >= 18 && hh < 21)) basePrice = 80
+    //       // 模拟现货价格
+    //       let basePrice = 50
+    //       if (hh >= 0 && hh < 6) basePrice = 30
+    //       else if ((hh >= 8 && hh < 11) || (hh >= 18 && hh < 21)) basePrice = 80
 
-          const i = hh * 4 + Math.floor(mm / 15) // 用于平滑函数
-          const fluctuation = 5 * Math.sin((Math.PI * i) / 48) // 正弦平滑
-          const noise = (Math.random() - 0.5) * 5 // 随机扰动 ±2.5
-          const price = Math.max(0, basePrice + fluctuation + noise)
+    //       const i = hh * 4 + Math.floor(mm / 15) // 用于平滑函数
+    //       const fluctuation = 5 * Math.sin((Math.PI * i) / 48) // 正弦平滑
+    //       const noise = (Math.random() - 0.5) * 5 // 随机扰动 ±2.5
+    //       const price = Math.max(0, basePrice + fluctuation + noise)
 
-          result.push({ name: timeStr, value: parseFloat(price.toFixed(2)) })
+    //       result.push({ name: timeStr, value: parseFloat(price.toFixed(2)) })
 
-          cursor.setMinutes(cursor.getMinutes() + 15)
-        }
-      }
+    //       cursor.setMinutes(cursor.getMinutes() + 15)
+    //     }
+    //   }
 
-      return result
-    }
+    //   return result
+    // }
 
     options.value = {
       xAxis: {
