@@ -364,7 +364,7 @@ onUnmounted(() => {
         <el-table-column prop="directCurrentPileInstalledPowerSum" align="center" sortable
           :label="$t('dcChargingPileCapacity') + '(kW)'" />
       </el-table>
-      <div v-show="!!stationName" class="tooltip" :style="{
+      <div v-show="!!stationName && tooltipX && tooltipY" class="tooltip" :style="{
         left: tooltipX + 'px',
         top: tooltipY + 'px',
       }">
