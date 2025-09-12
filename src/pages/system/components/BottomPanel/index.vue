@@ -87,10 +87,10 @@ function changeFun() {
 
       return result
     }
-    interface SpotPricePoint {
-      name: string
-      value: number
-    }
+    // interface SpotPricePoint {
+    //   name: string
+    //   value: number
+    // }
 
     // function generate7DaysSpotPriceCurve(): SpotPricePoint[] {
     //   const result: SpotPricePoint[] = []
