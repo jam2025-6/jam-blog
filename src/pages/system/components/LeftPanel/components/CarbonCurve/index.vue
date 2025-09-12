@@ -103,7 +103,7 @@ const options = computed(() => {
             <span class="item-point"></span>
             <span class="item-name">${value[0].seriesName}</span>
             <span class="item-value">${value[0].value}</span>
-            <span class="item-unit">t</span>
+            <span class="item-unit">kg</span>
           </div>
         </div>
       </div>
