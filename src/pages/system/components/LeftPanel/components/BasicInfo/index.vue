@@ -110,7 +110,7 @@ defineExpose({
               }">
                 {{ formData.pvInstalledPowerSum }}
               </div>
-              <div>kW</div>
+              <div>MW</div>
             </div>
           </div>
           <div class="pic-item-title photovoltaic" :style="{
@@ -128,7 +128,7 @@ defineExpose({
             <div class="info-item-word-title">{{ $t("windPowerCapacity") }}</div>
             <div class="info-item-word-value">
               <div class="info-item-word-value-num">{{ formData.windCapacitySum }}</div>
-              <div class="info-item-word-value-unit">kW</div>
+              <div class="info-item-word-value-unit">MW</div>
             </div>
           </div>
         </div>
@@ -139,7 +139,7 @@ defineExpose({
             <div class="info-item-word-value">
               <!-- 装机功率(MW) -->
               <div class="info-item-word-value-num">{{ formData.installedPowerSum }}</div>
-              <div class="info-item-word-value-unit">kW</div>
+              <div class="info-item-word-value-unit">MW</div>
               <div class="info-item-word-value-sub">/</div>
               <!-- 装机容量(MWh) -->
               <div class="info-item-word-value-num">{{ convertEnergy(formData.installedCapacitySum).value }}</div>
@@ -153,7 +153,7 @@ defineExpose({
             <div class="info-item-word-title">{{ $t("dcChargingPileCapacity") }}</div>
             <div class="info-item-word-value">
               <div class="info-item-word-value-num">{{ formData.directCurrentPileInstalledPowerSum }}</div>
-              <div class="info-item-word-value-unit">kW</div>
+              <div class="info-item-word-value-unit">MW</div>
             </div>
           </div>
         </div>
@@ -163,7 +163,7 @@ defineExpose({
             <div class="info-item-word-title">{{ $t("acChargingPileCapacity") }}</div>
             <div class="info-item-word-value">
               <div class="info-item-word-value-num">{{ formData.pileInstalledPowerSum }}</div>
-              <div class="info-item-word-value-unit">kW</div>
+              <div class="info-item-word-value-unit">MW</div>
             </div>
           </div>
         </div>

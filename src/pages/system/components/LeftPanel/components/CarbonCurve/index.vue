@@ -26,7 +26,7 @@ const options = computed(() => {
     },
     yAxis: {
       type: "value",
-      name: t("ton"),
+      name: 'kg',
       nameTextStyle: {
         color: "rgba(182, 212, 254, 0.8)",
         fontSize: 12,
