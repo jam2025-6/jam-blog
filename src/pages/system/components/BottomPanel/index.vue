@@ -236,68 +236,68 @@ function changeFun() {
         },
       },
       series: [
-        {
-          name: t("spotActual"),
-          data: generate7DaysSpotPriceCurve(),
-          type: "line",
-          smooth: true,
-          symbol: "circle",
-          symbolSize: 0,
-          areaStyle: {
-            normal: {
-              color: new echarts.graphic.LinearGradient(
-                0,
-                0,
-                0,
-                1,
-                [
-                  {
-                    offset: 0,
-                    color: "rgba(61, 136, 227, 0.3)",
-                  },
-                  {
-                    offset: 1,
-                    color: "rgba(61, 136, 227, 0.04)",
-                  },
-                ],
-                false
-              ),
-              shadowColor: "#3D88E3",
-              shadowBlur: 20,
-            },
-          },
-        },
-        {
-          name: t("spotForecast"),
-          data: [],
-          type: "line",
-          smooth: true,
-          symbol: "circle",
-          symbolSize: 0,
-          areaStyle: {
-            normal: {
-              color: new echarts.graphic.LinearGradient(
-                0,
-                0,
-                0,
-                1,
-                [
-                  {
-                    offset: 0,
-                    color: "rgba(252, 159, 113, 0.3)",
-                  },
-                  {
-                    offset: 1,
-                    color: "rgba(252, 159, 113, 0.04)",
-                  },
-                ],
-                false
-              ),
-              shadowColor: "#FC9F71",
-              shadowBlur: 20,
-            },
-          },
-        },
+        // {
+        //   name: t("spotActual"),
+        //   data: generate7DaysSpotPriceCurve(),
+        //   type: "line",
+        //   smooth: true,
+        //   symbol: "circle",
+        //   symbolSize: 0,
+        //   areaStyle: {
+        //     normal: {
+        //       color: new echarts.graphic.LinearGradient(
+        //         0,
+        //         0,
+        //         0,
+        //         1,
+        //         [
+        //           {
+        //             offset: 0,
+        //             color: "rgba(61, 136, 227, 0.3)",
+        //           },
+        //           {
+        //             offset: 1,
+        //             color: "rgba(61, 136, 227, 0.04)",
+        //           },
+        //         ],
+        //         false
+        //       ),
+        //       shadowColor: "#3D88E3",
+        //       shadowBlur: 20,
+        //     },
+        //   },
+        // },
+        // {
+        //   name: t("spotForecast"),
+        //   data: [],
+        //   type: "line",
+        //   smooth: true,
+        //   symbol: "circle",
+        //   symbolSize: 0,
+        //   areaStyle: {
+        //     normal: {
+        //       color: new echarts.graphic.LinearGradient(
+        //         0,
+        //         0,
+        //         0,
+        //         1,
+        //         [
+        //           {
+        //             offset: 0,
+        //             color: "rgba(252, 159, 113, 0.3)",
+        //           },
+        //           {
+        //             offset: 1,
+        //             color: "rgba(252, 159, 113, 0.04)",
+        //           },
+        //         ],
+        //         false
+        //       ),
+        //       shadowColor: "#FC9F71",
+        //       shadowBlur: 20,
+        //     },
+        //   },
+        // },
       ],
     }
   } else {
