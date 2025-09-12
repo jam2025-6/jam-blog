@@ -6,6 +6,7 @@ import { useI18n } from "vue-i18n";
 import { useRoute } from "vue-router";
 import { getCalcCarbonEmissions } from "@/api/system";
 import { AmountRecord } from "@/types/system";
+import { round } from "lodash";
 const { t } = useI18n();
 
 const options = computed(() => {
@@ -102,7 +103,7 @@ const options = computed(() => {
           <div class="item">
             <span class="item-point"></span>
             <span class="item-name">${value[0].seriesName}</span>
-            <span class="item-value">${value[0].value}</span>
+            <span class="item-value">${round(value[0].value, 2)}</span>
             <span class="item-unit">kg</span>
           </div>
         </div>
