@@ -1,7 +1,18 @@
 import { request } from "@/utils/request";
 import { ApiResponse } from "@/types/api";
 import { Microgrid } from "@/types/home";
-import { AmountRecord, EnergyCurves, PvStatistics, RealTimeData, StationInfo, EnergyData, EnergyStats, EnergyAndEarningsData, ForecastCurve, EarningsRecord } from "@/types/system";
+import {
+  AmountRecord,
+  EnergyCurves,
+  PvStatistics,
+  RealTimeData,
+  StationInfo,
+  EnergyData,
+  EnergyStats,
+  EnergyAndEarningsData,
+  ForecastCurve,
+  EarningsRecord
+} from "@/types/system";
 //基本信息
 export function getSearchById(id: string): Promise<ApiResponse<Microgrid>> {
   return request({

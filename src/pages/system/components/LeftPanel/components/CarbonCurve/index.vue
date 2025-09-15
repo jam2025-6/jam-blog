@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import { ref, computed } from "vue";
-import { PanelTitle, gdCharts } from "@/components";
 import * as echarts from "echarts";
 import { useI18n } from "vue-i18n";
 import { useRoute } from "vue-router";
 import { getCalcCarbonEmissions } from "@/api/system";
 import { AmountRecord } from "@/types/system";
 import { round } from "lodash";
+import { PanelTitle, gdCharts } from "@/components";
 const { t } = useI18n();
 
 const options = computed(() => {

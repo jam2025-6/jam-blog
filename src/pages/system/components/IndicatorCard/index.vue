@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import { useLocaleStore } from "@/stores/modules/locale";
+import { round } from "lodash";
 import { storeToRefs } from "pinia";
 import { getCoreHeader } from '@/api/system'
 import { useRoute } from "vue-router";
 import { EnergyAndEarningsData } from '@/types/system'
 import { QuestionFilled } from '@element-plus/icons-vue'
+import { useLocaleStore } from "@/stores/modules/locale";
 import { convertEnergy, formatMoney } from '@/utils/tools'
-import { round } from "lodash";
 const route = useRoute();
 const { isChinese } = storeToRefs(useLocaleStore());
 const formData = ref<EnergyAndEarningsData>({

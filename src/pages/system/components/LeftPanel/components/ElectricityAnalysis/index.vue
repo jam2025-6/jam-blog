@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import { PanelTitle, SemiCircleProgress } from "@/components";
 import { useLocaleStore } from "@/stores/modules/locale";
 import { storeToRefs } from "pinia";
 import { round } from "lodash";
@@ -8,6 +7,7 @@ import { useRoute } from "vue-router";
 import { getCalcElectricity } from "@/api/system";
 import { EnergyStats } from '@/types/system'
 import { convertEnergy } from '@/utils/tools'
+import { PanelTitle, SemiCircleProgress } from "@/components";
 const { isChinese } = storeToRefs(useLocaleStore());
 const route = useRoute();
 const formData = ref<EnergyStats>({

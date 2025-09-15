@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import PlatHeader from "@/components/PlatHeader/index.vue";
-import SystemHeader from "@/components/SystemHeader/index.vue";
 import { computed, ref } from "vue";
 import { useRoute } from "vue-router";
 import { getMicrogridBigScreenName } from '@/api/home'
+import PlatHeader from "@/components/PlatHeader/index.vue";
+import SystemHeader from "@/components/SystemHeader/index.vue";
+
 const route = useRoute();
 const title = ref('')
 function getTitle() {

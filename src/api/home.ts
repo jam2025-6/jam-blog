@@ -1,5 +1,9 @@
 import { request } from "@/utils/request";
-import { listParams, Microgrid, MicrogridBigScreenConfig } from "@/types/home";
+import {
+  listParams,
+  Microgrid,
+  MicrogridBigScreenConfig
+} from "@/types/home";
 import { ApiResponse, PageResponse } from "@/types/api";
 
 //列表查询

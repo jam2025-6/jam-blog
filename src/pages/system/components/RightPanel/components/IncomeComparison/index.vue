@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import { PanelTitle, gdCharts } from "@/components";
 import { ref, computed } from "vue";
 import * as echarts from "echarts";
 import { useI18n } from "vue-i18n";
 import { useRoute } from "vue-router";
 import { getCompareEarn } from "@/api/system";
 import { EarningsRecord } from "@/types/system";
+import { PanelTitle, gdCharts } from "@/components";
 const { t } = useI18n();
 const options = computed(() => {
   return {

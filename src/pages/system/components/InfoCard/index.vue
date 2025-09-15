@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { useLocaleStore } from "@/stores/modules/locale";
 import { storeToRefs } from "pinia";
+import { round } from "lodash";
+import { useLocaleStore } from "@/stores/modules/locale";
 import { EnergyData } from '@/types/system'
 import { convertEnergy, formatMoney } from '@/utils/tools'
-import { round } from "lodash";
 const { isChinese } = storeToRefs(useLocaleStore());
 interface Props {
   data?: EnergyData;

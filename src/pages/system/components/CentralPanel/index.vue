@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 import { useI18n } from "vue-i18n";
+import { round } from 'lodash';
 import { useLocaleStore } from "@/stores/modules/locale";
 import { storeToRefs } from "pinia";
 import Line from "./line.vue";
@@ -16,7 +17,7 @@ import windPowerActiveImg from '@/assets/images/station/windPower-active.png'
 import windPowerInActiveImg from '@/assets/images/station/windPower-inactive.png'
 import chargingPileActiveImg from '@/assets/images/station/chargingPile-active.png'
 import chargingPileInActiveImg from '@/assets/images/station/chargingPile-inactive.png'
-import { round } from 'lodash';
+
 
 // 获取当前路由信息
 const route = useRoute()

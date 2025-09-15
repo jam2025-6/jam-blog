@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { PanelTitle, gdCharts } from "@/components";
 import { ref, computed } from "vue";
 import * as echarts from "echarts";
 import { useI18n } from "vue-i18n";
@@ -7,6 +6,7 @@ import { useRoute } from "vue-router";
 import { getPowerCurve } from "@/api/system";
 import { EnergyCurves } from "@/types/system";
 import dayjs from "dayjs";
+import { PanelTitle, gdCharts } from "@/components";
 const { t } = useI18n();
 const options = computed(() => {
   return {

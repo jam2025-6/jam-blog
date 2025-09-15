@@ -1,13 +1,14 @@
 <script setup lang="ts">
-import { PanelTitle, gdCharts, Tabs } from "@/components";
+
 import { ref, computed, watch, onMounted } from "vue";
-import * as echarts from "echarts";
 import { useI18n } from "vue-i18n";
-import { getLoadForecastCurve } from "@/api/system";
 import { useRoute } from "vue-router";
-import { useLocaleStore } from "@/stores/modules/locale";
+import * as echarts from "echarts";
 import { storeToRefs } from "pinia";
 import dayjs from "dayjs";
+import { getLoadForecastCurve } from "@/api/system";
+import { useLocaleStore } from "@/stores/modules/locale";
+import { PanelTitle, gdCharts, Tabs } from "@/components";
 const { isChinese } = storeToRefs(useLocaleStore());
 const route = useRoute();
 const { t } = useI18n();
