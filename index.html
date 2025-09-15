@@ -9,23 +9,6 @@
   <link rel="icon" href="/favicon.ico" />
   <title><%- title %></title>
   <script>
-    // // 高德API 安全秘钥设置
-    // window._AMapSecurityConfig = {
-    //   securityJsCode: "ff29184b2a6200a361788c18b71b2a02",
-    // };
-    // // 读取 cookie 的通用函数
-    // function getCookie(name) {
-    //   const matches = document.cookie.match(
-    //     new RegExp("(?:^|; )" + name.replace(/([.$?*|{}()[\]\\/+^])/g, "\\$1") + "=([^;]*)")
-    //   );
-    //   return matches ? decodeURIComponent(matches[1]) : undefined;
-    // }
-
-    // // 判断 cookie 中的语言设置
-    // const locale = getCookie("saas-locale");
-
-    // 设置 title 内容
-    // document.title = locale === "zh-CN" ? "微电网管理平台" : "Gold Micrigrid Dashboard";
   </script>
   <style>
     .chromeframe {
@@ -208,12 +191,6 @@
 </head>
 
 <body>
-  <script>
-    // 高德API 安全秘钥设置
-    window._AMapSecurityConfig = {
-      securityJsCode: "ff29184b2a6200a361788c18b71b2a02",
-    };
-  </script>
   <noscript>
     <strong id="errorText">
       <!-- 非常抱歉！您当前浏览器不支持，请移步至更高版本！ -->
@@ -232,9 +209,6 @@
   </div>
   <script type="module" src="/src/main.ts"></script>
   <script>
-    //   window.onload = function () {
-    //   updatePageLanguage()
-    // }
     updatePageLanguage();
     function getCookie(name) {
       const value = `; ${document.cookie}`;
@@ -256,7 +230,6 @@
         },
       };
       setTimeout(() => {
-        // document.getElementById('errorText').innerHTML = translations[locale].loading
         document.getElementById("loadingText").innerHTML = translations[locale].loading;
       }, 0);
     }
