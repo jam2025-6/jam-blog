@@ -1,5 +1,5 @@
 import { request } from "@/utils/request";
-import { listParams, Microgrid } from "@/types/home.d";
+import { listParams, Microgrid, MicrogridBigScreenConfig } from "@/types/home";
 import { ApiResponse, PageResponse } from "@/types/api";
 
 //列表查询
@@ -13,7 +13,7 @@ export function getMicrogridList(params: listParams): Promise<ApiResponse<PageRe
 
 
 //列表查询
-export function getMicrogridBigScreenName(): Promise<ApiResponse<any>> {
+export function getMicrogridBigScreenName(): Promise<ApiResponse<MicrogridBigScreenConfig>> {
   return request({
     method: "GET",
     url: "/microgrid/getMicrogridBigScreenName",

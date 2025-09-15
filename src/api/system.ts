@@ -1,7 +1,7 @@
 import { request } from "@/utils/request";
 import { ApiResponse } from "@/types/api";
 import { Microgrid } from "@/types/home";
-import { AmountRecord, EnergyCurves, PvStatistics, RealTimeData, StationInfo, EnergyData, EnergyStats, EnergyAndEarningsData, ForecastCurve } from "@/types/system";
+import { AmountRecord, EnergyCurves, PvStatistics, RealTimeData, StationInfo, EnergyData, EnergyStats, EnergyAndEarningsData, ForecastCurve, EarningsRecord } from "@/types/system";
 //基本信息
 export function getSearchById(id: string): Promise<ApiResponse<Microgrid>> {
   return request({
@@ -35,7 +35,7 @@ export function getPowerCurve(id: string): Promise<ApiResponse<EnergyCurves>> {
 }
 
 //近7日收益对比
-export function getCompareEarn(id: string): Promise<ApiResponse<any>> {
+export function getCompareEarn(id: string): Promise<ApiResponse<EarningsRecord[]>> {
   return request({
     method: "GET",
     url: "/microgrid/compareEarn/" + id,

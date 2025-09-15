@@ -41,3 +41,16 @@ export interface Microgrid {
   microgridAbbreviation: string;
   children: Station[];
 }
+
+/**
+ * 微电网大屏配置实体
+ */
+interface MicrogridBigScreenConfig {
+  id: number;
+  corpId: string;
+  name: string;
+  useTo: string;
+  config: string;
+  gmtCreate: string;
+  gmtModify: string;
+}
