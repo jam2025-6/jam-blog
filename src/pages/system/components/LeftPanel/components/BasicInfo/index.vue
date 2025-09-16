@@ -142,8 +142,8 @@ defineExpose({
               <div class="info-item-word-value-unit">kW</div>
               <div class="info-item-word-value-sub">/</div>
               <!-- 装机容量(MWh) -->
-              <div class="info-item-word-value-num">{{ convertEnergy(formData.installedCapacitySum).value }}</div>
-              <div class="info-item-word-value-unit">{{ convertEnergy(formData.installedCapacitySum).unit }}</div>
+              <div class="info-item-word-value-num">{{ convertEnergy(formData.installedCapacitySum, 'MWh').value }}</div>
+              <div class="info-item-word-value-unit">{{ convertEnergy(formData.installedCapacitySum, 'MWh').unit }}</div>
             </div>
           </div>
         </div>
