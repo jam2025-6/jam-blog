@@ -1,13 +1,10 @@
 <template>
-  <router-view />
+  <!-- <router-view /> -->
+  111
 </template>
 
 <script setup lang="ts">
 
-// 组件挂载时的初始化逻辑
-onMounted(() => {
-
-});
 </script>
 
 <style>
