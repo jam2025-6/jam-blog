@@ -11,11 +11,10 @@
 // | 字号     | `--font-size-base`, `--font-size-title`               | 字号层级        |
 
 :root {
-  body,
-  body[data-theme="light"] {
-  }
 
   body,
-  body[data-theme="dark"] {
-  }
+  body[data-theme="light"] {}
+
+  body,
+  body[data-theme="dark"] {}
 }
