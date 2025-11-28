@@ -1,0 +1,516 @@
+<!doctype html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>个人博客主题示例</title>
+    <meta name="description" content="清爽极简的个人博客主题示例（文章 / 碎碎念 / 点滴）" />
+    <style>
+        /* CSS 变量：支持亮/暗两套色系 */
+        :root {
+            --bg: #F9FAFB;
+            --surface: #FFFFFF;
+            --muted: #6B7280;
+            --text: #111827;
+            --accent: #4F46E5;
+            --border: #E5E7EB;
+            --radius: 12px;
+            --card-padding: 18px;
+            --max-width: 1100px;
+            --shadow: 0 6px 18px rgba(16, 24, 40, 0.06);
+        }
+
+        [data-theme="dark"] {
+            --bg: #0B1220;
+            --surface: #111827;
+            --muted: #9CA3AF;
+            --text: #F3F4F6;
+            --accent: #818CF8;
+            --border: #374151;
+            --shadow: none;
+        }
+
+        * {
+            box-sizing: border-box
+        }
+
+        body {
+            font-family: Inter, 'Noto Sans SC', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+            margin: 0;
+            background: var(--bg);
+            color: var(--text);
+            -webkit-font-smoothing: antialiased
+        }
+
+        a {
+            color: var(--accent);
+            text-decoration: none
+        }
+
+        /* 布局容器 */
+        .container {
+            max-width: var(--max-width);
+            margin: 28px auto;
+            padding: 0 20px
+        }
+
+        /* Navbar */
+        .nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 24px
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px
+        }
+
+        .logo {
+            width: 44px;
+            height: 44px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, var(--accent), #06b6d4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 14px;
+            align-items: center
+        }
+
+        .nav-links a {
+            padding: 8px 10px;
+            border-radius: 8px
+        }
+
+        .nav-actions {
+            display: flex;
+            gap: 8px;
+            align-items: center
+        }
+
+        .btn {
+            background: var(--accent);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 10px;
+            border: none;
+            cursor: pointer
+        }
+
+        .icon-btn {
+            background: transparent;
+            border: 1px solid var(--border);
+            padding: 8px;
+            border-radius: 10px;
+            cursor: pointer
+        }
+
+        /* Hero */
+        .hero {
+            background: linear-gradient(180deg, rgba(79, 70, 229, 0.06), transparent);
+            padding: 28px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            margin-bottom: 22px
+        }
+
+        .hero h1 {
+            margin: 0 0 8px;
+            font-size: 26px
+        }
+
+        .hero p {
+            margin: 0;
+            color: var(--muted)
+        }
+
+        /* Grid: 左侧主栏 + 右侧目录（PC）*/
+        .layout {
+            display: grid;
+            grid-template-columns: 1fr 320px;
+            gap: 20px
+        }
+
+        @media (max-width:900px) {
+            .layout {
+                grid-template-columns: 1fr
+            }
+        }
+
+        /* 文章卡片 */
+        .card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            padding: var(--card-padding);
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+        }
+
+        .article-list {
+            display: grid;
+            gap: 14px
+        }
+
+        .article-card {
+            display: flex;
+            flex-direction: column;
+            gap: 10px
+        }
+
+        .article-meta {
+            font-size: 13px;
+            color: var(--muted)
+        }
+
+        .tags {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap
+        }
+
+        .tag {
+            background: transparent;
+            border: 1px dashed var(--border);
+            padding: 6px 8px;
+            border-radius: 999px;
+            font-size: 12px;
+            color: var(--muted)
+        }
+
+        /* 碎碎念 */
+        .note {
+            padding: 12px;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+            background: linear-gradient(180deg, transparent, rgba(0, 0, 0, 0.01))
+        }
+
+        .note-time {
+            font-size: 12px;
+            color: var(--muted)
+        }
+
+        /* 点滴图像网格 */
+        .images {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 6px
+        }
+
+        @media (max-width:600px) {
+            .images {
+                grid-template-columns: repeat(2, 1fr)
+            }
+        }
+
+        .images img {
+            width: 100%;
+            height: 110px;
+            object-fit: cover;
+            border-radius: 8px
+        }
+
+        /* 右侧目录 */
+        .toc {
+            position: sticky;
+            top: 28px
+        }
+
+        .toc h3 {
+            margin-top: 0
+        }
+
+        .about-card {
+            display: flex;
+            gap: 12px;
+            align-items: center
+        }
+
+        .avatar {
+            width: 64px;
+            height: 64px;
+            border-radius: 12px;
+            overflow: hidden
+        }
+
+        .avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover
+        }
+
+        /* Footer */
+        footer {
+            margin-top: 40px;
+            padding: 18px;
+            text-align: center;
+            color: var(--muted)
+        }
+
+        /* 小屏样式 */
+        @media (max-width:900px) {
+            .nav-links {
+                display: none
+            }
+
+            .mobile-menu {
+                display: flex
+            }
+        }
+
+        .mobile-menu {
+            display: none
+        }
+
+        /* utility */
+        .muted {
+            color: var(--muted)
+        }
+
+        .small {
+            font-size: 13px
+        }
+
+        .section-title {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 10px
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app" data-theme="light">
+        <div class="container">
+            <nav class="nav">
+                <div class="brand">
+                    <div class="logo">BK</div>
+                    <div>
+                        <div style="font-weight:700">MyMinimalBlog</div>
+                        <div class="small muted">记录技术 · 思考 · 生活</div>
+                    </div>
+                </div>
+
+                <div class="nav-links">
+                    <a href="#articles">文章</a>
+                    <a href="#notes">碎碎念</a>
+                    <a href="#moments">点滴</a>
+                    <a href="#about">关于我</a>
+                </div>
+
+                <div class="nav-actions">
+                    <button class="icon-btn" id="themeToggle" title="切换主题">🌙</button>
+                    <button class="btn" onclick="location.href='#admin'">写文章</button>
+                    <button class="icon-btn mobile-menu" id="mobileMenuBtn">☰</button>
+                </div>
+            </nav>
+
+            <section class="hero card">
+                <h1>清爽 · 极简 · 个人博客主题</h1>
+                <p>适合技术文章 + 随手碎碎念 + 点滴图文记录 — 单文件示例。可直接转换为 Vue 组件或扩展为完整主题。</p>
+            </section>
+
+            <main class="layout">
+                <div>
+                    <!-- 文章列表 -->
+                    <section id="articles" class="card">
+                        <div class="section-title">
+                            <h2>文章</h2>
+                            <div class="muted small">共 12 篇</div>
+                        </div>
+
+                        <div class="article-list">
+                            <!-- article item -->
+                            <article class="article-card">
+                                <h3><a href="#">用 Vite+Vue3 搭建博客：从零到上线</a></h3>
+                                <div class="article-meta">2025-03-10 · 读取 1.2k · 标签：<span class="tag">Vue</span> <span
+                                        class="tag">Vite</span></div>
+                                <p class="muted">介绍如何用 Vite 搭建项目、选择路由、状态管理与部署的实用经验分享。</p>
+                            </article>
+
+                            <article class="article-card">
+                                <h3><a href="#">Node.js 后端实用目录：认证、上传、分页</a></h3>
+                                <div class="article-meta">2025-02-16 · 读取 860 · 标签：<span class="tag">Node</span> <span
+                                        class="tag">Express</span></div>
+                                <p class="muted">常见后端功能集锦：JWT 鉴权、图片上传（Multer）、分页与性能优化。</p>
+                            </article>
+
+                            <article class="article-card">
+                                <h3><a href="#">Markdown 编辑器选型与实现】</a></h3>
+                                <div class="article-meta">2024-12-28 · 读取 2.3k · 标签：<span class="tag">Markdown</span>
+                                    <span class="tag">Editor</span></div>
+                                <p class="muted">对比常见编辑器组件（ToastUI、Vditor、ProseMirror），并给出接入建议。</p>
+                            </article>
+                        </div>
+                    </section>
+
+                    <!-- 碎碎念 -->
+                    <section id="notes" class="card" style="margin-top:18px">
+                        <div class="section-title">
+                            <h2>碎碎念</h2>
+                            <div class="muted small">时间线</div>
+                        </div>
+
+                        <div style="display:grid;gap:10px">
+                            <div class="note">
+                                <div class="note-time">2025-11-27 · 22:14</div>
+                                <div>今天把前端的路由懒加载优化完了，页面首屏快了不少～</div>
+                            </div>
+
+                            <div class="note">
+                                <div class="note-time">2025-11-25 · 09:12</div>
+                                <div>学习了新的 CSS trick，可以让代码块在窄屏下横向滚动，同时保留复制按钮。</div>
+                            </div>
+
+                            <div class="note">
+                                <div class="note-time">2025-11-20 · 18:03</div>
+                                <div>周末想去爬山，顺便拍几张自然风景照。</div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- 点滴 -->
+                    <section id="moments" class="card" style="margin-top:18px">
+                        <div class="section-title">
+                            <h2>点滴 · Moments</h2>
+                            <div class="muted small">图文记录 · 心情 · 地点</div>
+                        </div>
+
+                        <article style="margin-bottom:14px">
+                            <div style="display:flex;align-items:center;gap:12px;margin-bottom:8px">
+                                <div class="avatar"><img src="https://picsum.photos/seed/me1/200/200" alt="avatar">
+                                </div>
+                                <div>
+                                    <div style="font-weight:700">我自己</div>
+                                    <div class="small muted">2025-10-05 · 深圳 · 😄 开心</div>
+                                </div>
+                            </div>
+                            <p class="muted">去海边的一天，风景很美，放空很重要。</p>
+                            <div class="images" style="margin-top:8px">
+                                <img src="https://picsum.photos/seed/sea1/600/400" alt="img1">
+                                <img src="https://picsum.photos/seed/sea2/600/400" alt="img2">
+                                <img src="https://picsum.photos/seed/sea3/600/400" alt="img3">
+                            </div>
+                        </article>
+
+                        <article>
+                            <div style="display:flex;align-items:center;gap:12px;margin-bottom:8px">
+                                <div class="avatar"><img src="https://picsum.photos/seed/me2/200/200" alt="avatar">
+                                </div>
+                                <div>
+                                    <div style="font-weight:700">我自己</div>
+                                    <div class="small muted">2025-09-18 · 北京 · 🙂 惬意</div>
+                                </div>
+                            </div>
+                            <p class="muted">秋高气爽，城市里也有柔软的安静时刻。</p>
+                            <div class="images" style="margin-top:8px">
+                                <img src="https://picsum.photos/seed/city1/600/400" alt="img4">
+                                <img src="https://picsum.photos/seed/city2/600/400" alt="img5">
+                                <img src="https://picsum.photos/seed/city3/600/400" alt="img6">
+                            </div>
+                        </article>
+
+                    </section>
+
+                </div>
+
+                <!-- 右侧栏 -->
+                <aside class="toc">
+                    <div class="card about-card">
+                        <div class="avatar"><img src="https://picsum.photos/seed/avatar/200/200" alt="avatar"></div>
+                        <div>
+                            <div style="font-weight:700">你的名字</div>
+                            <div class="small muted">前端工程师 · 爱好摄影</div>
+                        </div>
+                    </div>
+
+                    <div class="card" style="margin-top:14px">
+                        <h3 style="margin:0 0 10px">分类</h3>
+                        <div class="tags"><span class="tag">前端</span><span class="tag">后端</span><span
+                                class="tag">笔记</span><span class="tag">随笔</span></div>
+                    </div>
+
+                    <div class="card" style="margin-top:14px">
+                        <h3 style="margin:0 0 10px">最近文章</h3>
+                        <ul style="margin:0;padding:0;list-style:none;display:grid;gap:8px">
+                            <li><a href="#">Markdown 编辑器选型与实现</a></li>
+                            <li><a href="#">用 Vite+Vue3 搭建博客</a></li>
+                            <li><a href="#">Node.js 后端实用目录</a></li>
+                        </ul>
+                    </div>
+
+                </aside>
+            </main>
+
+            <footer class="container">
+                <div class="muted">© 2025 你的名字 · 基于 Vue + Node 可扩展的主题示例</div>
+            </footer>
+        </div>
+    </div>
+
+    <script>
+        (function () {
+            const root = document.getElementById('app');
+            const btn = document.getElementById('themeToggle');
+            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+
+            // 初始化主题：优先 localStorage -> prefers-color-scheme -> light
+            let theme = localStorage.getItem('blog-theme');
+            if (!theme) {
+                const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+                theme = prefersDark ? 'dark' : 'light';
+            }
+            root.setAttribute('data-theme', theme);
+            updateBtn();
+
+            btn.addEventListener('click', () => {
+                theme = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+                root.setAttribute('data-theme', theme);
+                localStorage.setItem('blog-theme', theme);
+                updateBtn();
+            });
+
+            function updateBtn() {
+                btn.textContent = root.getAttribute('data-theme') === 'dark' ? '☀️' : '🌙';
+            }
+
+            // 简单移动端菜单切换（仅演示）
+            if (mobileMenuBtn) {
+                mobileMenuBtn.addEventListener('click', () => {
+                    const links = document.querySelector('.nav-links');
+                    if (links.style.display === 'flex') links.style.display = '';
+                    else links.style.display = 'flex';
+                })
+            }
+
+            // 图片懒加载（简单实现）
+            document.addEventListener('DOMContentLoaded', () => {
+                const imgs = document.querySelectorAll('img');
+                const io = new IntersectionObserver((entries) => {
+                    entries.forEach(e => {
+                        if (e.isIntersecting) {
+                            const img = e.target;
+                            if (img.dataset.src) { img.src = img.dataset.src; }
+                            io.unobserve(img);
+                        }
+                    })
+                })
+                imgs.forEach(i => io.observe(i));
+            })
+        })();
+    </script>
+</body>
+
+</html>

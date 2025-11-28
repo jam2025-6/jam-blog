@@ -5,7 +5,9 @@ import path from "path"; // ⬅️ 用 path 更稳
 import { createSvgIconsPlugin } from "vite-plugin-svg-icons";
 import { createHtmlPlugin } from "vite-plugin-html";
 import svgLoader from "vite-svg-loader";
-// https://vite.dev/config/
+import AutoImport from "unplugin-auto-import/vite";
+import Components from "unplugin-vue-components/vite";
+import { NaiveUiResolver } from "unplugin-vue-components/resolvers";
 export default defineConfig(({ mode }): Promise<UserConfig> => {
   const env = loadEnv(mode, process.cwd(), "");
   const { VITE_APP_TITLE, VITE_URL } = env;
@@ -27,6 +29,34 @@ export default defineConfig(({ mode }): Promise<UserConfig> => {
         createSvgIconsPlugin({
           iconDirs: [path.resolve(process.cwd(), "src/assets/icons")],
           symbolId: "icon-[name]",
+        }),
+        // 自动导入 naive-ui API
+        AutoImport({
+          imports: [
+            'vue',
+            'vue-router',
+            'pinia',
+            {
+              'naive-ui': [
+                'useDialog',
+                'useMessage',
+                'useNotification',
+                'useLoadingBar'
+              ]
+            }
+          ],
+          dts: path.resolve(process.cwd(), 'types/auto-imports.d.ts'),
+          eslintrc: {
+            enabled: true
+          }
+        }),
+        // 自动导入 Vue 组件
+        Components({
+          resolvers: [
+            // Naive UI 组件解析器
+            NaiveUiResolver()
+          ],
+          dts: path.resolve(process.cwd(), 'types/components.d.ts')
         }),
       ],
       resolve: {

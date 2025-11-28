@@ -1,0 +1,129 @@
+<script setup lang="ts">
+import { useMessage } from "naive-ui";
+const message = useMessage();
+function handleClick(item: any) {
+  message.info(String(item));
+}
+</script>
+
+<template>
+  <ul class="article">
+    <li v-for="item in 111" :key="item" class="article-item">
+      <div class="article-content">
+        <div class="article-title" @click="handleClick(item)">这是一个标题，他可以很长，也可以很短</div>
+        <div class="article-meta">2025/11/19</div>
+      </div>
+    </li>
+  </ul>
+</template>
+
+<style lang="scss" scoped>
+/* ✅ 移动端样式 */
+@media (max-width: 768px) {
+  .article {
+    padding: 20px 16px;
+    background-color: var(--bg-color);
+  }
+
+  .article-item {
+    display: flex;
+    flex-direction: column;
+    padding: 16px 12px;
+    border-bottom: 1px solid var(--border-color);
+    transition: all 0.2s ease;
+
+    &:last-child {
+      border-bottom: none;
+    }
+
+    &:hover {
+      background-color: rgba(0, 0, 0, 0.02);
+    }
+
+    .article-content {
+      padding: 0;
+    }
+
+    .article-title {
+      color: var(--text-color);
+      font-size: 16px;
+      font-weight: 500;
+      line-height: 1.5;
+      margin: 0 0 6px 0;
+      cursor: pointer;
+      transition: color 0.2s ease;
+
+      &:hover {
+        color: var(--color-main);
+      }
+    }
+
+    .article-meta {
+      color: var(--text-muted);
+      font-size: 13px;
+      font-weight: 400;
+      margin: 0;
+    }
+  }
+}
+
+/* ✅ 桌面端样式 */
+@media (min-width: 769px) {
+  .article {
+    padding: 36px 16px 16px 16px;
+    background-color: var(--bg-color);
+  }
+
+  .article-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 0;
+    border-bottom: 1px solid var(--border-color);
+    transition: all 0.2s ease;
+
+    &:last-child {
+      border-bottom: none;
+    }
+
+    &:hover {
+      background-color: rgba(0, 0, 0, 0.02);
+      padding-left: 8px;
+      padding-right: 8px;
+    }
+
+    .article-title {
+      flex: 1;
+      color: var(--text-color);
+      cursor: pointer;
+      font-size: 20px;
+      font-weight: 500;
+      line-height: 1.6;
+      transition: color 0.2s ease;
+      margin-right: 16px;
+
+      &:hover {
+        color: var(--color-main);
+        text-decoration: none;
+      }
+    }
+
+    .article-meta {
+      color: var(--text-muted);
+      white-space: nowrap;
+      font-size: 14px;
+    }
+  }
+}
+
+.article {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  background-color: var(--bg-color);
+}
+
+.article-item {
+  /* 基础样式 */
+}
+</style>

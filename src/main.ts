@@ -12,7 +12,6 @@ import "virtual:svg-icons-register"; // svg图标
 const app = createApp(App);
 app.component("SvgIcon", SvgIcon);
 // 注册全局指令// 全局注册，名字叫 Icon
-// app.component("SvgIcon", SvgIcon);
 app.use(router);
 app.use(pinia); // ✅ 使用 Pinia
 app.mount("#app");

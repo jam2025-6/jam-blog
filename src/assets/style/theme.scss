@@ -11,10 +11,60 @@
 // | 字号     | `--font-size-base`, `--font-size-title`               | 字号层级        |
 
 :root {
+  /* 浅色主题变量 */
+  --color-main: #409eff;
+  --color-secondary: #67c23a;
+  --bg-color: #f8f9fa;
+  --bg-page: #ffffff;
+  --bg-card: #ffffff;
+  --text-color: #303133;
+  --text-muted: #909399;
+  --border-color: #e4e7ed;
+  --color-success: #67c23a;
+  --color-warning: #e6a23c;
+  --color-error: #f56c6c;
+  --spacing-sm: 8px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+  --radius-base: 8px;
+  --radius-sm: 4px;
+  --font-size-base: 14px;
+  --font-size-title: 18px;
+}
 
-  body,
-  body[data-theme="light"] {}
+/* 浅色主题 */
+body,
+body[data-theme="light"] {
+  --color-main: #409eff;
+  --color-secondary: #67c23a;
+  --bg-color: #f8f9fa;
+  --bg-page: #ffffff;
+  --bg-card: #ffffff;
+  --text-color: #303133;
+  --text-muted: #909399;
+  --border-color: #e4e7ed;
+  --color-success: #67c23a;
+  --color-warning: #e6a23c;
+  --color-error: #f56c6c;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  transition: all 0.3s ease;
+}
 
-  body,
-  body[data-theme="dark"] {}
+/* 深色主题 */
+body[data-theme="dark"] {
+  --color-main: #66b1ff;
+  --color-secondary: #85ce61;
+  --bg-color: #1a1a1a;
+  --bg-page: #2c2c2c;
+  --bg-card: #3a3a3a;
+  --text-color: #e0e0e0;
+  --text-muted: #a0a0a0;
+  --border-color: #4a4a4a;
+  --color-success: #85ce61;
+  --color-warning: #ebb563;
+  --color-error: #f78989;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  transition: all 0.3s ease;
 }
