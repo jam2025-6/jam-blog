@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
+import { memoryApi } from "@/api";
+import dayjs from "dayjs";
 
 interface MemoryItem {
   id: number | string;
@@ -9,21 +11,29 @@ interface MemoryItem {
   location: string;
   emotion: string;
   emotionIcon: string;
+  coverImage?: string;
 }
 
-const memoryList = ref<MemoryItem[]>([
-  {
-    id: "example",
-    title: "这是一个示例",
-    images: ["http://101.126.19.231:6303/uploads/blogs/example_simple.jpg"],
-    date: "2025-12-01",
-    location: "杭州",
-    emotion: "开心",
-    emotionIcon: "😄",
-  },
-]);
+const memoryList = ref<MemoryItem[]>([]);
+const loading = ref(true);
 
-onMounted(() => {});
+// 从API获取回忆列表
+const fetchMemories = async () => {
+  loading.value = true;
+  try {
+    const data = await memoryApi.getMemories();
+    memoryList.value = data;
+  } catch (error) {
+    console.error("Failed to fetch memories:", error);
+    memoryList.value = [];
+  } finally {
+    loading.value = false;
+  }
+};
+
+onMounted(() => {
+  fetchMemories();
+});
 </script>
 
 <template>
@@ -31,12 +41,19 @@ onMounted(() => {});
     <li v-for="item in memoryList" :key="item.id" class="memory-item">
       <router-link :to="`/memory/${item.id}`" class="memory-link">
         <div class="memory-cover" v-if="item.images.length > 0">
-          <n-image lazy width="100%" class="cover-image" :src="item.images[0]" :alt="item.title" />
+          <n-image
+            lazy
+            width="100%"
+            preview-disabled
+            class="cover-image"
+            :src="item.coverImage || item.images[0]"
+            :alt="item.title"
+          />
         </div>
         <div class="memory-info">
           <h3 class="memory-title">{{ item.title }}</h3>
           <div class="memory-meta">
-            <span class="date">{{ item.date }}</span>
+            <span class="date">{{ dayjs(item.date).format("YYYY/MM/DD") }}</span>
             <span class="divider">·</span>
             <span class="location">{{ item.location }}</span>
             <span class="divider">·</span>

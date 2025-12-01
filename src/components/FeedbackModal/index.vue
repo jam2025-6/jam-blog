@@ -16,6 +16,12 @@
   >
     <div class="feedback-form">
       <n-form :model="feedbackForm" layout="vertical">
+        <!-- <n-form-item label="姓名">
+          <n-input v-model:value="feedbackForm.name" placeholder="请输入您的姓名（选填）" />
+        </n-form-item>
+        <n-form-item label="邮箱">
+          <n-input v-model:value="feedbackForm.email" placeholder="请输入您的邮箱（选填）" />
+        </n-form-item> -->
         <n-form-item label="留言内容" required>
           <n-input
             v-model:value="feedbackForm.content"
@@ -29,7 +35,7 @@
     <template #action>
       <div class="modal-footer">
         <n-button @click="showFeedbackModal = false">取消</n-button>
-        <n-button type="primary" @click="submitFeedback">确定保存</n-button>
+        <n-button type="primary" @click="submitFeedback" :loading="isSubmitting">确定保存</n-button>
       </div>
     </template>
   </n-modal>
@@ -39,6 +45,7 @@
 import { ref } from "vue";
 import { useMessage } from "naive-ui";
 import SvgIcon from "../SvgIcon/index.vue";
+import { messageApi } from "../../api/index";
 
 const message = useMessage();
 
@@ -50,28 +57,49 @@ const startX = ref(0);
 const startY = ref(0);
 const offsetX = ref(0);
 const offsetY = ref(0);
+const isSubmitting = ref(false);
 
 // 留言板表单数据
 const feedbackForm = ref({
   content: "",
+  name: null,
+  email: null,
 });
 
 // 提交留言
-const submitFeedback = () => {
+const submitFeedback = async () => {
   // 简单的表单验证
   if (!feedbackForm.value.content.trim()) {
     message.error("请输入留言内容");
     return;
   }
 
-  // 模拟提交成功
-  message.success("留言提交成功，感谢您的反馈！");
+  try {
+    isSubmitting.value = true;
 
-  // 重置表单并关闭弹窗
-  feedbackForm.value = {
-    content: "",
-  };
-  showFeedbackModal.value = false;
+    // 准备提交数据，将空字符串和null转换为undefined
+    const submitData = {
+      name: feedbackForm.value.name ? feedbackForm.value.name : undefined,
+      email: feedbackForm.value.email ? feedbackForm.value.email : undefined,
+      content: feedbackForm.value.content,
+    };
+
+    await messageApi.createMessage(submitData);
+    message.success("留言提交成功，感谢您的反馈！");
+
+    // 重置表单并关闭弹窗
+    feedbackForm.value = {
+      content: "",
+      name: null,
+      email: null,
+    };
+    showFeedbackModal.value = false;
+  } catch (error) {
+    message.error("留言提交失败，请稍后重试");
+    console.error("提交留言失败:", error);
+  } finally {
+    isSubmitting.value = false;
+  }
 };
 
 // 拖动功能相关函数

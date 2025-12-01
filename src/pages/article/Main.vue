@@ -1,10 +1,9 @@
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
-// import { useMessage } from "naive-ui";
 import dayjs from "dayjs";
+import { articleApi } from "@/api";
 
-// const message = useMessage();
 const router = useRouter();
 
 interface Article {
@@ -14,27 +13,29 @@ interface Article {
 }
 
 const articles = ref<Article[]>([]);
+const loading = ref(true);
 
 // 跳转到文章详情页
 function goToDetail(id: number) {
   router.push(`/article/${id}`);
 }
 
-// 生成文章数据
-const generateArticles = () => {
-  const articleList: Article[] = [
-    {
-      id: 1,
-      title: "这是一个示例",
-      date: "2025-12-01",
-    },
-  ];
-
-  articles.value = articleList;
+// 从API获取文章数据
+const fetchArticles = async () => {
+  loading.value = true;
+  try {
+    const data = await articleApi.getArticles();
+    articles.value = data;
+  } catch (error) {
+    console.error("Failed to fetch articles:", error);
+    articles.value = [];
+  } finally {
+    loading.value = false;
+  }
 };
 
 onMounted(() => {
-  generateArticles();
+  fetchArticles();
 });
 </script>
 

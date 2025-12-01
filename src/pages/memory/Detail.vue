@@ -3,6 +3,7 @@ import { ref, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { MdPreview } from "md-editor-v3";
 import "md-editor-v3/lib/style.css";
+import { memoryApi } from "@/api";
 
 // 导入 example.md 文件
 import exampleMd from "./md/example.md?raw";
@@ -107,19 +108,25 @@ const generateFakeData = (id: number): MemoryItem => {
 };
 
 // 获取记忆详情
-const fetchMemoryDetail = () => {
+const fetchMemoryDetail = async () => {
   const id = Number(route.params.id);
-  // if (isNaN(id)) {
-  //   router.push("/memory");
-  //   return;
-  // }
+  if (isNaN(id)) {
+    router.push("/memory");
+    return;
+  }
 
-  // 在实际项目中，这里应该是API请求
-  // 现在使用假数据模拟
-  setTimeout(() => {
-    memoryItem.value = generateFakeData(id);
+  loading.value = true;
+  try {
+    // 调用真实API获取记忆详情
+    const data = await memoryApi.getMemoryById(id);
+    memoryItem.value = data;
+  } catch (error) {
+    console.error("Failed to fetch memory detail:", error);
+    // 如果获取失败，返回列表页
+    router.push("/memory");
+  } finally {
     loading.value = false;
-  }, 300);
+  }
 };
 
 // 返回列表页
@@ -184,12 +191,13 @@ onMounted(() => {
           <div class="content-section" v-if="memoryItem.images.length > 1">
             <h2 class="section-title">照片集</h2>
             <div class="image-gallery">
-              <img
+              <n-image
                 v-for="(image, index) in memoryItem.images.slice(1)"
                 :key="index"
                 :src="image"
                 :alt="`memory-${memoryItem.id}-${index + 1}`"
                 class="gallery-image"
+                width="100%"
               />
             </div>
           </div>

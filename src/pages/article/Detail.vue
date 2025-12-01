@@ -23,9 +23,7 @@ import { ref, onMounted } from "vue";
 import { useRouter, useRoute } from "vue-router";
 import { MdPreview } from "md-editor-v3";
 import "md-editor-v3/lib/style.css";
-
-// 导入 example.md 文件
-import exampleMd from "./md/example.md?raw";
+import { articleApi } from "@/api";
 
 const router = useRouter();
 const route = useRoute();
@@ -44,47 +42,36 @@ const article = ref<Article>({
   content: "",
 });
 
-// 文章数据 - 使用 example.md 内容
-const articlesData: Article[] = [
-  {
-    id: 1,
-    title: "Vue 3 组合式 API 学习笔记",
-    date: "2025-11-28",
-    content: exampleMd,
-  },
-  {
-    id: 2,
-    title: "前端性能优化实战",
-    date: "2025-11-27",
-    content: exampleMd,
-  },
-  {
-    id: 3,
-    title: "TypeScript 高级类型用法",
-    date: "2025-11-26",
-    content: exampleMd,
-  },
-];
+const loading = ref(true);
 
 // 返回列表页
 const goBack = () => {
   router.push("/article");
 };
 
-// 获取文章详情
-const getArticleDetail = () => {
-  const id = Number(route.params.id);
-  const foundArticle = articlesData.find((item) => item.id === id);
-  if (foundArticle) {
-    article.value = foundArticle;
-  } else {
-    // 如果找不到文章，返回列表页
+// 从API获取文章详情
+const fetchArticleDetail = async () => {
+  loading.value = true;
+  try {
+    const id = Number(route.params.id);
+    if (isNaN(id)) {
+      router.push("/article");
+      return;
+    }
+
+    const data = await articleApi.getArticleById(id);
+    article.value = data;
+  } catch (error) {
+    console.error("Failed to fetch article detail:", error);
+    // 如果获取失败，返回列表页
     router.push("/article");
+  } finally {
+    loading.value = false;
   }
 };
 
 onMounted(() => {
-  getArticleDetail();
+  fetchArticleDetail();
 });
 </script>
 

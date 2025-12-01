@@ -1,82 +1,54 @@
-// import axios, { type Method } from "axios";
-// import { getToken } from "@/utils/auth";
-// import i18n from "@/i18n";
-// import { ElMessage, ElMessageBox } from "element-plus";
-// import { translate } from './i18n-helper';
-// interface RequestOptions {
-//   url: string;
-//   method?: Method;
-//   params?: any;
-//   data?: any;
-//   headers?: any;
-//   baseURL?: string; // 可选，自定义 baseURL
-// }
-// // 基础配置
-// const baseURL = import.meta.env.VITE_API_BASE;
+import axios, { type Method } from "axios";
 
-// const service = axios.create({
-//   baseURL,
-//   timeout: 10000,
-// });
+interface RequestOptions {
+  url: string;
+  method?: Method;
+  params?: any;
+  data?: any;
+  headers?: any;
+  baseURL?: string; // 可选，自定义 baseURL
+}
 
-// // 请求拦截器
-// service.interceptors.request.use((config) => {
-//   // 将 token 加入请求头
-//   config.headers["Authorization"] = "Bearer " + getToken();
-//   config.headers["lang"] = i18n.global.locale.value;
-//   config.headers["zone"] = Intl.DateTimeFormat().resolvedOptions().timeZone;
-//   if (import.meta.env.VITE_APP_ENV === "development") {
-//     config.headers["companycode"] = "gold";
-//     config.headers["userid"] = 1;
-//   }
-//   return config;
-// });
-// function handle401() {
-//   ElMessageBox.confirm(
-//     translate('message.sessionExpired'),
-//     translate('message.systemNotification'),
-//     {
-//       confirmButtonText: translate('message.confirm'),
-//       cancelButtonText: translate('message.cancel'),
-//       type: 'warning'
-//     }
-//   ).then(() => {
-//     location.href = '/';
-//   }).catch(() => { });
-// }
-// // 响应拦截器
-// service.interceptors.response.use(
-//   (response) => {
-//     const code = response.data.code;
-//     if (code === 200) {
-//       return Promise.resolve(response);
-//     } else if (code === 401) {
-//       handle401()
-//       // 保证返回一个 Promise<never>，让 TS 类型匹配
-//       return Promise.reject(new Error('Unauthorized'));
-//     } else {
-//       return Promise.reject(new Error(response.data.message || "Error"));
-//     }
-//   },
-//   (error) => {
-//     const { message } = error;
-//     ElMessage({ message: message, type: "error", duration: 5 * 1000 });
-//     return Promise.reject(error);
-//   }
-// );
+// 基础配置 - 后端服务地址
+const baseURL = 'http://localhost:3000';
 
-// // T 为返回的数据类型
-// export function request<T = any>(options: RequestOptions): Promise<T> {
-//   const mergedHeaders = {
-//     ...service.defaults.headers.common,
-//     ...(options.headers || {}),
-//   };
-//   return service({
-//     url: options.url,
-//     method: (options.method || "GET").toUpperCase() as Method,
-//     params: options.params,
-//     data: options.data,
-//     headers: mergedHeaders,
-//     baseURL: options.baseURL || service.defaults.baseURL, // ✅ 只作用于当前请求
-//   }).then((res) => res.data as T);
-// }
+const service = axios.create({
+  baseURL,
+  timeout: 10000,
+});
+
+// 请求拦截器
+service.interceptors.request.use((config) => {
+  // 设置请求头
+  config.headers["Content-Type"] = "application/json";
+  return config;
+});
+
+// 响应拦截器
+service.interceptors.response.use(
+  (response) => {
+    // 直接返回响应数据，后端返回的数据结构已经是前端需要的格式
+    return Promise.resolve(response.data);
+  },
+  (error) => {
+    const { message } = error;
+    console.error('API Error:', message);
+    return Promise.reject(error);
+  }
+);
+
+// T 为返回的数据类型
+export function request<T = any>(options: RequestOptions): Promise<T> {
+  const mergedHeaders = {
+    ...service.defaults.headers.common,
+    ...(options.headers || {}),
+  };
+  return service({
+    url: options.url,
+    method: (options.method || "GET").toUpperCase() as Method,
+    params: options.params,
+    data: options.data,
+    headers: mergedHeaders,
+    baseURL: options.baseURL || service.defaults.baseURL, // ✅ 只作用于当前请求
+  }).then((res) => res as T);
+}

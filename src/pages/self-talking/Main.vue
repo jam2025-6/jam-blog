@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import dayjs from "dayjs";
 import { ref, onMounted } from "vue";
+import { selfTalkingApi } from "@/api";
 
 interface SelfTalkingItem {
   id: number;
@@ -8,15 +9,26 @@ interface SelfTalkingItem {
   content: string;
 }
 
-const selfTalkingList = ref<SelfTalkingItem[]>([
-  {
-    id: 1,
-    time: "2025-12-01 12:00:00",
-    content: "Hello World",
-  },
-]);
+const selfTalkingList = ref<SelfTalkingItem[]>([]);
+const loading = ref(true);
 
-onMounted(() => {});
+// 从API获取自言自语列表
+const fetchSelfTalkings = async () => {
+  loading.value = true;
+  try {
+    const data = await selfTalkingApi.getSelfTalkings();
+    selfTalkingList.value = data;
+  } catch (error) {
+    console.error("Failed to fetch self-talkings:", error);
+    selfTalkingList.value = [];
+  } finally {
+    loading.value = false;
+  }
+};
+
+onMounted(() => {
+  fetchSelfTalkings();
+});
 </script>
 
 <template>

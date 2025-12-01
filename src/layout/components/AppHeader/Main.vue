@@ -98,7 +98,7 @@ function handleClick(path: string) {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   backdrop-filter: blur(10px); /* 背景模糊 */
   -webkit-backdrop-filter: blur(10px); /* Safari 支持 */
-  z-index: 2025;
+  z-index: 11111;
   background-color: var(--bg-page);
   .header {
     max-width: 780px;
