@@ -2,6 +2,7 @@
 import { ref, onMounted, watch } from "vue";
 import { useMessage } from "naive-ui";
 import { useRouter, useRoute } from "vue-router";
+import FeedbackModal from "@/components/FeedbackModal/index.vue";
 const message = useMessage();
 const router = useRouter();
 const route = useRoute();
@@ -80,9 +81,12 @@ function handleClick(path: string) {
         <n-dropdown size="large" trigger="hover" :options="langOptions" @select="handleSelect">
           <SvgIcon name="language" />
         </n-dropdown>
+        <SvgIcon name="search" />
       </section>
     </div>
   </header>
+  <!-- 留言板组件 -->
+  <FeedbackModal />
 </template>
 
 <style lang="scss" scoped>

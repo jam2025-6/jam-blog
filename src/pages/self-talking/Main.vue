@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import dayjs from "dayjs";
 import { ref, onMounted } from "vue";
 
 interface SelfTalkingItem {
@@ -7,70 +8,21 @@ interface SelfTalkingItem {
   content: string;
 }
 
-const selfTalkingList = ref<SelfTalkingItem[]>([]);
+const selfTalkingList = ref<SelfTalkingItem[]>([
+  {
+    id: 1,
+    time: "2025-12-01 12:00:00",
+    content: "Hello World",
+  },
+]);
 
-// 生成随机时间
-const generateRandomTime = (): string => {
-  const now = new Date();
-  const randomDays = Math.floor(Math.random() * 30); // 最近30天内
-  const randomDate = new Date(now.getTime() - randomDays * 24 * 60 * 60 * 1000);
-
-  const year = randomDate.getFullYear();
-  const month = String(randomDate.getMonth() + 1).padStart(2, "0");
-  const day = String(randomDate.getDate()).padStart(2, "0");
-  const hours = String(Math.floor(Math.random() * 24)).padStart(2, "0");
-  const minutes = String(Math.floor(Math.random() * 60)).padStart(2, "0");
-  const seconds = String(Math.floor(Math.random() * 60)).padStart(2, "0");
-
-  return `${year}/${month}/${day} ${hours}:${minutes}:${seconds}`;
-};
-
-// 生成随机内容
-const generateRandomContent = (): string => {
-  const contents = [
-    "今天天气真好，适合出去散步",
-    "刚刚完成了一个重要的项目，感觉很有成就感",
-    "学习Vue3真的很有趣，组合式API让代码更清晰",
-    "最近在看一本好书，推荐给大家",
-    "今天尝试了新的菜谱，味道还不错",
-    "生活就像一盒巧克力，你永远不知道下一颗是什么味道",
-    "保持积极的心态，每天都是新的开始",
-    "努力工作，享受生活，这才是人生的意义",
-    "今天遇到了一个有趣的人，聊了很多有意义的话题",
-    "学习是一个终身的过程，不断进步才能保持竞争力",
-    "有时候，简单的生活才是最幸福的",
-    "感谢身边的朋友和家人，有你们真好",
-    "今天的夕阳真美，忍不住拍了几张照片",
-    "运动让我感觉充满活力，坚持锻炼很重要",
-    "阅读可以拓宽视野，让我们看到更广阔的世界",
-  ];
-  return contents[Math.floor(Math.random() * contents.length)];
-};
-
-// 生成假数据
-const generateFakeData = (count: number = 50) => {
-  const data: SelfTalkingItem[] = [];
-  for (let i = 0; i < count; i++) {
-    data.push({
-      id: i + 1,
-      time: generateRandomTime(),
-      content: generateRandomContent(),
-    });
-  }
-  // 按时间倒序排列
-  data.sort((a, b) => new Date(b.time).getTime() - new Date(a.time).getTime());
-  selfTalkingList.value = data;
-};
-
-onMounted(() => {
-  generateFakeData();
-});
+onMounted(() => {});
 </script>
 
 <template>
   <ul class="self-talking">
     <li v-for="item in selfTalkingList" :key="item.id" class="item">
-      <div class="li-time">{{ item.time }}</div>
+      <div class="li-time">{{ dayjs(item.time).format("YYYY/MM/DD HH:mm:ss") }}</div>
       <div class="li-content">{{ item.content }}</div>
     </li>
   </ul>

@@ -2,9 +2,8 @@
 import { ref, onMounted } from "vue";
 
 interface MemoryItem {
-  id: number;
+  id: number | string;
   title: string;
-  description: string;
   images: string[];
   date: string;
   location: string;
@@ -12,100 +11,19 @@ interface MemoryItem {
   emotionIcon: string;
 }
 
-const memoryList = ref<MemoryItem[]>([]);
+const memoryList = ref<MemoryItem[]>([
+  {
+    id: "example",
+    title: "这是一个示例",
+    images: ["http://101.126.19.231:6303/uploads/blogs/example_simple.jpg"],
+    date: "2025-12-01",
+    location: "杭州",
+    emotion: "开心",
+    emotionIcon: "😄",
+  },
+]);
 
-// 生成随机日期
-const generateRandomDate = (): string => {
-  const now = new Date();
-  const randomDays = Math.floor(Math.random() * 365); // 最近一年
-  const randomDate = new Date(now.getTime() - randomDays * 24 * 60 * 60 * 1000);
-
-  const year = randomDate.getFullYear();
-  const month = String(randomDate.getMonth() + 1).padStart(2, "0");
-  const day = String(randomDate.getDate()).padStart(2, "0");
-
-  return `${year}-${month}-${day}`;
-};
-
-// 生成随机图片
-const generateRandomImages = (count: number): string[] => {
-  const images: string[] = [];
-  const categories = ["nature", "city", "food", "travel", "people", "animal", "art", "architecture"];
-  const randomCategory = categories[Math.floor(Math.random() * categories.length)];
-
-  for (let i = 0; i < count; i++) {
-    images.push(`https://picsum.photos/seed/sea1/600/400`);
-  }
-  return images;
-};
-
-// 生成假数据
-const generateFakeData = () => {
-  const titles = [
-    "海边的一天",
-    "爬山记",
-    "咖啡馆探店",
-    "电影观后感",
-    "厨艺新突破",
-    "博物馆之旅",
-    "家庭野餐",
-    "跑步记录",
-    "美丽日落",
-    "好书推荐",
-  ];
-
-  const descriptions = [
-    "去海边的一天，风景很美，放空很重要。",
-    "今天和朋友一起爬山，虽然很累，但山顶的风景值得。",
-    "尝试了新的咖啡馆，咖啡味道不错，环境也很舒适。",
-    "周末在家看了一部好电影，剧情很感人。",
-    "今天学会了一道新菜，家人都说好吃，很有成就感。",
-    "去了博物馆，了解了很多历史文化知识。",
-    "和家人一起野餐，天气很好，心情也很棒。",
-    "今天跑步突破了自己的记录，坚持就是胜利。",
-    "看到了美丽的日落，忍不住拍了很多照片。",
-    "读了一本好书，收获很多，推荐给大家。",
-  ];
-
-  const locations = ["深圳", "北京", "上海", "广州", "杭州", "成都", "西安", "厦门", "青岛", "三亚"];
-
-  const emotions = [
-    { icon: "😄", text: "开心" },
-    { icon: "😊", text: "愉快" },
-    { icon: "😌", text: "平静" },
-    { icon: "🤔", text: "思考" },
-    { icon: "😮", text: "惊讶" },
-    { icon: "😍", text: "喜爱" },
-    { icon: "🤗", text: "温暖" },
-    { icon: "😎", text: "酷炫" },
-  ];
-
-  const data: MemoryItem[] = [];
-
-  for (let i = 0; i < 8; i++) {
-    const imageCount = Math.floor(Math.random() * 5) + 1; // 1-5张图片
-    const emotion = emotions[Math.floor(Math.random() * emotions.length)];
-
-    data.push({
-      id: i + 1,
-      title: titles[Math.floor(Math.random() * titles.length)],
-      description: descriptions[Math.floor(Math.random() * descriptions.length)],
-      images: generateRandomImages(imageCount),
-      date: generateRandomDate(),
-      location: locations[Math.floor(Math.random() * locations.length)],
-      emotion: emotion.text,
-      emotionIcon: emotion.icon,
-    });
-  }
-
-  // 按日期倒序排列
-  data.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
-  memoryList.value = data;
-};
-
-onMounted(() => {
-  generateFakeData();
-});
+onMounted(() => {});
 </script>
 
 <template>
@@ -113,7 +31,7 @@ onMounted(() => {
     <li v-for="item in memoryList" :key="item.id" class="memory-item">
       <router-link :to="`/memory/${item.id}`" class="memory-link">
         <div class="memory-cover" v-if="item.images.length > 0">
-          <img :src="item.images[0]" :alt="item.title" class="cover-image" />
+          <n-image lazy width="100%" class="cover-image" :src="item.images[0]" :alt="item.title" />
         </div>
         <div class="memory-info">
           <h3 class="memory-title">{{ item.title }}</h3>

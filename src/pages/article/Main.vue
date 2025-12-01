@@ -1,17 +1,49 @@
 <script setup lang="ts">
-import { useMessage } from "naive-ui";
-const message = useMessage();
-function handleClick(item: any) {
-  message.info(String(item));
+import { ref, onMounted } from "vue";
+import { useRouter } from "vue-router";
+// import { useMessage } from "naive-ui";
+import dayjs from "dayjs";
+
+// const message = useMessage();
+const router = useRouter();
+
+interface Article {
+  id: number;
+  title: string;
+  date: string;
 }
+
+const articles = ref<Article[]>([]);
+
+// 跳转到文章详情页
+function goToDetail(id: number) {
+  router.push(`/article/${id}`);
+}
+
+// 生成文章数据
+const generateArticles = () => {
+  const articleList: Article[] = [
+    {
+      id: 1,
+      title: "这是一个示例",
+      date: "2025-12-01",
+    },
+  ];
+
+  articles.value = articleList;
+};
+
+onMounted(() => {
+  generateArticles();
+});
 </script>
 
 <template>
   <ul class="article">
-    <li v-for="item in 111" :key="item" class="article-item">
+    <li v-for="item in articles" :key="item.id" class="article-item">
       <div class="article-content">
-        <div class="article-title" @click="handleClick(item)">这是一个标题，他可以很长，也可以很短</div>
-        <div class="article-meta">2025/11/19</div>
+        <div class="article-title" @click="goToDetail(item.id)">{{ item.title }}</div>
+        <div class="article-meta">{{ dayjs(item.date).format("YYYY/MM/DD") }}</div>
       </div>
     </li>
   </ul>
