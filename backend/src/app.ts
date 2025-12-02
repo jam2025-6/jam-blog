@@ -38,9 +38,10 @@ import articleRoutes from './routes/ArticleRoutes';
 import memoryRoutes from './routes/MemoryRoutes';
 import selfTalkingRoutes from './routes/SelfTalkingRoutes';
 import messageRoutes from './routes/MessageRoutes';
-
+const uploadDir = "/data/uploads";
 const app = express();
 
+app.use("/uploads", express.static(uploadDir));
 // Middleware
 app.use(helmet());
 app.use(morgan('dev'));
@@ -60,7 +61,7 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 // Error handler
 app.use(errorHandler);
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 6303;
 
 app.listen(PORT, () => {
   console.log(`Server running in ${process.env.NODE_ENV} mode on port ${PORT}`);

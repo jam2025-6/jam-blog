@@ -4,14 +4,20 @@
       <!-- 返回按钮 -->
       <button class="back-btn" @click="goBack">← 返回列表</button>
 
+      <!-- 加载状态 -->
+      <div v-if="loading" class="loading">
+        <div class="loading-spinner"></div>
+        <p>加载中...</p>
+      </div>
+
       <!-- 文章内容 -->
-      <article class="article-content">
+      <article v-else class="article-content">
         <h1 class="article-title">{{ article.title }}</h1>
         <div class="article-meta">{{ article.date }}</div>
 
         <!-- 文章正文 - 使用 md-editor-v3 显示 Markdown 内容 -->
         <div class="article-body">
-          <MdPreview :model-value="article.content" />
+          <MdPreview :model-value="article.content" :theme="theme" />
         </div>
       </article>
     </div>
@@ -19,7 +25,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from "vue";
+import { ref, onMounted, computed, onBeforeUnmount } from "vue";
 import { useRouter, useRoute } from "vue-router";
 import { MdPreview } from "md-editor-v3";
 import "md-editor-v3/lib/style.css";
@@ -43,6 +49,51 @@ const article = ref<Article>({
 });
 
 const loading = ref(true);
+const currentTheme = ref(localStorage.getItem("theme") || "light");
+
+// 监听localStorage变化
+const handleStorageChange = (e: StorageEvent) => {
+  if (e.key === "theme") {
+    currentTheme.value = e.newValue || "light";
+  }
+};
+
+// 监听body属性变化
+const updateThemeFromBody = () => {
+  const bodyTheme = document.body.getAttribute("data-theme");
+  if (bodyTheme) {
+    currentTheme.value = bodyTheme;
+    localStorage.setItem("theme", bodyTheme);
+  }
+};
+
+// 监听主题切换按钮的点击事件（通过MutationObserver）
+let observer: MutationObserver | null = null;
+
+onMounted(() => {
+  fetchArticleDetail();
+
+  // 初始化主题
+  updateThemeFromBody();
+
+  // 添加事件监听
+  window.addEventListener("storage", handleStorageChange);
+  observer = new MutationObserver(updateThemeFromBody);
+  observer.observe(document.body, { attributes: true, attributeFilter: ["data-theme"] });
+});
+
+// 组件卸载前清理
+onBeforeUnmount(() => {
+  window.removeEventListener("storage", handleStorageChange);
+  if (observer) {
+    observer.disconnect();
+  }
+});
+
+// 计算属性，返回当前主题
+const theme = computed(() => {
+  return currentTheme.value === "dark" ? "dark" : "light";
+});
 
 // 返回列表页
 const goBack = () => {
@@ -69,10 +120,6 @@ const fetchArticleDetail = async () => {
     loading.value = false;
   }
 };
-
-onMounted(() => {
-  fetchArticleDetail();
-});
 </script>
 
 <style lang="scss" scoped>

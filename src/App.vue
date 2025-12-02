@@ -1,7 +1,7 @@
 <template>
   <n-config-provider>
     <!-- :theme="darkTheme" -->
-    <n-message-provider>
+    <n-message-provider placement="bottom">
       <RouterView />
     </n-message-provider>
   </n-config-provider>
@@ -15,6 +15,7 @@
 #app {
   height: 100%;
   width: 100%;
+
   .n-config-provider {
     height: 100%;
     width: 100%;

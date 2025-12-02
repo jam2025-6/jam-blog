@@ -1,12 +1,8 @@
 <script setup lang="ts">
-import { ref, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { MdPreview } from "md-editor-v3";
 import "md-editor-v3/lib/style.css";
 import { memoryApi } from "@/api";
-
-// 导入 example.md 文件
-import exampleMd from "./md/example.md?raw";
 
 interface MemoryItem {
   id: number;
@@ -18,95 +14,78 @@ interface MemoryItem {
   location: string;
   emotion: string;
   emotionIcon: string;
+  coverImage: string;
 }
 
 const route = useRoute();
 const router = useRouter();
 const memoryItem = ref<MemoryItem | null>(null);
 const loading = ref(true);
+const currentTheme = ref(localStorage.getItem("theme") || "light");
 
-// 生成随机日期
-const generateRandomDate = (): string => {
-  const now = new Date();
-  const randomDays = Math.floor(Math.random() * 365); // 最近一年
-  const randomDate = new Date(now.getTime() - randomDays * 24 * 60 * 60 * 1000);
-
-  const year = randomDate.getFullYear();
-  const month = String(randomDate.getMonth() + 1).padStart(2, "0");
-  const day = String(randomDate.getDate()).padStart(2, "0");
-
-  return `${year}-${month}-${day}`;
-};
-
-// 生成随机图片
-const generateRandomImages = (count: number): string[] => {
-  const images: string[] = [];
-  const categories = ["nature", "city", "food", "travel", "people", "animal", "art", "architecture"];
-  const randomCategory = categories[Math.floor(Math.random() * categories.length)];
-
-  for (let i = 0; i < count; i++) {
-    images.push(`https://picsum.photos/seed/${randomCategory}${Math.random().toString(36).substr(2, 9)}/600/400`);
+// 监听localStorage变化
+const handleStorageChange = (e: StorageEvent) => {
+  if (e.key === "theme") {
+    currentTheme.value = e.newValue || "light";
   }
-  return images;
 };
 
-// 生成假数据
-const generateFakeData = (id: number): MemoryItem => {
-  const titles = [
-    "海边的一天",
-    "爬山记",
-    "咖啡馆探店",
-    "电影观后感",
-    "厨艺新突破",
-    "博物馆之旅",
-    "家庭野餐",
-    "跑步记录",
-    "美丽日落",
-    "好书推荐",
-  ];
-
-  const descriptions = [
-    "去海边的一天，风景很美，放空很重要。",
-    "今天和朋友一起爬山，虽然很累，但山顶的风景值得。",
-    "尝试了新的咖啡馆，咖啡味道不错，环境也很舒适。",
-    "周末在家看了一部好电影，剧情很感人。",
-    "今天学会了一道新菜，家人都说好吃，很有成就感。",
-    "去了博物馆，了解了很多历史文化知识。",
-    "和家人一起野餐，天气很好，心情也很棒。",
-    "今天跑步突破了自己的记录，坚持就是胜利。",
-    "看到了美丽的日落，忍不住拍了很多照片。",
-    "读了一本好书，收获很多，推荐给大家。",
-  ];
-
-  const locations = ["深圳", "北京", "上海", "广州", "杭州", "成都", "西安", "厦门", "青岛", "三亚"];
-
-  const emotions = [
-    { icon: "😄", text: "开心" },
-    { icon: "😊", text: "愉快" },
-    { icon: "😌", text: "平静" },
-    { icon: "🤔", text: "思考" },
-    { icon: "😮", text: "惊讶" },
-    { icon: "😍", text: "喜爱" },
-    { icon: "🤗", text: "温暖" },
-    { icon: "😎", text: "酷炫" },
-  ];
-
-  const imageCount = Math.floor(Math.random() * 5) + 1; // 1-5张图片
-  const emotion = emotions[Math.floor(Math.random() * emotions.length)];
-
-  return {
-    id,
-    title: titles[Math.floor(Math.random() * titles.length)],
-    description: descriptions[Math.floor(Math.random() * descriptions.length)],
-    content: exampleMd,
-    images: generateRandomImages(imageCount),
-    date: generateRandomDate(),
-    location: locations[Math.floor(Math.random() * locations.length)],
-    emotion: emotion.text,
-    emotionIcon: emotion.icon,
-  };
+// 监听body属性变化
+const updateThemeFromBody = () => {
+  const bodyTheme = document.body.getAttribute("data-theme");
+  if (bodyTheme) {
+    currentTheme.value = bodyTheme;
+    localStorage.setItem("theme", bodyTheme);
+  }
 };
 
+// 监听主题切换按钮的点击事件（通过MutationObserver）
+let observer: MutationObserver | null = null;
+
+onMounted(() => {
+  fetchMemoryDetail();
+
+  // 初始化主题
+  updateThemeFromBody();
+
+  // 添加事件监听
+  window.addEventListener("storage", handleStorageChange);
+  observer = new MutationObserver(updateThemeFromBody);
+  observer.observe(document.body, { attributes: true, attributeFilter: ["data-theme"] });
+});
+
+// 组件卸载前清理
+onBeforeUnmount(() => {
+  window.removeEventListener("storage", handleStorageChange);
+  if (observer) {
+    observer.disconnect();
+  }
+});
+
+// 计算属性，返回当前主题
+const theme = computed(() => {
+  return currentTheme.value === "dark" ? "dark" : "light";
+});
+
+// 记忆文案列表
+const memoryTexts = ref([
+  "这是一条美好的记忆，值得珍藏",
+  "时光荏苒，美好永驻心间",
+  "每一段记忆，都是人生的宝贵财富",
+  "愿这份美好，永远伴随你左右",
+  "记忆中的瞬间，温暖了整个人生",
+  "珍惜每一段时光，它们都是独特的回忆",
+  "时光会老，但记忆永远年轻",
+  "这些美好，将成为生命中最亮的星",
+  "每一次回忆，都是一次心灵的旅行",
+  "美好时光，值得用一生去回味"
+]);
+
+// 随机选择一条文案
+const randomMemoryText = computed(() => {
+  const randomIndex = Math.floor(Math.random() * memoryTexts.value.length);
+  return memoryTexts.value[randomIndex];
+});
 // 获取记忆详情
 const fetchMemoryDetail = async () => {
   const id = Number(route.params.id);
@@ -177,35 +156,44 @@ onMounted(() => {
 
         <!-- 封面图 -->
         <div class="article-cover" v-if="memoryItem.images.length > 0">
-          <img :src="memoryItem.images[0]" :alt="memoryItem.title" class="cover-image" />
+          <n-image lazy width="100%" preview-disabled class="cover-image"
+            :src="memoryItem.coverImage || memoryItem.images[0]" :alt="memoryItem.title"
+            :intersection-observer-options="{ rootMargin: '100px 0px', threshold: 0.1 }">
+            <template #placeholder>
+              <div class="image-placeholder">
+                <div class="loading-spinner"></div>
+              </div>
+            </template>
+          </n-image>
         </div>
 
         <!-- 内容主体 -->
         <div class="article-content">
           <!-- Markdown 内容 -->
           <div class="content-section">
-            <MdPreview :model-value="memoryItem.content" />
+            <MdPreview :theme="theme" previewTheme="cyanosis" :model-value="memoryItem.content" />
           </div>
 
           <!-- 图片列表 -->
           <div class="content-section" v-if="memoryItem.images.length > 1">
             <h2 class="section-title">照片集</h2>
             <div class="image-gallery">
-              <n-image
-                v-for="(image, index) in memoryItem.images.slice(1)"
-                :key="index"
-                :src="image"
-                :alt="`memory-${memoryItem.id}-${index + 1}`"
-                class="gallery-image"
-                width="100%"
-              />
+              <n-image v-for="(image, index) in memoryItem.images.slice(1)" :key="index" :src="image" lazy
+                :alt="`memory-${memoryItem.id}-${index + 1}`" class="gallery-image" width="100%"
+                :intersection-observer-options="{ rootMargin: '100px 0px', threshold: 0.1 }">
+                <template #placeholder>
+                  <div class="image-placeholder">
+                    <div class="loading-spinner"></div>
+                  </div>
+                </template>
+              </n-image>
             </div>
           </div>
 
           <!-- 文章底部 -->
           <footer class="article-footer">
             <div class="footer-line"></div>
-            <p class="footer-text">这是一条美好的记忆，值得珍藏</p>
+            <p class="footer-text">{{ randomMemoryText }}</p>
           </footer>
         </div>
       </article>
@@ -483,6 +471,36 @@ onMounted(() => {
           font-style: italic;
         }
       }
+
+      /* 图片占位符样式 */
+      :deep(.n-image-placeholder) {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: var(--bg-color);
+        border-radius: 12px;
+        height: 100%;
+        width: 100%;
+
+        .loading-spinner {
+          width: 30px;
+          height: 30px;
+          border: 3px solid var(--border-color);
+          border-top: 3px solid var(--color-main);
+          border-radius: 50%;
+          animation: spin 1s linear infinite;
+        }
+      }
+
+      .gallery-image {
+        aspect-ratio: 4/3;
+        object-fit: cover;
+      }
+
+      .cover-image {
+        aspect-ratio: 16/9;
+        object-fit: cover;
+      }
     }
   }
 
@@ -547,6 +565,7 @@ onMounted(() => {
   0% {
     transform: rotate(0deg);
   }
+
   100% {
     transform: rotate(360deg);
   }

@@ -5,15 +5,8 @@
   </div>
 
   <!-- 留言板弹窗 -->
-  <n-modal
-    v-model:show="showFeedbackModal"
-    title="留言板"
-    preset="dialog"
-    size="large"
-    :bordered="false"
-    :close-on-esc="true"
-    :close-on-click-outside="true"
-  >
+  <n-modal v-model:show="showFeedbackModal" title="留言板" preset="dialog" size="large" :bordered="false"
+    :close-on-esc="true" :close-on-click-outside="true">
     <div class="feedback-form">
       <n-form :model="feedbackForm" layout="vertical">
         <!-- <n-form-item label="姓名">
@@ -23,12 +16,8 @@
           <n-input v-model:value="feedbackForm.email" placeholder="请输入您的邮箱（选填）" />
         </n-form-item> -->
         <n-form-item label="留言内容" required>
-          <n-input
-            v-model:value="feedbackForm.content"
-            placeholder="请输入您的留言"
-            type="textarea"
-            :autosize="{ minRows: 4, maxRows: 8 }"
-          />
+          <n-input v-model:value="feedbackForm.content" placeholder="请输入您的留言" type="textarea"
+            :autosize="{ minRows: 4, maxRows: 8 }" />
         </n-form-item>
       </n-form>
     </div>

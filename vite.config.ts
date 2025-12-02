@@ -74,10 +74,11 @@ export default defineConfig(({ mode }): Promise<UserConfig> => {
           strict: false,
         },
         proxy: {
-          "/dev-api": {
-            target: "http://192.168.28.18:8811",
+          "/api": {
+            // target: "http://192.168.28.18:8811",
+            // target: "http://101.126.19.231:6303/api",
             changeOrigin: true,
-            rewrite: (p) => p.replace(/^\/dev-api/, ""),
+            rewrite: (p) => p.replace(/^\/api/, ""),
           },
         },
       },

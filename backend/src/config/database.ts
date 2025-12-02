@@ -1,16 +1,33 @@
 import { Sequelize } from 'sequelize';
 import dotenv from 'dotenv';
 
-// Load environment variables
-if (process.env.NODE_ENV !== 'production') {
-  dotenv.config();
+// 加载环境变量
+// 1. 首先加载基础.env文件
+dotenv.config();
+
+
+// 2. 开发环境加载.env.local文件（如果存在），用于本地开发配置
+if (process.env.NODE_ENV !== 'production' && process.env.NODE_ENV !== 'test') {
+  dotenv.config({
+    path: '.env.local',
+    override: true
+  });
 }
 
-const DB_HOST = process.env.DB_HOST || 'localhost';
+// 3. 生产环境加载.env.production文件（如果存在）
+if (process.env.NODE_ENV === 'production') {
+  dotenv.config({
+    path: '.env.production',
+    override: true
+  });
+}
+
+// 数据库配置，支持本地和线上环境
+const DB_HOST = process.env.DB_URL || process.env.DB_HOST || 'localhost';
 const DB_PORT = parseInt(process.env.DB_PORT || '3306', 10);
 const DB_USER = process.env.DB_USER || 'root';
-const DB_PASSWORD = process.env.DB_PASSWORD || 'password';
-const DB_NAME = process.env.DB_NAME || 'blog';
+const DB_PASSWORD = process.env.DB_PASSWORD || '';
+const DB_NAME = process.env.NODE_ENV === 'production' ? 'jam-blogs' : (process.env.DB_NAME || 'jam-blogs');
 
 // Create Sequelize instance
 const sequelize = new Sequelize(DB_NAME, DB_USER, DB_PASSWORD, {

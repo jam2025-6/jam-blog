@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { ref, onMounted } from "vue";
 import { memoryApi } from "@/api";
 import dayjs from "dayjs";
 
@@ -41,14 +40,8 @@ onMounted(() => {
     <li v-for="item in memoryList" :key="item.id" class="memory-item">
       <router-link :to="`/memory/${item.id}`" class="memory-link">
         <div class="memory-cover" v-if="item.images.length > 0">
-          <n-image
-            lazy
-            width="100%"
-            preview-disabled
-            class="cover-image"
-            :src="item.coverImage || item.images[0]"
-            :alt="item.title"
-          />
+          <n-image lazy width="100%" preview-disabled class="cover-image" :src="item.coverImage || item.images[0]"
+            :alt="item.title" />
         </div>
         <div class="memory-info">
           <h3 class="memory-title">{{ item.title }}</h3>

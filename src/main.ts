@@ -8,7 +8,7 @@ import SvgIcon from "@/components/SvgIcon/index.vue";
 // import "@/utils/base";
 // import SvgIcon from "@/components/SvgIcon/index.vue";
 import "virtual:svg-icons-register"; // svg图标
-
+import 'md-editor-v3/lib/style.css';
 const app = createApp(App);
 app.component("SvgIcon", SvgIcon);
 // 注册全局指令// 全局注册，名字叫 Icon

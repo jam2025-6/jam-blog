@@ -10,7 +10,7 @@ interface RequestOptions {
 }
 
 // 基础配置 - 后端服务地址
-const baseURL = 'http://localhost:3000';
+const baseURL = 'http://101.126.19.231:6303/';
 
 const service = axios.create({
   baseURL,
