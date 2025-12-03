@@ -44,7 +44,6 @@ const createLoadingElement = (): HTMLElement => {
       z-index: 9999;
       background-color: rgba(255, 255, 255, 0.9);
     }
-    
     .loading {
       display: flex;
       flex-direction: column;
