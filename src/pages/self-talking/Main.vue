@@ -32,12 +32,14 @@ onMounted(() => {
 </script>
 
 <template>
-  <ul class="self-talking">
-    <li v-for="item in selfTalkingList" :key="item.id" class="item">
-      <div class="li-time">{{ dayjs(item.time).format("YYYY/MM/DD HH:mm:ss") }}</div>
-      <div class="li-content">{{ item.content }}</div>
-    </li>
-  </ul>
+  <div class="self-talking-container" v-loading="loading">
+    <ul class="self-talking">
+      <li v-for="item in selfTalkingList" :key="item.id" class="item">
+        <div class="li-time">{{ dayjs(item.time).format("YYYY/MM/DD HH:mm:ss") }}</div>
+        <div class="li-content">{{ item.content }}</div>
+      </li>
+    </ul>
+  </div>
 </template>
 
 <style lang="scss" scoped>
@@ -47,6 +49,7 @@ onMounted(() => {
     padding: 16px;
   }
 }
+
 @media (min-width: 769px) {
   .self-talking {
     padding: 36px 16px 16px 16px;
@@ -54,6 +57,11 @@ onMounted(() => {
     margin: 0 auto;
   }
 }
+
+.self-talking-container {
+  width: 100%;
+}
+
 .self-talking {
   .item {
     min-height: 44px;

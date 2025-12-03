@@ -10,6 +10,7 @@ interface Article {
   id: number;
   title: string;
   date: string;
+  is_top: boolean;
 }
 
 const articles = ref<Article[]>([]);
@@ -40,14 +41,19 @@ onMounted(() => {
 </script>
 
 <template>
-  <ul class="article">
-    <li v-for="item in articles" :key="item.id" class="article-item">
-      <div class="article-content">
-        <div class="article-title" @click="goToDetail(item.id)">{{ item.title }}</div>
-        <div class="article-meta">{{ dayjs(item.date).format("YYYY/MM/DD") }}</div>
-      </div>
-    </li>
-  </ul>
+  <div class="article-container" v-loading="loading">
+    <ul class="article">
+      <li v-for="item in articles" :key="item.id" class="article-item" :class="{ 'top-article': item.is_top }">
+        <div class="article-content">
+          <div class="article-title" @click="goToDetail(item.id)">
+            <span v-if="item.is_top" class="top-badge">置顶</span>
+            {{ item.title }}
+          </div>
+          <div class="article-meta">{{ dayjs(item.date).format("YYYY/MM/DD") }}</div>
+        </div>
+      </li>
+    </ul>
+  </div>
 </template>
 
 <style lang="scss" scoped>
@@ -85,9 +91,23 @@ onMounted(() => {
       margin: 0 0 6px 0;
       cursor: pointer;
       transition: color 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 8px;
 
       &:hover {
         color: var(--color-main);
+      }
+
+      .top-badge {
+        display: inline-block;
+        padding: 2px 6px;
+        background-color: var(--color-main);
+        color: white;
+        font-size: 10px;
+        font-weight: 600;
+        border-radius: 10px;
+        line-height: 1;
       }
     }
 
@@ -134,10 +154,24 @@ onMounted(() => {
       line-height: 1.6;
       transition: color 0.2s ease;
       margin-right: 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
 
       &:hover {
         color: var(--color-main);
         text-decoration: none;
+      }
+
+      .top-badge {
+        display: inline-block;
+        padding: 3px 8px;
+        background-color: var(--color-main);
+        color: white;
+        font-size: 12px;
+        font-weight: 600;
+        border-radius: 12px;
+        line-height: 1;
       }
     }
 
@@ -158,5 +192,9 @@ onMounted(() => {
 
 .article-item {
   /* 基础样式 */
+}
+
+.article-container {
+  width: 100%;
 }
 </style>

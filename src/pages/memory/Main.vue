@@ -36,26 +36,28 @@ onMounted(() => {
 </script>
 
 <template>
-  <ul class="memory-list">
-    <li v-for="item in memoryList" :key="item.id" class="memory-item">
-      <router-link :to="`/memory/${item.id}`" class="memory-link">
-        <div class="memory-cover" v-if="item.images.length > 0">
-          <n-image lazy width="100%" preview-disabled class="cover-image" :src="item.coverImage || item.images[0]"
-            :alt="item.title" />
-        </div>
-        <div class="memory-info">
-          <h3 class="memory-title">{{ item.title }}</h3>
-          <div class="memory-meta">
-            <span class="date">{{ dayjs(item.date).format("YYYY/MM/DD") }}</span>
-            <span class="divider">·</span>
-            <span class="location">{{ item.location }}</span>
-            <span class="divider">·</span>
-            <span class="emotion">{{ item.emotionIcon }} {{ item.emotion }}</span>
+  <div class="memory-container" v-loading="loading">
+    <ul class="memory-list">
+      <li v-for="item in memoryList" :key="item.id" class="memory-item">
+        <router-link :to="`/memory/${item.id}`" class="memory-link">
+          <div class="memory-cover" v-if="item.images.length > 0">
+            <n-image lazy width="100%" preview-disabled class="cover-image" :src="item.coverImage || item.images[0]"
+              :alt="item.title" />
           </div>
-        </div>
-      </router-link>
-    </li>
-  </ul>
+          <div class="memory-info">
+            <h3 class="memory-title">{{ item.title }}</h3>
+            <div class="memory-meta">
+              <span class="date">{{ dayjs(item.date).format("YYYY/MM/DD") }}</span>
+              <span class="divider">·</span>
+              <span class="location">{{ item.location }}</span>
+              <span class="divider">·</span>
+              <span class="emotion">{{ item.emotionIcon }} {{ item.emotion }}</span>
+            </div>
+          </div>
+        </router-link>
+      </li>
+    </ul>
+  </div>
 </template>
 
 <style lang="scss" scoped>

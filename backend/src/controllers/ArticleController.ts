@@ -24,8 +24,11 @@ import { Article } from '../models/Article';
 export const getArticles = async (req: Request, res: Response): Promise<void> => {
   try {
     const articles = await Article.findAll({
-      order: [['date', 'DESC']],
-      attributes: ['id', 'title', 'date']
+      order: [
+        ['is_top', 'DESC'],
+        ['date', 'DESC']
+      ],
+      attributes: ['id', 'title', 'date', 'is_top']
     });
     res.status(200).json(articles);
   } catch (error) {

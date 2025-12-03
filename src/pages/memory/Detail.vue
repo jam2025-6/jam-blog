@@ -155,7 +155,7 @@ onMounted(() => {
         </header>
 
         <!-- 封面图 -->
-        <div class="article-cover" v-if="memoryItem.images.length > 0">
+        <!-- <div class="article-cover" v-if="memoryItem.images.length > 0">
           <n-image lazy width="100%" preview-disabled class="cover-image"
             :src="memoryItem.coverImage || memoryItem.images[0]" :alt="memoryItem.title"
             :intersection-observer-options="{ rootMargin: '100px 0px', threshold: 0.1 }">
@@ -165,7 +165,7 @@ onMounted(() => {
               </div>
             </template>
           </n-image>
-        </div>
+        </div> -->
 
         <!-- 内容主体 -->
         <div class="article-content">
@@ -402,7 +402,7 @@ onMounted(() => {
 
     /* 内容主体 */
     .article-content {
-      padding: 32px;
+      padding:0 32px;
 
       .content-section {
         margin-bottom: 40px;

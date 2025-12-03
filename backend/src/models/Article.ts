@@ -6,6 +6,7 @@ interface ArticleAttributes {
   title: string;
   date: Date;
   content: string;
+  isTop: boolean;
   createdAt?: Date;
   updatedAt?: Date;
 }
@@ -17,6 +18,7 @@ export class Article extends Model<ArticleAttributes, ArticleCreationAttributes>
   public title!: string;
   public date!: Date;
   public content!: string;
+  public isTop!: boolean;
   public createdAt!: Date;
   public updatedAt!: Date;
 }
@@ -42,6 +44,13 @@ Article.init({
     type: DataTypes.TEXT,
     allowNull: false,
     comment: 'Article content'
+  },
+  isTop: {
+    type: DataTypes.BOOLEAN,
+    allowNull: false,
+    defaultValue: false,
+    field: 'is_top',
+    comment: 'Whether the article is pinned, 0: not pinned, 1: pinned'
   }
 }, {
   sequelize,
