@@ -42,6 +42,7 @@ const createLoadingElement = (): HTMLElement => {
       justify-content: center;
       background-color: transparent;
       z-index: 9999;
+      background-color: rgba(255, 255, 255, 0.9);
     }
     
     .loading {

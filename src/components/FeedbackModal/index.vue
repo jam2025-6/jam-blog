@@ -1,12 +1,25 @@
 <template>
   <!-- 悬浮留言板按钮 -->
-  <div class="floating-feedback-btn" ref="floatingBtnRef" @mousedown="startDrag" @click="showFeedbackModal = true">
-    <SvgIcon name="comment" />
+  <div
+    class="floating-feedback-btn"
+    title="反馈/留言"
+    ref="floatingBtnRef"
+    @mousedown="startDrag"
+    @click="showFeedbackModal = true"
+  >
+    <SvgIcon name="feedback" />
   </div>
 
   <!-- 留言板弹窗 -->
-  <n-modal v-model:show="showFeedbackModal" title="留言板" preset="dialog" size="large" :bordered="false"
-    :close-on-esc="true" :close-on-click-outside="true">
+  <n-modal
+    v-model:show="showFeedbackModal"
+    title="留言板"
+    preset="dialog"
+    size="large"
+    :bordered="false"
+    :close-on-esc="true"
+    :close-on-click-outside="true"
+  >
     <div class="feedback-form">
       <n-form :model="feedbackForm" layout="vertical">
         <!-- <n-form-item label="姓名">
@@ -16,8 +29,12 @@
           <n-input v-model:value="feedbackForm.email" placeholder="请输入您的邮箱（选填）" />
         </n-form-item> -->
         <n-form-item label="留言内容" required>
-          <n-input v-model:value="feedbackForm.content" placeholder="请输入您的留言" type="textarea"
-            :autosize="{ minRows: 4, maxRows: 8 }" />
+          <n-input
+            v-model:value="feedbackForm.content"
+            placeholder="如果您有任何想法或建议，欢迎在这里留言，或加我微信：void511472，期待与您交流！"
+            type="textarea"
+            :autosize="{ minRows: 4, maxRows: 8 }"
+          />
         </n-form-item>
       </n-form>
     </div>
@@ -154,7 +171,6 @@ const stopDrag = () => {
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  // box-shadow: 0 4px 12px rgba(64, 158, 255, 0.3);
   z-index: 2025;
   transition: all 0.3s ease;
   user-select: none;
@@ -167,7 +183,6 @@ const stopDrag = () => {
 
   &:hover {
     transform: translateY(-2px);
-    //box-shadow: 0 6px 16px rgba(64, 158, 255, 0.4);
   }
 
   &:active {
@@ -185,6 +200,5 @@ const stopDrag = () => {
   justify-content: flex-end;
   gap: 12px;
   padding-top: 16px;
-  // border-top: 1px solid var(--border-color);
 }
 </style>

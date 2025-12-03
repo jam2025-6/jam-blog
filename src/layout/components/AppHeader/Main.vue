@@ -30,7 +30,7 @@ onMounted(() => {
   if (!initialTheme) {
     const currentHour = new Date().getHours();
     // 18:00-6:00使用夜间模式，其余时间使用日间模式
-    initialTheme = (currentHour >= 18 || currentHour < 6) ? "dark" : "light";
+    initialTheme = currentHour >= 18 || currentHour < 6 ? "dark" : "light";
   }
   // 应用主题
   isDarkTheme.value = initialTheme === "dark";
@@ -117,14 +117,14 @@ function handleClick(path: string) {
       align-items: center;
       height: 100%;
 
-      >ul {
+      > ul {
         display: flex;
         align-items: center;
         height: 100%;
         gap: 0 24px;
         font-size: 16px;
 
-        >li {
+        > li {
           opacity: 0.8;
           user-select: none;
           cursor: pointer;

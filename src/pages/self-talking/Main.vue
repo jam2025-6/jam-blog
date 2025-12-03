@@ -33,12 +33,15 @@ onMounted(() => {
 
 <template>
   <div class="self-talking-container" v-loading="loading">
-    <ul class="self-talking">
+    <ul class="self-talking" v-if="selfTalkingList && selfTalkingList.length">
       <li v-for="item in selfTalkingList" :key="item.id" class="item">
         <div class="li-time">{{ dayjs(item.time).format("YYYY/MM/DD HH:mm:ss") }}</div>
         <div class="li-content">{{ item.content }}</div>
       </li>
     </ul>
+    <div class="empty" v-else>
+      <n-empty size="huge" description="你什么也找不到"> </n-empty>
+    </div>
   </div>
 </template>
 
@@ -60,6 +63,15 @@ onMounted(() => {
 
 .self-talking-container {
   width: 100%;
+  height: 100%;
+}
+
+.empty {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .self-talking {

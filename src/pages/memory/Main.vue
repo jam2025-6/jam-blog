@@ -37,12 +37,18 @@ onMounted(() => {
 
 <template>
   <div class="memory-container" v-loading="loading">
-    <ul class="memory-list">
+    <ul class="memory-list" v-if="memoryList && memoryList.length">
       <li v-for="item in memoryList" :key="item.id" class="memory-item">
         <router-link :to="`/memory/${item.id}`" class="memory-link">
           <div class="memory-cover" v-if="item.images.length > 0">
-            <n-image lazy width="100%" preview-disabled class="cover-image" :src="item.coverImage || item.images[0]"
-              :alt="item.title" />
+            <n-image
+              lazy
+              width="100%"
+              preview-disabled
+              class="cover-image"
+              :src="item.coverImage || item.images[0]"
+              :alt="item.title"
+            />
           </div>
           <div class="memory-info">
             <h3 class="memory-title">{{ item.title }}</h3>
@@ -57,6 +63,9 @@ onMounted(() => {
         </router-link>
       </li>
     </ul>
+    <div class="empty" v-else>
+      <n-empty size="huge" description="你什么也找不到"> </n-empty>
+    </div>
   </div>
 </template>
 
@@ -145,6 +154,18 @@ onMounted(() => {
   }
 }
 
+.memory-container {
+  width: 100%;
+  height: 100%;
+}
+
+.empty {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 .memory-list {
   list-style: none;
   margin: 0;

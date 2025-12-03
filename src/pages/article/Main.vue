@@ -42,7 +42,7 @@ onMounted(() => {
 
 <template>
   <div class="article-container" v-loading="loading">
-    <ul class="article">
+    <ul class="article" v-if="articles && articles.length">
       <li v-for="item in articles" :key="item.id" class="article-item" :class="{ 'top-article': item.is_top }">
         <div class="article-content">
           <div class="article-title" @click="goToDetail(item.id)">
@@ -53,6 +53,9 @@ onMounted(() => {
         </div>
       </li>
     </ul>
+    <div class="empty" v-else>
+      <n-empty size="huge" description="你什么也找不到"> </n-empty>
+    </div>
   </div>
 </template>
 
@@ -190,11 +193,16 @@ onMounted(() => {
   background-color: var(--bg-color);
 }
 
-.article-item {
-  /* 基础样式 */
+.empty {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .article-container {
   width: 100%;
+  height: 100%;
 }
 </style>
