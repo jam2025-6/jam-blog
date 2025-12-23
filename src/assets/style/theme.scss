@@ -68,3 +68,8 @@ body[data-theme="dark"] {
   color: var(--text-color);
   transition: all 0.3s ease;
 }
+
+.md-editor-dark,
+.md-editor-modal-container[data-theme=dark] {
+  --md-bk-color: var(--bg-card) !important;
+}

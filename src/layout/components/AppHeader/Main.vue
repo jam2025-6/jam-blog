@@ -71,7 +71,7 @@ function handleClick(path: string) {
     <div class="header">
       <nav class="nav-ls">
         <ul>
-          <li :class="{ active: activePath === '/article' }" @click="handleClick('/article')">文章</li>
+          <li :class="{ active: activePath === '/article' }" @click="handleClick('/article')">首页</li>
           <li :class="{ active: activePath === '/self-talking' }" @click="handleClick('/self-talking')">碎碎念</li>
           <li :class="{ active: activePath === '/memory' }" @click="handleClick('/memory')">点滴</li>
         </ul>
@@ -117,14 +117,14 @@ function handleClick(path: string) {
       align-items: center;
       height: 100%;
 
-      > ul {
+      >ul {
         display: flex;
         align-items: center;
         height: 100%;
         gap: 0 24px;
         font-size: 16px;
 
-        > li {
+        >li {
           opacity: 0.8;
           user-select: none;
           cursor: pointer;

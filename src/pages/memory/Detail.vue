@@ -164,8 +164,8 @@ onMounted(() => {
                 <div class="loading-spinner"></div>
               </div>
             </template>
-          </n-image>
-        </div> -->
+</n-image>
+</div> -->
 
         <!-- 内容主体 -->
         <div class="article-content">
@@ -402,7 +402,7 @@ onMounted(() => {
 
     /* 内容主体 */
     .article-content {
-      padding:0 32px;
+      padding: 0 32px;
 
       .content-section {
         margin-bottom: 40px;
